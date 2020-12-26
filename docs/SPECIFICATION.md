@@ -2,6 +2,7 @@
 
 ![システム概要](images/system-overview.png)
 
+背景情報については、[BACKGROUND.md](BACKGROUND.md)もご覧ください。
 ## 患者側システム
 
 * Web もしくは アプリ にて、患者が必要な情報を入力してサーバに送信する
