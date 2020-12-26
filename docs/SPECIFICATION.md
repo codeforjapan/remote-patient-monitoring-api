@@ -2,6 +2,8 @@
 
 ![システム概要](images/system-overview.png)
 
+赤字で囲った部分が本システムの対象範囲
+
 背景情報については、[BACKGROUND.md](BACKGROUND.md)もご覧ください。
 ## 患者側システム
 
