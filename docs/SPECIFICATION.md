@@ -16,7 +16,7 @@
   * [ ] 症状については必要な情報を確認中
 * リスクの高い患者については、Bluetooth 対応のパルスオキシメーターとスマートフォンを渡し、自動でデータを吸い上げることを検討する
 
-[ワイヤーフレーム](https://www.figma.com/file/29X7k8bKfFlWS6Md5BhrME/UI-Template-(Copy)?node-id=3062%3A84)
+[ワイヤーフレーム](https://www.figma.com/file/29X7k8bKfFlWS6Md5BhrME/UI-Template-Copy?node-id=41%3A0)
 ## 保健所側システム
 
 * 保健所ごとに、担当する患者の状態一覧が見れる
