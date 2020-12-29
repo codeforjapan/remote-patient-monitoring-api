@@ -14,9 +14,23 @@
 
 詳細については、[システム仕様](docs/SPECIFICATION.md)をご覧ください。
 
-## 現状
+本リポジトリは、全体的なIssue管理及び、API サーバの開発のためのリポジトリとなります。
 
-作業に着手したばかりです。
+保健師用ダッシュボード については、[remote-patient-monitoring-dashboard](https://github.com/codeforjapan/remote-patient-monitoring-dashboard)を、
+患者用クライアント については、[remote-patient-monitoring-client](https://github.com/codeforjapan/remote-patient-monitoring-client)をご覧ください。
+
+
+## これまでの歩み
+
+| 日付 | 内容 |
+| --- | --- |
+| 2020/12/30  | ユースケース及びワイヤーフレームが8割方完成。開発に着手。リポジトリを3つに分ける |
+| 2020/12/26  | 本リポジトリを作成 |
+| 2020/12/23  | 奥村先生とボランティアチームのミーティングを実施、ざっくりとしたシステム要件が固まる |
+| 2020/12/14  | 奥村先生の呼びかけに応じ、調査を開始 |
+
+
+
 Issues で手伝って欲しいタスクを記載しています。
 コントリビューターをを募集しております。[CONTRIBUTING.md](docs/CONTRIBUTING.md)をご覧ください。
 
