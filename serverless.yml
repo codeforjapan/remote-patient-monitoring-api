@@ -65,7 +65,7 @@ package:
 
 functions:
   getCenter:
-    handler: src/lambda/getCenter/index.handler
+    handler: src/lambda/handler.getCenter
     name: "remote-patient-monitoring-getCenter-${self:provider.stage}"
     description: "This function is test app."
 #    The following are a few example events you can configure
