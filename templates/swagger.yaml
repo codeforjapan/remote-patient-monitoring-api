@@ -9,6 +9,7 @@ info:
   license:
     name: "MIT License"
     url: "https://github.com/codeforjapan/remote-patient-monitoring-api/blob/main/LICENSE"
+basePath: "/v1"
 
 produces:
   - application/json
@@ -17,9 +18,18 @@ consumes:
   - application/json
 
 paths:
-  /v1/api/center/{centerId}:
+  /api/center/{centerId}:
     get:
       summary: "保健所ID"
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: "200"
+        uri: "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:725955336967:function:remote-patient-monitoring-getCenter-dev/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
       description: "指定されたcenterIdの保健所情報を返します"
       parameters:
         - name: "centerId"
@@ -44,10 +54,8 @@ definitions:
       id:
         type: "integer"
         format: "int64"
-        example: 1
       name:
         type: "string"
-        example: "A市保健所"
   error:
     type: object
     properties:

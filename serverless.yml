@@ -103,7 +103,8 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-#resources:
+resources:
+  - ${file(./templates/api-gateway.yml)}
 #  Resources:
 #    NewResource:
 #      Type: AWS::S3::Bucket
