@@ -49,13 +49,19 @@ provider:
 #    variable1: value1
 
 # you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
+package:
+  #  include:
+  #    - include-me.js
+  #    - include-me-dir/**
+  exclude:
+    - docs/**
+    - node_modules/**
+    - templates/**
+    - .eslintrc.json
+    - LICENSE
+    - README.md
+    - yarn.lock
+    - package.json
 
 functions:
   getCenter:
