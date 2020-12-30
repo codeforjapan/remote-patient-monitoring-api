@@ -1,0 +1,27 @@
+service: remoteMonitoringSystemDynamoDb
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+  # you can overwrite defaults here
+  stage: dev
+  region: ap-northeast-1
+
+  # 中略
+# you can add packaging information here
+package:
+  #  include:
+  #    - include-me.js
+  #    - include-me-dir/**
+  exclude:
+    - templates/**
+
+#functions:
+#　functionsは記載しない
+
+# you can add CloudFormation resource templates here
+resources:
+  - ${file(./templates/dynamodb.yml)}

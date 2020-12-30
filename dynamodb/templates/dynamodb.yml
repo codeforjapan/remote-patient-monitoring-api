@@ -1,0 +1,16 @@
+Resources:
+  RemotePatientMonitoringCenterTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: RemotePatientMonitoringCenterTable-${self:provider.stage}
+      AttributeDefinitions:
+        - AttributeName: centerId
+          AttributeType: S
+        - AttributeName: name
+          AttributeType: S
+      KeySchema:
+        - AttributeName: centerId
+          KeyType: HASH
+        - AttributeName: name
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST

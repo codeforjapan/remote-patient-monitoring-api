@@ -3,10 +3,22 @@ Resources:
     Type: "AWS::ApiGateway::RestApi"
     Properties:
       Body: ${file(./templates/swagger.yaml)}
-  GetPersonApiPermission:
+  GetCenterApiPermission:
     Type: "AWS::Lambda::Permission"
     Properties:
       FunctionName: "remote-patient-monitoring-getCenter-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  PostCenterApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-postCenter-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  PutCenterApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-putCenter-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "apigateway.amazonaws.com"
   ApiGatewayDeployment:
@@ -15,3 +27,7 @@ Resources:
       RestApiId:
         Ref: ApiGatewayRestApi
       StageName: ${self:provider.stage}
+Outputs:
+  Id:
+    Value:
+      Ref: ApiGatewayRestApi

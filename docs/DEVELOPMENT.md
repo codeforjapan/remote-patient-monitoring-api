@@ -10,7 +10,7 @@ Follow [this AWS instruction](https://docs.aws.amazon.com/ja_jp/cli/latest/userg
 
 Set AWS profile 
 
-```
+```bash
 aws configure --profile your-profile-name
 export AWS_PROFILE="your-profile-name"
 ```
@@ -19,8 +19,15 @@ export AWS_PROFILE="your-profile-name"
 
 `yarn install`
 
+### 4. Setup server
+
+```bash
+cd dynamodb
+../node_modules/.bin/sls deploy -v
+```
+
 ### 4. Deploy
 
-```
+```bash
 sls deploy -v
 ```

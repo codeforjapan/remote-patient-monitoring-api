@@ -68,6 +68,23 @@ functions:
     handler: src/lambda/handler.getCenter
     name: "remote-patient-monitoring-getCenter-${self:provider.stage}"
     description: "This function is test app."
+    role: "arn:aws:iam::#{AWS::AccountId}:role/GetCenterRole-${self:provider.stage}"
+    environment:
+      CENTER_TABLE_NAME: RemotePatientMonitoringCenterTable-${self:provider.stage}
+  postCenter:
+    handler: src/lambda/handler.postCenter
+    name: "remote-patient-monitoring-postCenter-${self:provider.stage}"
+    description: "This function is test app."
+    role: "arn:aws:iam::#{AWS::AccountId}:role/PostCenterRole-${self:provider.stage}"
+    environment:
+      CENTER_TABLE_NAME: RemotePatientMonitoringCenterTable-${self:provider.stage}
+  putCenter:
+    handler: src/lambda/handler.putCenter
+    name: "remote-patient-monitoring-putCenter-${self:provider.stage}"
+    description: "This function is test app."
+    role: "arn:aws:iam::#{AWS::AccountId}:role/PutCenterRole-${self:provider.stage}"
+    environment:
+      CENTER_TABLE_NAME: RemotePatientMonitoringCenterTable-${self:provider.stage}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -111,6 +128,7 @@ functions:
 # you can add CloudFormation resource templates here
 resources:
   - ${file(./templates/api-gateway.yml)}
+  - ${file(./templates/iam.yml)}
 #  Resources:
 #    NewResource:
 #      Type: AWS::S3::Bucket
