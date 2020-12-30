@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "serverless": "^2.16.1"
+    "serverless": "^2.16.1",
+    "serverless-pseudo-parameters": "^2.5.0"
   },
   "name": "remote-patient-monitoring"
 }
