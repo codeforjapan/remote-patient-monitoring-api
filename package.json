@@ -1,5 +1,6 @@
 {
   "dependencies": {
     "serverless": "^2.16.1"
-  }
+  },
+  "name": "remote-patient-monitoring"
 }
