@@ -18,13 +18,13 @@ service: remote-patient-monitoring
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
-frameworkVersion: '2'
+frameworkVersion: "2"
 
 provider:
   name: aws
   runtime: nodejs12.x
 
-# you can overwrite defaults here
+  # you can overwrite defaults here
   stage: dev
   region: ap-northeast-1
 
@@ -58,9 +58,9 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
-    name: "remote-patient-monitoring-hello-${self:provider.stage}"
+  getCenter:
+    handler: src/lambda/getCenter/index.handler
+    name: "remote-patient-monitoring-getCenter-${self:provider.stage}"
     description: "This function is test app."
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

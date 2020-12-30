@@ -1,0 +1,57 @@
+swagger: "2.0"
+info:
+  description: "遠隔療養者モニタリングシステムのAPIです。"
+  version: "1.0.0"
+  title: "Remote Patient Monitoring System API"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "hal@code4japan.org"
+  license:
+    name: "MIT License"
+    url: "https://github.com/codeforjapan/remote-patient-monitoring-api/blob/main/LICENSE"
+
+produces:
+  - application/json
+
+consumes:
+  - application/json
+
+paths:
+  /v1/api/center/{centerId}:
+    get:
+      summary: "保健所ID"
+      description: "指定されたcenterIdの保健所情報を返します"
+      parameters:
+        - name: "centerId"
+          in: "path"
+          description: "取得したい保健所のID"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          schema:
+            $ref: "#/definitions/Center"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/error"
+definitions:
+  Center:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 1
+      name:
+        type: "string"
+        example: "A市保健所"
+  error:
+    type: object
+    properties:
+      errorCode:
+        type: "string"
+      errorMessage:
+        type: "string"
