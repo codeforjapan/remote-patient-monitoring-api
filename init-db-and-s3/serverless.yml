@@ -27,4 +27,7 @@ package:
 # you can add CloudFormation resource templates here
 resources:
   - ${file(./templates/dynamodb.yml)}
-  - ${file(./s3.yml)}
+  - ${file(./templates/s3.yml)}
+
+plugins:
+  - serverless-pseudo-parameters
