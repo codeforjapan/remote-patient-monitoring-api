@@ -30,14 +30,21 @@ module.exports.getCenters = async (event, context, callback) => {
     }
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(formatter.getCenterFormatter(res)),
+      body: JSON.stringify(res),
     });
   } catch (err) {
     console.log("getCenterTable-index error");
+    callback(null, {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: err
+      }),
+    });
   }
 };
 
 module.exports.postCenter = async (event, context, callback) => {
+  console.log('called postCenter');
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
   try {
@@ -60,6 +67,12 @@ module.exports.postCenter = async (event, context, callback) => {
     });
   } catch (err) {
     console.log("postCenterTable-index error");
+    callback(null, {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: err
+      }),
+    });
   }
 };
 
@@ -67,9 +80,12 @@ module.exports.getCenter = async (event, context, callback) => {
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
+  console.log('call getCenter with ' + event.pathParameters.centerId);
   try {
-    const res = await centerTable.getCenters(event.pathParameters.centerId);
-    if (validator.checkDyanmoQueryResultEmpty(res)) {
+    const res = await centerTable.getCenter(event.pathParameters.centerId);
+    console.log('called getCenter')
+    console.log(res);
+    if (validator.checkDynamoGetResultEmpty(res)) {
       const errorModel = {
         errorCode: "RPM00001",
         errorMessage: "Not Found",
@@ -81,18 +97,27 @@ module.exports.getCenter = async (event, context, callback) => {
         }),
       });
     }
+    console.log(res);
+    console.log(JSON.stringify(res));
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(formatter.getCenterFormatter(res)),
+      body: JSON.stringify(res),
     });
   } catch (err) {
     console.log("getCenterTable-index error");
+    callback(null, {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: err
+      }),
+    });
   }
 };
 
 module.exports.putCenter = async (event, context, callback) => {
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
+  console.log(event)
   try {
     if (!validator.checkCenterBody(JSON.parse(event.body))) {
       const errorModel = {
@@ -116,5 +141,11 @@ module.exports.putCenter = async (event, context, callback) => {
     });
   } catch (err) {
     console.log("putCenterTable-index error");
+    callback(null, {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: err
+      }),
+    });
   }
 };

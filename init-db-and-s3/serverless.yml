@@ -28,6 +28,7 @@ package:
 resources:
   - ${file(./templates/dynamodb.yml)}
   - ${file(./templates/s3.yml)}
+  - ${file(./templates/iam.yml)}
 
 plugins:
   - serverless-pseudo-parameters

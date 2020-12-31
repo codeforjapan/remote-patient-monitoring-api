@@ -1,5 +1,5 @@
 "use strict";
-const uuid = require('node-uuid');
+const uuid = require('uuid');
 
 module.exports = class CenterTable {
   constructor(serviceClient) {
@@ -8,11 +8,10 @@ module.exports = class CenterTable {
 
   getCenters() {
     const params = {
-      TableName: process.env.CENTER_TABLE_NAME,
-      ProjectionExpression: "#hash, centerName"
+      TableName: process.env.CENTER_TABLE_NAME
     };
     return new Promise((resolve, reject) => {
-      this.client.query(params, (err, data) => {
+      this.client.scan(params, (err, data) => {
         if (err) {
           console.log(err);
           reject(err);
@@ -25,18 +24,15 @@ module.exports = class CenterTable {
   }
 
   getCenter(centerId) {
+    console.log("called second getCenter");
     const params = {
       TableName: process.env.CENTER_TABLE_NAME,
-      KeyConditionExpression: "#hash = :centerId",
-      ExpressionAttributeNames: {
-        "#hash": "centerId",
-      },
-      ExpressionAttributeValues: {
-        ":centerId": centerId,
-      },
+      Key: {
+        "centerId": centerId
+      }
     };
     return new Promise((resolve, reject) => {
-      this.client.query(params, (err, data) => {
+      this.client.get(params, (err, data) => {
         if (err) {
           console.log(err);
           reject(err);
@@ -76,11 +72,11 @@ module.exports = class CenterTable {
       ...body,
       centerId: centerId,
     };
+    console.log(center);
     const params = {
       TableName: process.env.CENTER_TABLE_NAME,
       Key: {
-        centerId: center.centerId,
-        name: center.name,
+        centerId: center.centerId
       },
       UpdateExpression: "set #centerName = :centerName",
       ExpressionAttributeNames: {

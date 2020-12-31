@@ -68,7 +68,7 @@ functions:
     handler: src/lambda/handler.getCenters
     name: "remote-patient-monitoring-getCenters-${self:provider.stage}"
     description: "This function is test app."
-    role: "arn:aws:iam::#{AWS::AccountId}:role/GetCenterRole-${self:provider.stage}"
+    role: "arn:aws:iam::#{AWS::AccountId}:role/GetCentersRole-${self:provider.stage}"
     environment:
       CENTER_TABLE_NAME: RemotePatientMonitoringCenterTable-${self:provider.stage}
   getCenter:
@@ -134,7 +134,6 @@ functions:
 
 # you can add CloudFormation resource templates here
 resources:
-  - ${file(./templates/iam.yml)}
   - ${file(./templates/api-gateway.yml)}
 #    NewResource:
 #      Type: AWS::S3::Bucket

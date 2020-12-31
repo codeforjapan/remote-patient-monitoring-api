@@ -3,6 +3,12 @@ Resources:
     Type: "AWS::ApiGateway::RestApi"
     Properties:
       Body: ${file(./templates/swagger.yaml)}
+  GetCentersApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-getCenters-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
   GetCenterApiPermission:
     Type: "AWS::Lambda::Permission"
     Properties:

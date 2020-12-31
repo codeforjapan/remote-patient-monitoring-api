@@ -1,4 +1,29 @@
 Resources:
+  GetCentersRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "GetCentersRole-${self:provider.stage}"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: "/"
+      Policies:
+        - PolicyName: "GetCentersPolicy-${self:provider.stage}"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - dynamodb:Scan
+                Resource:
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/RemotePatientMonitoringCenterTable-${self:provider.stage}"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/RemotePatientMonitoringCenterTable-${self:provider.stage}/index/*"
   GetCenterRole:
     Type: AWS::IAM::Role
     Properties:
@@ -21,6 +46,7 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - dynamodb:Query
+                  - dynamodb:GetItem
                 Resource:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/RemotePatientMonitoringCenterTable-${self:provider.stage}"
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/RemotePatientMonitoringCenterTable-${self:provider.stage}/index/*"
