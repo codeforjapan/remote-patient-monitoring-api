@@ -28,25 +28,26 @@ provider:
   stage: dev
   region: ap-northeast-1
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+  # you can add statements to the Lambda function's IAM Role here
+  #  iamRoleStatements:
+  #    - Effect: "Allow"
+  #      Action:
+  #        - "s3:ListBucket"
+  #      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+  #    - Effect: "Allow"
+  #      Action:
+  #        - "s3:PutObject"
+  #      Resource:
+  #        Fn::Join:
+  #          - ""
+  #          - - "arn:aws:s3:::"
+  #            - "Ref" : "ServerlessDeploymentBucket"
+  #            - "/*"
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+  # you can define service wide environment variables here
+  environment:
+    Bucket: ${file(config/${self:provider.stage}.json):Bucket}
+    DebugMode: ${file(config/${self:provider.stage}.json):DebugMode}
 
 # you can add packaging information here
 package:
@@ -55,7 +56,6 @@ package:
   #    - include-me-dir/**
   exclude:
     - docs/**
-    - node_modules/**
     - templates/**
     - .eslintrc.json
     - LICENSE
@@ -64,6 +64,13 @@ package:
     - package.json
 
 functions:
+  getCenters:
+    handler: src/lambda/handler.getCenters
+    name: "remote-patient-monitoring-getCenters-${self:provider.stage}"
+    description: "This function is test app."
+    role: "arn:aws:iam::#{AWS::AccountId}:role/GetCenterRole-${self:provider.stage}"
+    environment:
+      CENTER_TABLE_NAME: RemotePatientMonitoringCenterTable-${self:provider.stage}
   getCenter:
     handler: src/lambda/handler.getCenter
     name: "remote-patient-monitoring-getCenter-${self:provider.stage}"
@@ -129,7 +136,7 @@ functions:
 resources:
   - ${file(./templates/api-gateway.yml)}
   - ${file(./templates/iam.yml)}
-#  Resources:
+  - ${file(./templates/s3.yml)}
 #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:
@@ -141,3 +148,8 @@ resources:
 
 plugins:
   - serverless-pseudo-parameters
+  - serverless-layers
+
+custom:
+  serverless-layers:
+    layersDeploymentBucket: ${self:provider.environment.Bucket}
