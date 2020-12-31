@@ -134,9 +134,8 @@ functions:
 
 # you can add CloudFormation resource templates here
 resources:
-  - ${file(./templates/api-gateway.yml)}
   - ${file(./templates/iam.yml)}
-  - ${file(./templates/s3.yml)}
+  - ${file(./templates/api-gateway.yml)}
 #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:
@@ -149,7 +148,6 @@ resources:
 plugins:
   - serverless-pseudo-parameters
   - serverless-layers
-
 custom:
   serverless-layers:
     layersDeploymentBucket: ${self:provider.environment.Bucket}

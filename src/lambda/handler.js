@@ -1,41 +1,120 @@
 "use strict";
+var AWS = require("aws-sdk");
+AWS.config.update({
+  region: process.env.region
+});
+var docClient = new AWS.DynamoDB.DocumentClient({
+  apiVersion: "2012-08-10"
+});
+var CenterTable = require("../aws/centerTable");
+var Validator = require("../util/validator");
+var Formatter = require("../util/formatter");
 
-const center = require('./center.js');
-
-function cbw(cb) {
-  return function (err, res) {
-    if (err) {
-      cb(err);
-    } else {
-      if (typeof res === 'object' && res.hasOwnProperty('body')) {
-        cb(null, res.body);
-      } else {
-        cb(null, {});
-      }
+module.exports.getCenters = async (event, context, callback) => {
+  const centerTable = new CenterTable(docClient);
+  const validator = new Validator();
+  const formatter = new Formatter();
+  try {
+    const res = await centerTable.getCenters();
+    if (validator.checkDyanmoQueryResultEmpty(res)) {
+      const errorModel = {
+        errorCode: "RPM00001",
+        errorMessage: "Not Found",
+      };
+      callback(null, {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorModel,
+        }),
+      });
     }
-  };
-}
-
-module.exports.getCenters = (event, context, cb) => center.getCenters({
-  parameters: {
-    limit: event.query.limit,
-    next: event.query.next
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify(formatter.getCenterFormatter(res)),
+    });
+  } catch (err) {
+    console.log("getCenterTable-index error");
   }
-}, cbw(cb));
+};
 
-module.exports.postCenter = (event, context, cb) => center.postCenter({
-  body: event.body
-}, cbw(cb));
-
-module.exports.getCenter = (event, context, cb) => center.getCenter({
-  parameters: {
-    userId: event.path.centerId
+module.exports.postCenter = async (event, context, callback) => {
+  const centerTable = new CenterTable(docClient);
+  const validator = new Validator();
+  try {
+    if (!validator.checkCenterBody(JSON.parse(event.body))) {
+      const errorModel = {
+        errorCode: "RPM00002",
+        errorMessage: "Invalid Body",
+      };
+      callback(null, {
+        statusCode: 400,
+        body: JSON.stringify({
+          errorModel,
+        }),
+      });
+    }
+    const res = await centerTable.postCenter(JSON.parse(event.body));
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify(res),
+    });
+  } catch (err) {
+    console.log("postCenterTable-index error");
   }
-}, cbw(cb));
+};
 
-module.exports.putCenter = (event, context, cb) => center.putCenter({
-  parameters: {
-    userId: event.path.centerId,
-    body: event.body
+module.exports.getCenter = async (event, context, callback) => {
+  const centerTable = new CenterTable(docClient);
+  const validator = new Validator();
+  const formatter = new Formatter();
+  try {
+    const res = await centerTable.getCenters(event.pathParameters.centerId);
+    if (validator.checkDyanmoQueryResultEmpty(res)) {
+      const errorModel = {
+        errorCode: "RPM00001",
+        errorMessage: "Not Found",
+      };
+      callback(null, {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorModel,
+        }),
+      });
+    }
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify(formatter.getCenterFormatter(res)),
+    });
+  } catch (err) {
+    console.log("getCenterTable-index error");
   }
-}, cbw(cb));
+};
+
+module.exports.putCenter = async (event, context, callback) => {
+  const centerTable = new CenterTable(docClient);
+  const validator = new Validator();
+  try {
+    if (!validator.checkCenterBody(JSON.parse(event.body))) {
+      const errorModel = {
+        errorCode: "RPM00002",
+        errorMessage: "Invalid Body",
+      };
+      callback(null, {
+        statusCode: 400,
+        body: JSON.stringify({
+          errorModel,
+        }),
+      });
+    }
+    const res = await centerTable.putCenter(
+      event.pathParameters.centerId,
+      JSON.parse(event.body)
+    );
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify(res),
+    });
+  } catch (err) {
+    console.log("putCenterTable-index error");
+  }
+};

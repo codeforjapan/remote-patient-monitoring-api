@@ -11,6 +11,8 @@ provider:
   region: ap-northeast-1
 
   # 中略
+  environment:
+    Bucket: ${file(../config/${self:provider.stage}.json):Bucket}
 # you can add packaging information here
 package:
   #  include:
@@ -25,3 +27,4 @@ package:
 # you can add CloudFormation resource templates here
 resources:
   - ${file(./templates/dynamodb.yml)}
+  - ${file(./s3.yml)}
