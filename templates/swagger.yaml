@@ -142,7 +142,7 @@ definitions:
   consumeCenterModel:
     type: "object"
     properties:
-      name:
+      centerName:
         type: "string"
   error:
     type: object
@@ -154,8 +154,8 @@ definitions:
   produceCenterModel:
     type: "object"
     properties:
-      id:
+      centerId:
         type: "integer"
         format: "int64"
-      name:
+      centerName:
         type: "string"
