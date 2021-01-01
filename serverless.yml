@@ -144,6 +144,7 @@ resources:
   #       Value: "Some output value"
   # Please comment out above line for the first deploy. After the deployment, enable it and deploy again.
   - ${file(./templates/api-gateway.yml)}
+  # Swagger UI 関連の設計は https://betterdev.blog/serverless-swagger-ui-for-api-gateway/ を参考にした。
   - ${file(./templates/swagger-ui.yml)}
 
 plugins:
