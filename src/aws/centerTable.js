@@ -24,7 +24,6 @@ module.exports = class CenterTable {
   }
 
   getCenter(centerId) {
-    console.log("called second getCenter");
     const params = {
       TableName: process.env.CENTER_TABLE_NAME,
       Key: {
