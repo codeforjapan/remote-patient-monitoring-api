@@ -134,20 +134,38 @@ functions:
 
 # you can add CloudFormation resource templates here
 resources:
+  #    NewResource:
+  #      Type: AWS::S3::Bucket
+  #      Properties:
+  #        BucketName: my-new-bucket
+  #  Outputs:
+  #     NewOutput:
+  #       Description: "Description for the output"
+  #       Value: "Some output value"
   # Please comment out above line for the first deploy. After the deployment, enable it and deploy again.
   - ${file(./templates/api-gateway.yml)}
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+  - ${file(./templates/swagger-ui.yml)}
 
 plugins:
   - serverless-pseudo-parameters
   - serverless-layers
+  - serverless-s3-deploy
+  - serverless-scriptable-plugin
+  - serverless-cloudformation-sub-variables
 custom:
+  project: remote-patient-monitoring
+  baseName: ${self:custom.project}-${self:provider.stage}-${self:service}
   serverless-layers:
     layersDeploymentBucket: ${self:provider.environment.Bucket}
+  scriptHooks:
+    after:aws:deploy:deploy:updateStack:
+      - generateConfigFile.js
+      - webpack --mode production --progress
+  assets:
+    auto: true
+    targets:
+      - bucket: !Ref SwaggerBucket
+        files:
+          - source: dist
+            empty: true
+            globs: "**/*"
