@@ -134,6 +134,7 @@ functions:
 
 # you can add CloudFormation resource templates here
 resources:
+  # Please comment out above line for the first deploy. After the deployment, enable it and deploy again.
   - ${file(./templates/api-gateway.yml)}
 #    NewResource:
 #      Type: AWS::S3::Bucket

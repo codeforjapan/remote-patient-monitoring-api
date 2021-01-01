@@ -17,17 +17,42 @@ export AWS_PROFILE="your-profile-name"
 
 ### 3. Install Serverless environment
 
-`yarn install`
+`npm install`
 
-### 4. Setup server
+### 4. Setup Dynamodb and S3
 
 ```bash
-cd dynamodb
+cd init-db-and-s3
 ../node_modules/.bin/sls deploy -v
 ```
 
-### 4. Deploy
+### 5. Deploy lamdga funciton
+
+Comment out below line from `./serverless.yml` and deploy once.
+
+`serverless.yml`
+
+```yaml
+resources:
+  #- ${file(./templates/api-gateway.yml)}
+```
 
 ```bash
 sls deploy -v
 ```
+
+### 6. Deploy API Gateway
+
+Enable commented-out line from `./serverless.yml` and deploy it again.
+
+`serverless.yml`
+
+```yaml
+resources:
+  - ${file(./templates/api-gateway.yml)}
+```
+
+```bash
+sls deploy -v
+```
+
