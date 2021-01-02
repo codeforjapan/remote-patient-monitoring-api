@@ -97,7 +97,5 @@ custom:
     buckets:
       # empty the Swagger UI S3 bucket content when removing the service so the bucket can be removed
       - ${cf:${self:custom.baseName}.SwaggerBucketName, ''}
+      -
   # save bucket name in outputs so it can be found when removing the service
-  Outputs:
-    SwaggerBucketName:
-      Value: !Ref SwaggerBucket

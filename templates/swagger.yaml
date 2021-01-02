@@ -19,6 +19,8 @@ consumes:
 paths:
   /api/center/:
     get:
+      #security:
+      #  - api-authorizer: []
       summary: get centers.
       description: get all centers.
       tags:
@@ -389,3 +391,27 @@ definitions:
         format: "int64"
       centerName:
         type: "string"
+# securityDefinitions:
+#   api-authorizer:
+#     type: "apiKey"
+#     name: "Authorization"
+#     in: "header"
+#     x-amazon-apigateway-authtype: "oauth2"
+#     x-amazon-apigateway-authorizer:
+#       type: token
+#       authorizerUri: "arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth/invocations"
+#       authorizerCredentials: "arn:aws:iam::#{AWS::AccountId}:role"
+#       identityValidationExpression: "^x-[a-z]+"
+#       authorizerResultTtlInSeconds: 60
+# components:
+#   securitySchemes:
+#     jwt-authorizer-oauth:
+#       type: oauth2
+#       x-amazon-apigateway-authorizer:
+#         type: jwt
+#         jwtConfiguration:
+#           issuer: "https://cognito-idp.region.amazonaws.com/userPoolId"
+#           audience:
+#             - audience1
+#             - audience2
+#         identitySource: $request.header.Authorization
