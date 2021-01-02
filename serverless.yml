@@ -74,15 +74,13 @@ resources:
 
 plugins:
   - serverless-pseudo-parameters
-  - serverless-layers
   - serverless-s3-deploy
   - serverless-scriptable-plugin
   - serverless-cloudformation-sub-variables
+  - serverless-s3-remover
 custom:
   project: remote-patient-monitoring
   baseName: ${self:custom.project}-${self:provider.stage}-${self:service}
-  serverless-layers:
-    layersDeploymentBucket: ${self:provider.environment.Bucket}
   scriptHooks:
     after:aws:deploy:deploy:updateStack:
       - generateConfigFile.js
@@ -95,3 +93,11 @@ custom:
           - source: dist
             empty: true
             globs: "**/*"
+  remover:
+    buckets:
+      # empty the Swagger UI S3 bucket content when removing the service so the bucket can be removed
+      - ${cf:${self:custom.baseName}.SwaggerBucketName, ''}
+  # save bucket name in outputs so it can be found when removing the service
+  Outputs:
+    SwaggerBucketName:
+      Value: !Ref SwaggerBucket

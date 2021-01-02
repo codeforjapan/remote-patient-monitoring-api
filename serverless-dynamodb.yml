@@ -1,4 +1,4 @@
-service: emote-patient-monitoring-dynamoDb
+service: remote-patient-monitoring-dynamoDb
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
 
