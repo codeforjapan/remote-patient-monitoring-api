@@ -1,0 +1,83 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: remote-patient-monitoring
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: "2"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+  # you can overwrite defaults here
+  stage: dev
+  region: ap-northeast-1
+
+  # you can add statements to the Lambda function's IAM Role here
+  #  iamRoleStatements:
+  #    - Effect: "Allow"
+  #      Action:
+  #        - "s3:ListBucket"
+  #      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+  #    - Effect: "Allow"
+  #      Action:
+  #        - "s3:PutObject"
+  #      Resource:
+  #        Fn::Join:
+  #          - ""
+  #          - - "arn:aws:s3:::"
+  #            - "Ref" : "ServerlessDeploymentBucket"
+  #            - "/*"
+
+  # you can define service wide environment variables here
+  environment:
+    Bucket: ${file(config/${self:provider.stage}.json):Bucket}
+    DebugMode: ${file(config/${self:provider.stage}.json):DebugMode}
+
+# you can add packaging information here
+package:
+  #  include:
+  #    - include-me.js
+  #    - include-me-dir/**
+  exclude:
+    - docs/**
+    - templates/**
+    - .eslintrc.json
+    - LICENSE
+    - README.md
+    - yarn.lock
+    - package.json
+
+functions: ${file(./templates/functions.yml)}
+
+# you can add CloudFormation resource templates here
+resources:
+  # Please comment out below two lines for the first deploy. After the deployment, enable it and deploy again.
+  # Swagger UI 関連の設計は https://betterdev.blog/serverless-swagger-ui-for-api-gateway/ を参考にした。
+
+plugins:
+  - serverless-pseudo-parameters
+  - serverless-layers
+  - serverless-s3-deploy
+  - serverless-scriptable-plugin
+  - serverless-cloudformation-sub-variables
+custom:
+  project: remote-patient-monitoring
+  baseName: ${self:custom.project}-${self:provider.stage}-${self:service}
+  serverless-layers:
+    layersDeploymentBucket: ${self:provider.environment.Bucket}

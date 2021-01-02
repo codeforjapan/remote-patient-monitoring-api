@@ -1,4 +1,4 @@
-service: remoteMonitoringSystemDynamoDb
+service: emote-patient-monitoring-dynamoDb
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
 
@@ -12,14 +12,21 @@ provider:
 
   # 中略
   environment:
-    Bucket: ${file(../config/${self:provider.stage}.json):Bucket}
+    Bucket: ${file(./config/${self:provider.stage}.json):Bucket}
 # you can add packaging information here
 package:
   #  include:
   #    - include-me.js
   #    - include-me-dir/**
   exclude:
+    - docs/**
     - templates/**
+    - node_modules/**
+    - .eslintrc.json
+    - LICENSE
+    - README.md
+    - yarn.lock
+    - package.json
 
 #functions:
 #　functionsは記載しない
