@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@aws-amplify/auth": "^3.4.16",
+    "aws-lambda-cors": "0.0.2",
     "serverless": "^2.16.1",
     "serverless-cloudformation-sub-variables": "^0.2.1",
     "serverless-pseudo-parameters": "^2.5.0",

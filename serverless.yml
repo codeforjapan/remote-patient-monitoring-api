@@ -67,10 +67,10 @@ functions: ${file(./templates/functions.yml)}
 
 # you can add CloudFormation resource templates here
 resources:
-  # Please comment out above line for the first deploy. After the deployment, enable it and deploy again.
+  # Please comment out below two lines for the first deploy. After the deployment, enable it and deploy again.
   - ${file(./templates/api-gateway.yml)}
-  # Swagger UI 関連の設計は https://betterdev.blog/serverless-swagger-ui-for-api-gateway/ を参考にした。
   - ${file(./templates/swagger-ui.yml)}
+  # Swagger UI 関連の設計は https://betterdev.blog/serverless-swagger-ui-for-api-gateway/ を参考にした。
 
 plugins:
   - serverless-pseudo-parameters
