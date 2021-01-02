@@ -1,1 +1,0 @@
-{"region":"ap-northeast-1","cognito":{"identityPoolId":"ap-northeast-1:134b52a1-138d-478c-b072-de5e1131f8ed","userPoolId":"ap-northeast-1_Zv0FFFVwj","userPoolWebClientId":"3jj0tg007564hk201fipuj8rsi","oauthDomain":"my-api-swaggerui.auth.ap-northeast-1.amazoncognito.com"},"apiGateway":{"restApiId":"e1v3azqfq0","stageName":"dev"}}
