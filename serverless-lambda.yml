@@ -56,12 +56,16 @@ package:
   #    - include-me.js
   #    - include-me-dir/**
   exclude:
+    - .git/**
     - docs/**
     - templates/**
     - .eslintrc.json
     - LICENSE
     - README.md
     - yarn.lock
+    - package.json
+    - util/**
+    - package-lock.json
     - package.json
 
 functions: ${file(./templates/functions.yml)}

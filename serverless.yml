@@ -53,6 +53,8 @@ provider:
     SwaggerUIUserPoolDomain: ${file(config/${self:provider.stage}.json):SwaggerUIUserPoolDomain}
     AuthUserPoolDomain: ${file(config/${self:provider.stage}.json):AuthUserPoolDomain}
     DBPrefix: ${file(config/${self:provider.stage}.json):DBPrefix}
+    AdminUserEmail: ${file(config/${self:provider.stage}.json):AdminUserEmail}
+    AdminUserName: ${file(config/${self:provider.stage}.json):AdminUserName}
 
 # you can add packaging information here
 package:
@@ -60,6 +62,7 @@ package:
   #    - include-me.js
   #    - include-me-dir/**
   exclude:
+    - .git/**
     - docs/**
     - templates/**
     - .eslintrc.json
@@ -68,6 +71,8 @@ package:
     - yarn.lock
     - package.json
     - util/**
+    - package-lock.json
+    - package.json
 
 functions: ${file(./templates/functions.yml)}
 

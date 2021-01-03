@@ -5,4 +5,4 @@ jspm_packages
 # Serverless directories
 .serverless
 src/webpack/config.json
-util/src/config.json
+util/config.json

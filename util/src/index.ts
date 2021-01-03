@@ -5,6 +5,12 @@ import commandLineUsage from 'command-line-usage';
 
 const optionDefinitions = [
   {
+    name: 'type',
+    alias: 't',
+    type: String,
+    desctiption: 'confirm '
+  },
+  {
     name: 'username',
     alias: 'u',
     type: String,
@@ -15,6 +21,12 @@ const optionDefinitions = [
     alias: 'p',
     type: String,
     description: 'Password'
+  },
+  {
+    name: 'loginCode',
+    alias: 'l',
+    type: String,
+    description: 'Login Code'
   },
   {
     name: 'help',
@@ -44,7 +56,7 @@ if(options.help) {
 
 console.log(options);
 
-if (options.username == undefined ||  options.password == undefined) {
+if (options.username == undefined || options.password == undefined ||  options.type == undefined ) {
   const usage = commandLineUsage(sections);
   console.log(usage);
   process.exit(0);
@@ -62,13 +74,15 @@ const poolData = {
 };
 console.log(poolData);
 const CognitoUserPoolWrapper = require('cognito-user-pool')(poolData);
+if (options.type === 'confirm'){
+  const params = {
+    "username": options.username,
+    "loginSession": options.loginCode,
+    "newPassword": options.password
+  }
+  console.log(params);
 
-const params = {
-  "username": options.username,
-  "password": options.password
-}
-console.log(params);
-
-CognitoUserPoolWrapper.signup(params, (res:any) => {
-  console.log(res);
-});
+  CognitoUserPoolWrapper.loginNewPasswordRequired(params, (res:any) => {
+    console.log(res);
+  });
+};

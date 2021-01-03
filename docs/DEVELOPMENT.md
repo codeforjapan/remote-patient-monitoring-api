@@ -21,7 +21,8 @@ export AWS_PROFILE="your-profile-name"
 
 ### 4. Edit environment settings
 
-リージョン毎に一意なので、Bucket名とドメイン名は変えて下さい
+リージョン毎に一意なので、Bucket名とドメイン名は変えて下さい。
+また、AdminUserEmail も変更してください。
 
 config/dev.json
 
@@ -33,6 +34,9 @@ config/dev.json
   "OauthSignoutURL":"https://your.signout.url",
   "Bucket":"your-bucket-name",
   "DebugMode":"on"
+  "DBPrefix":"RemotePatientMonitoring-",
+  "AdminUserEmail":"hal@code4japan.org",
+  "AdminUserName":"admin"
 }
 ```
 
@@ -53,3 +57,15 @@ sls deploy -v -c serverless-lambda.yml
 ```bash
 sls deploy -v
 ```
+
+### 8. Confirm admin user
+
+config/dev.json にセットしたメールアドレスに、仮パスワードを届いていると思います。
+それを使って、下記コマンドでユーザを有効にしてください。
+
+```bash
+cd util/
+./confirm_admin.sh -u admin -c '仮パスワード' -p '新しいパスワード' 
+```
+
+新しいパスワードはメモしておいてください。
