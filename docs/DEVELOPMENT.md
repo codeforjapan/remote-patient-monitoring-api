@@ -60,12 +60,21 @@ sls deploy -v
 
 ### 8. Confirm admin user
 
+`util/.secret` というファイルを作り、以下の内容を設定してください。
+
+```json
+{
+  "auth_user":"admin(dev.json で設定したものと同じ)", 
+  "auth_pass":"設定したいパスワード"
+}
+```
+
 config/dev.json にセットしたメールアドレスに、仮パスワードを届いていると思います。
 それを使って、下記コマンドでユーザを有効にしてください。
 
 ```bash
 cd util/
-./confirm_admin.sh -u admin -c '仮パスワード' -p '新しいパスワード' 
+./confirm_admin.sh -c '仮パスワード' 
 ```
 
-新しいパスワードはメモしておいてください。
+`.secret` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。

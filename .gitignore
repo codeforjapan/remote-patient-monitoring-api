@@ -6,3 +6,4 @@ jspm_packages
 .serverless
 src/webpack/config.json
 util/config.json
+util/.secret
