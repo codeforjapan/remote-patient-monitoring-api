@@ -14,7 +14,7 @@ Resources:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
       UserPoolId: !Ref RPMUserPool
-      Domain: api.remote-patient-monitoring.jp
+      Domain: ${self:provider.environment.AuthUserPoolDomain}
 
   RPMAppClient:
     Type: AWS::Cognito::UserPoolClient
@@ -34,6 +34,11 @@ Resources:
         - ${self:provider.environment.OauthCallbackURL}
       LogoutURLs:
         - ${self:provider.environment.OauthSignoutURL}
+      ExplicitAuthFlows:
+        - ALLOW_ADMIN_USER_PASSWORD_AUTH
+        - ALLOW_CUSTOM_AUTH
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
 
   RPMIdentityProvider:
     Type: AWS::Cognito::IdentityPool

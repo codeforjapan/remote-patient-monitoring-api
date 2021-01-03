@@ -1,0 +1,6 @@
+{
+	"private": true,
+	"devDependencies": {
+		"webpack-cli": "^4.3.1"
+	}
+}

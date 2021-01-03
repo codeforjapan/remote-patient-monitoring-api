@@ -19,19 +19,36 @@ export AWS_PROFILE="your-profile-name"
 
 `npm install`
 
-### 4. Setup Dynamodb and S3
+### 4. Edit environment settings
+
+リージョン毎に一意なので、Bucket名とドメイン名は変えて下さい
+
+config/dev.json
+
+```bash
+{
+  "SwaggerUIUserPoolDomain":"your.domain",
+  "AuthUserPoolDomain":"your.api.domain",
+  "OauthCallbackURL":"https://your.callback.url",
+  "OauthSignoutURL":"https://your.signout.url",
+  "Bucket":"your-bucket-name",
+  "DebugMode":"on"
+}
+```
+
+### 5. Setup Dynamodb and S3
 
 ```bash
 sls deploy -v -c serverless-dynamodb.yml
 ```
 
-### 5. Deploy lamdga funciton
+### 6. Deploy lamdga funciton
 
 ```bash
 sls deploy -v -c serverless-lambda.yml
 ```
 
-### 6. Deploy API Gateway
+### 7. Deploy API Gateway
 
 ```bash
 sls deploy -v

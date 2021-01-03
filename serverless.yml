@@ -50,6 +50,8 @@ provider:
     DebugMode: ${file(config/${self:provider.stage}.json):DebugMode}
     OauthCallbackURL: ${file(config/${self:provider.stage}.json):OauthCallbackURL}
     OauthSignoutURL: ${file(config/${self:provider.stage}.json):OauthSignoutURL}
+    SwaggerUIUserPoolDomain: $(file(config/${self:provider.stage}.json):SwaggerUIUserPoolDomain"}
+    AuthUserPoolDomain: $(file(config/${self:provider.stage}.json):AuthUserPoolDomain"}
 
 # you can add packaging information here
 package:
@@ -64,6 +66,7 @@ package:
     - README.md
     - yarn.lock
     - package.json
+    - util/**
 
 functions: ${file(./templates/functions.yml)}
 
@@ -87,6 +90,7 @@ custom:
   scriptHooks:
     after:aws:deploy:deploy:updateStack:
       - generateConfigFile.js
+      - generateAuthConfigFile.js
       - ./node_modules/.bin/webpack --mode production --progress
   assets:
     auto: true
