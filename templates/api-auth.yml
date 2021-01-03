@@ -1,0 +1,88 @@
+Resources:
+  RPMUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: RPMUserPool
+      Schema:
+        - Name: email
+          Required: true
+          Mutable: true
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: true
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      UserPoolId: !Ref RPMUserPool
+      Domain: api.remote-patient-monitoring.jp
+
+  RPMAppClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: RPMAppClient
+      UserPoolId: !Ref RPMUserPool
+      GenerateSecret: false
+      SupportedIdentityProviders:
+        - COGNITO
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthFlows:
+        - code
+      AllowedOAuthScopes:
+        - email
+        - openid
+      CallbackURLs:
+        - ${self:provider.environment.OauthCallbackURL}
+      LogoutURLs:
+        - ${self:provider.environment.OauthSignoutURL}
+
+  RPMIdentityProvider:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      IdentityPoolName: RPMIdentityPool
+      CognitoIdentityProviders:
+        - ProviderName: "cognito-idp.#{AWS::Region}.amazonaws.com/#{RPMUserPool}"
+          ClientId: !Ref RPMAppClient
+      AllowUnauthenticatedIdentities: false
+
+  RPMIdentityProviderRoles:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId: !Ref RPMIdentityProvider
+      Roles:
+        authenticated: !GetAtt RPMAuthRole.Arn
+
+  RPMAuthRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: cognito-identity.amazonaws.com
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                cognito-identity.amazonaws.com:aud: !Ref RPMIdentityProvider
+              ForAnyValue:StringLike:
+                cognito-identity.amazonaws.com:amr: authenticated
+      Policies:
+        - PolicyName: api-gateway
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: apigateway:GET
+                Resource: "arn:aws:apigateway:#{AWS::Region}::/restapis/#{ApiGatewayRestApi}/stages/${self:provider.stage}/exports/*"
+  ApiGatewayWithAuthorizationAuthorizer:
+    Type: AWS::ApiGateway::Authorizer
+    DependsOn:
+      - ApiGatewayRestApi # 暗黙的に適用されるが一応入れておく
+    Properties:
+      Name: ApiGatewayWithAuthorizationAuthorizer
+      RestApiId:
+        Ref: ApiGatewayRestApi
+      IdentitySource: method.request.header.Authorization
+      Type: COGNITO_USER_POOLS
+      ProviderARNs:
+        - { Fn::GetAtt: [RPMUserPool, Arn] }

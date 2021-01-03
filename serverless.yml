@@ -48,6 +48,8 @@ provider:
   environment:
     Bucket: ${file(config/${self:provider.stage}.json):Bucket}
     DebugMode: ${file(config/${self:provider.stage}.json):DebugMode}
+    OauthCallbackURL: ${file(config/${self:provider.stage}.json):OauthCallbackURL}
+    OauthSignoutURL: ${file(config/${self:provider.stage}.json):OauthSignoutURL}
 
 # you can add packaging information here
 package:
@@ -69,6 +71,7 @@ functions: ${file(./templates/functions.yml)}
 resources:
   # Please comment out below two lines for the first deploy. After the deployment, enable it and deploy again.
   - ${file(./templates/api-gateway.yml)}
+  - ${file(./templates/api-auth.yml)}
   - ${file(./templates/swagger-ui.yml)}
   # Swagger UI 関連の設計は https://betterdev.blog/serverless-swagger-ui-for-api-gateway/ を参考にした。
 

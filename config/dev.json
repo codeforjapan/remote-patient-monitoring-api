@@ -1,4 +1,6 @@
 {
+  "OauthCallbackURL":"https://dev.remotepatientmonitoring.jp",
+  "OauthSignoutURL":"https://dev.remotepatientmonitoring.jp",
   "Bucket":"remote-patient-monitoring-dev",
   "DebugMode":"on"
 }
