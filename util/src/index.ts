@@ -43,9 +43,13 @@ if(options.help) {
 
 console.log(options);
 
-function hello(name: string): string {
-  return `Hello, ${name}!`;
+if (options.username == undefined ||  options.password == undefined) {
+  const usage = commandLineUsage(sections);
+  console.log(usage);
+  process.exit(0);
+} else {
+  function hello(name: string): string {
+    return `Hello, ${name}!`;
+  }
 }
 
-console.log(config);
-console.log(hello(config.cognito.identityPoolId));
