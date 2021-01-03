@@ -56,8 +56,7 @@ module.exports.getCenters = cors.cors({
   allowHeaders: [
     'Authorization',
     'Content-Type',
-  ],
-  allowCredentials: true,
+  ]
 })(origGetCenters);
 
 
@@ -106,8 +105,7 @@ module.exports.postCenter = cors.cors({
   allowHeaders: [
     'Authorization',
     'Content-Type',
-  ],
-  allowCredentials: true,
+  ]
 })(origPostCenter);
 
 const origGetCenter = async (event, context, callback) => {
@@ -117,7 +115,6 @@ const origGetCenter = async (event, context, callback) => {
   console.log('call getCenter with ' + event.pathParameters.centerId);
   try {
     const res = await centerTable.getCenter(event.pathParameters.centerId);
-    console.log('called getCenter')
     console.log(res);
     if (validator.checkDynamoGetResultEmpty(res)) {
       const errorModel = {
@@ -159,14 +156,12 @@ module.exports.getCenter = cors.cors({
   allowHeaders: [
     'Authorization',
     'Content-Type',
-  ],
-  allowCredentials: true,
+  ]
 })(origGetCenter);
 
 const origPutCenter = async (event, context, callback) => {
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
-  console.log(event)
   try {
     if (!validator.checkCenterBody(JSON.parse(event.body))) {
       const errorModel = {
@@ -210,6 +205,5 @@ module.exports.putCenter = cors.cors({
   allowHeaders: [
     'Authorization',
     'Content-Type',
-  ],
-  allowCredentials: true,
+  ]
 })(origPutCenter);
