@@ -50,8 +50,8 @@ provider:
     DebugMode: ${file(config/${self:provider.stage}.json):DebugMode}
     OauthCallbackURL: ${file(config/${self:provider.stage}.json):OauthCallbackURL}
     OauthSignoutURL: ${file(config/${self:provider.stage}.json):OauthSignoutURL}
-    SwaggerUIUserPoolDomain: $(file(config/${self:provider.stage}.json):SwaggerUIUserPoolDomain"}
-    AuthUserPoolDomain: $(file(config/${self:provider.stage}.json):AuthUserPoolDomain"}
+    SwaggerUIUserPoolDomain: ${file(config/${self:provider.stage}.json):SwaggerUIUserPoolDomain}
+    AuthUserPoolDomain: ${file(config/${self:provider.stage}.json):AuthUserPoolDomain}
 
 # you can add packaging information here
 package:
