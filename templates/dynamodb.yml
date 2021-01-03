@@ -2,7 +2,7 @@ Resources:
   RemotePatientMonitoringCenterTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: RemotePatientMonitoringCenterTable-${self:provider.stage}
+      TableName: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
       KeySchema:
         - AttributeName: centerId
           KeyType: HASH

@@ -52,6 +52,7 @@ provider:
     OauthSignoutURL: ${file(config/${self:provider.stage}.json):OauthSignoutURL}
     SwaggerUIUserPoolDomain: ${file(config/${self:provider.stage}.json):SwaggerUIUserPoolDomain}
     AuthUserPoolDomain: ${file(config/${self:provider.stage}.json):AuthUserPoolDomain}
+    DBPrefix: ${file(config/${self:provider.stage}.json):DBPrefix}
 
 # you can add packaging information here
 package:

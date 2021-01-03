@@ -22,8 +22,8 @@ Resources:
                 Action:
                   - dynamodb:Scan
                 Resource:
-                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/RemotePatientMonitoringCenterTable-${self:provider.stage}"
-                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/RemotePatientMonitoringCenterTable-${self:provider.stage}/index/*"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}/index/*"
   GetCenterRole:
     Type: AWS::IAM::Role
     Properties:
@@ -48,8 +48,8 @@ Resources:
                   - dynamodb:Query
                   - dynamodb:GetItem
                 Resource:
-                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/RemotePatientMonitoringCenterTable-${self:provider.stage}"
-                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/RemotePatientMonitoringCenterTable-${self:provider.stage}/index/*"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}/index/*"
   PostCenterRole:
     Type: AWS::IAM::Role
     Properties:
@@ -73,7 +73,7 @@ Resources:
                 Action:
                   - dynamodb:PutItem
                 Resource:
-                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/RemotePatientMonitoringCenterTable-${self:provider.stage}"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}"
   PutCenterRole:
     Type: AWS::IAM::Role
     Properties:
@@ -97,4 +97,4 @@ Resources:
                 Action:
                   - dynamodb:UpdateItem
                 Resource:
-                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/RemotePatientMonitoringCenterTable-${self:provider.stage}"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}"

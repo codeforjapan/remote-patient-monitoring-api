@@ -13,6 +13,7 @@ provider:
   # 中略
   environment:
     Bucket: ${file(./config/${self:provider.stage}.json):Bucket}
+    DBPrefix: ${file(./config/${self:provider.stage}.json):DBPrefix}
 # you can add packaging information here
 package:
   #  include:
@@ -34,7 +35,6 @@ package:
 # you can add CloudFormation resource templates here
 resources:
   - ${file(./templates/dynamodb.yml)}
-  - ${file(./templates/s3.yml)}
   - ${file(./templates/iam.yml)}
 
 plugins:
