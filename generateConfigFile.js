@@ -19,7 +19,7 @@ const listStackResources = async (resources, nextToken) => {
   }
 
   return resources;
-}
+};
 
 const createConfig = stackResources => ({
   region: provider.region,
