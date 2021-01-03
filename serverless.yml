@@ -84,7 +84,7 @@ custom:
   scriptHooks:
     after:aws:deploy:deploy:updateStack:
       - generateConfigFile.js
-      - webpack --mode production --progress
+      - ./node_modules/.bin/webpack --mode production --progress
   assets:
     auto: true
     targets:
