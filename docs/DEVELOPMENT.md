@@ -53,4 +53,3 @@ sls deploy -v -c serverless-lambda.yml
 ```bash
 sls deploy -v
 ```
-
