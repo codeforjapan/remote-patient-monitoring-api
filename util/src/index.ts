@@ -2,6 +2,7 @@ import {config} from './config';
 import commandLineArgs from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
 
+
 const optionDefinitions = [
   {
     name: 'username',
@@ -53,3 +54,21 @@ if (options.username == undefined ||  options.password == undefined) {
   }
 }
 
+
+const poolData = {
+  UserPoolId: config.cognito.userPoolId, // your user pool ID
+  ClientId: config.cognito.userPoolWebClientId, // generated in the AWS console
+  Paranoia: 7 // an integer between 1 - 10
+};
+console.log(poolData);
+const CognitoUserPoolWrapper = require('cognito-user-pool')(poolData);
+
+const params = {
+  "username": options.username,
+  "password": options.password
+}
+console.log(params);
+
+CognitoUserPoolWrapper.signup(params, (res:any) => {
+  console.log(res);
+});
