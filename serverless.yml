@@ -62,7 +62,6 @@ package:
   #    - include-me.js
   #    - include-me-dir/**
   exclude:
-    - .git/**
     - docs/**
     - templates/**
     - .eslintrc.json
@@ -92,7 +91,7 @@ plugins:
   - serverless-s3-remover
 custom:
   project: remote-patient-monitoring
-  baseName: ${self:custom.project}-${self:provider.stage}-${self:service}
+  baseName: ${self:custom.project}-${self:provider.stage}
   scriptHooks:
     after:aws:deploy:deploy:updateStack:
       - generateConfigFile.js
@@ -106,9 +105,7 @@ custom:
           - source: dist
             empty: true
             globs: "**/*"
+  # empty the Swagger UI S3 bucket content when removing the service so the bucket can be removed
   remover:
     buckets:
-      # empty the Swagger UI S3 bucket content when removing the service so the bucket can be removed
       - ${cf:${self:custom.baseName}.SwaggerBucketName, ''}
-      -
-  # save bucket name in outputs so it can be found when removing the service
