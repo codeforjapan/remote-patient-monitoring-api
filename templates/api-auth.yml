@@ -88,12 +88,12 @@ Resources:
           Value: ${self:provider.environment.AdminUserEmail}
       Username: ${self:provider.environment.AdminUserName}
 
-  ApiGatewayWithAuthorizationAuthorizer:
+  MyAuthorizer:
     Type: AWS::ApiGateway::Authorizer
     DependsOn:
       - ApiGatewayRestApi # 暗黙的に適用されるが一応入れておく
     Properties:
-      Name: ApiGatewayWithAuthorizationAuthorizer
+      Name: MyAuthorizer
       RestApiId:
         Ref: ApiGatewayRestApi
       IdentitySource: method.request.header.Authorization

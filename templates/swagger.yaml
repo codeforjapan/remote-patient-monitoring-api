@@ -19,8 +19,9 @@ consumes:
 paths:
   /api/center/:
     get:
-      # security:
-      #   - MyUserPool: []
+      security:
+        - api_key: []
+        - MyAuthorizer: []
       summary: get centers.
       description: get all centers.
       tags:
@@ -394,29 +395,34 @@ definitions:
         format: "int64"
       centerName:
         type: "string"
-  # securityDefinitions:
-  #   api-authorizer:
-  #     type: "apiKey"
-  #     name: "Authorization"
-  #     in: "header"
-  #     x-amazon-apigateway-authtype: "oauth2"
-  #     x-amazon-apigateway-authorizer:
-  #       type: token
-  #       authorizerUri: "arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth/invocations"
-  #       authorizerCredentials: "arn:aws:iam::#{AWS::AccountId}:role"
-  #       identityValidationExpression: "^x-[a-z]+"
-  #       authorizerResultTtlInSeconds: 60
-# components:
-#   securitySchemes:
-#     MyUserPool:
-#       type: apiKey
-#       name: Authorization
-#       in: header
-#       x-amazon-apigateway-authtype: cognito_user_pools
-#       x-amazon-apigateway-authorizer:
-#         type: cognito_user_pools
-#         providerARNs:
-#           - arn:aws:cognito-idp:#{AWS:Region}:#{AWS::AccountId}:userpool/UESR_POOL_ID
+# securityDefinitions:
+#   api-authorizer:
+#     type: "apiKey"
+#     name: "Authorization"
+#     in: "header"
+#     x-amazon-apigateway-authtype: "oauth2"
+#     x-amazon-apigateway-authorizer:
+#       type: token
+#       authorizerUri: "arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth/invocations"
+#       authorizerCredentials: "arn:aws:iam::#{AWS::AccountId}:role"
+#       identityValidationExpression: "^x-[a-z]+"
+#       authorizerResultTtlInSeconds: 60
+# securityDefinitions:
+#   api_key:
+#     type: "apiKey"
+#     name: "x-api-key"
+#     in: "header"
+#   MyAuthorizer:
+#     type: "apiKey"
+#     name: "Authorization"
+#     in: "header"
+#     x-amazon-apigateway-authtype: "cognito_user_pools"
+#     x-amazon-apigateway-authorizer:
+#       type: cognito_user_pools
+#       providerARNs:
+#         - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_ycrEjAmSd"
+#       identityValidationExpression: ".*"
+#components:
 # securitySchemes:
 #   jwt-authorizer-oauth:
 #     type: oauth2
