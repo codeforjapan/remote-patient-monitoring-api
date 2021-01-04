@@ -1,0 +1,11 @@
+exclude:
+  - docs/**
+  - templates/**
+  - .eslintrc.json
+  - LICENSE
+  - README.md
+  - yarn.lock
+  - package.json
+  - util/**
+  - package-lock.json
+  - package.json

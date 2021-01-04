@@ -9,9 +9,9 @@
     "uuid": "^8.3.2"
   },
   "scripts": {
-    "deploy:dynamodb": "./node_modules/.bin/sls deploy -v -c serverless-dynamodb.yml",
-    "deploy:lambda": "./node_modules/.bin/sls deploy -v -c serverless-lambda.yml",
-    "deploy:": "./node_modules/.bin/sls deploy -v",
+    "deploy:dynamodb": "sls deploy -v -c serverless-dynamodb.yml",
+    "deploy:lambda": "sls deploy -v -c serverless-lambda.yml",
+    "deploy:gateway": "sls deploy -v",
     "confirmAdmin": "util/confirm_admin.sh"
   },
   "name": "remote-patient-monitoring",

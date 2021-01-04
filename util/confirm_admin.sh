@@ -62,17 +62,15 @@ fi
 # set new password 
 if [ -n "$PASSWORD" ]; then
     SESSION=`echo $RET | jq -r '.Session'`
-    if [ -n "$SESSION" ]; then
-        SESSION=`echo $RET | `
-    fi
     echo $SESSION
     echo '#--- set new password'
-    aws cognito-idp admin-respond-to-auth-challenge \
+    RET=`aws cognito-idp admin-respond-to-auth-challenge \
     --user-pool-id $POOL_ID \
     --client-id $CLIENT_ID \
     --challenge-name NEW_PASSWORD_REQUIRED \
     --challenge-responses NEW_PASSWORD="'${PASSWORD}'",USERNAME="'${USERNAME}'" \
-    --session $SESSION
+    --session $SESSION`
+    echo $RET | jq
     if [ $? -ne 0 ]; then
       echo "Changing password failed"
       exit 1

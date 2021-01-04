@@ -61,25 +61,15 @@ package:
   #  include:
   #    - include-me.js
   #    - include-me-dir/**
-  exclude:
-    - docs/**
-    - templates/**
-    - .eslintrc.json
-    - LICENSE
-    - README.md
-    - yarn.lock
-    - package.json
-    - util/**
-    - package-lock.json
-    - package.json
+  ${file(./templates/exclude-files.yml)}
 
 functions: ${file(./templates/functions.yml)}
 
 # you can add CloudFormation resource templates here
 resources:
   # Please comment out below two lines for the first deploy. After the deployment, enable it and deploy again.
-  - ${file(./templates/api-gateway.yml)}
   - ${file(./templates/api-auth.yml)}
+  - ${file(./templates/api-gateway.yml)}
   - ${file(./templates/swagger-ui.yml)}
   # Swagger UI 関連の設計は https://betterdev.blog/serverless-swagger-ui-for-api-gateway/ を参考にした。
 

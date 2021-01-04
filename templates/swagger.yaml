@@ -19,8 +19,8 @@ consumes:
 paths:
   /api/center/:
     get:
-      #security:
-      #  - api-authorizer: []
+      # security:
+      #   - MyUserPool: []
       summary: get centers.
       description: get all centers.
       tags:
@@ -85,6 +85,9 @@ paths:
         uri: "arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getCenters-dev/invocations"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
+      # x-amazon-apigateway-authorizer:
+      #   type: COGNITO_USER_POOLS
+      #   authorizerId: !Ref ApiGatewayWithAuthorizationAuthorizer
     post:
       summary: Create a new center.
       description: Create a new center.
@@ -391,27 +394,37 @@ definitions:
         format: "int64"
       centerName:
         type: "string"
-# securityDefinitions:
-#   api-authorizer:
-#     type: "apiKey"
-#     name: "Authorization"
-#     in: "header"
-#     x-amazon-apigateway-authtype: "oauth2"
-#     x-amazon-apigateway-authorizer:
-#       type: token
-#       authorizerUri: "arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth/invocations"
-#       authorizerCredentials: "arn:aws:iam::#{AWS::AccountId}:role"
-#       identityValidationExpression: "^x-[a-z]+"
-#       authorizerResultTtlInSeconds: 60
+  # securityDefinitions:
+  #   api-authorizer:
+  #     type: "apiKey"
+  #     name: "Authorization"
+  #     in: "header"
+  #     x-amazon-apigateway-authtype: "oauth2"
+  #     x-amazon-apigateway-authorizer:
+  #       type: token
+  #       authorizerUri: "arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth/invocations"
+  #       authorizerCredentials: "arn:aws:iam::#{AWS::AccountId}:role"
+  #       identityValidationExpression: "^x-[a-z]+"
+  #       authorizerResultTtlInSeconds: 60
 # components:
 #   securitySchemes:
-#     jwt-authorizer-oauth:
-#       type: oauth2
+#     MyUserPool:
+#       type: apiKey
+#       name: Authorization
+#       in: header
+#       x-amazon-apigateway-authtype: cognito_user_pools
 #       x-amazon-apigateway-authorizer:
-#         type: jwt
-#         jwtConfiguration:
-#           issuer: "https://cognito-idp.region.amazonaws.com/userPoolId"
-#           audience:
-#             - audience1
-#             - audience2
-#         identitySource: $request.header.Authorization
+#         type: cognito_user_pools
+#         providerARNs:
+#           - arn:aws:cognito-idp:#{AWS:Region}:#{AWS::AccountId}:userpool/UESR_POOL_ID
+# securitySchemes:
+#   jwt-authorizer-oauth:
+#     type: oauth2
+#     x-amazon-apigateway-authorizer:
+#       type: jwt
+#       jwtConfiguration:
+#         issuer: "https://cognito-idp.region.amazonaws.com/userPoolId"
+#         audience:
+#           - audience1
+#           - audience2
+#       identitySource: $request.header.Authorization
