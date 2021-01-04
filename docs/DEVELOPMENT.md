@@ -45,6 +45,7 @@ config/dev.json
 ```bash
 npm run deploy
 ```
+
 ### 6. Confirm admin user
 
 `util/.secret` というファイルを作り、以下の内容を設定してください。
@@ -64,7 +65,6 @@ npm run confirmAdmin -- -c '仮パスワード'
 ```
 
 `.secret` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
-
 
 ## 開発用情報
 
