@@ -31,6 +31,7 @@ const createConfig = stackResources => ({
   },
   apiGateway: {
     restApiId: getPhysicalId(stackResources, 'ApiGatewayRestApi'),
+    ApiGatewayWithAuthorizationAuthorizer: getPhysicalId(stackResources, 'ApiGatewayWithAuthorizationAuthorizer'),
     stageName: provider.stage,
   },
 });

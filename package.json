@@ -9,6 +9,8 @@
     "uuid": "^8.3.2"
   },
   "scripts": {
+    "deploy": "run-s deploy:dynamodb deploy:all-gateway",
+    "deploy:all-gateway": "run-s deploy:lambda deploy:gateway",
     "deploy:dynamodb": "sls deploy -v -c serverless-dynamodb.yml",
     "deploy:lambda": "sls deploy -v -c serverless-lambda.yml",
     "deploy:gateway": "sls deploy -v",
@@ -20,6 +22,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.0.1",
     "html-webpack-plugin": "^4.5.0",
+    "npm-run-all": "^4.1.5",
     "serverless-layers": "^2.3.3",
     "serverless-s3-deploy": "^0.9.0",
     "serverless-s3-remover": "^0.6.0",
