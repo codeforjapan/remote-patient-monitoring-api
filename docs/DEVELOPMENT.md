@@ -73,8 +73,7 @@ config/dev.json にセットしたメールアドレスに、仮パスワード�
 それを使って、下記コマンドでユーザを有効にしてください。
 
 ```bash
-cd util/
-./confirm_admin.sh -c '仮パスワード' 
+npm run confirmAdmin -- -c '仮パスワード' 
 ```
 
 `.secret` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。

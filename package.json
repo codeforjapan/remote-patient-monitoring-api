@@ -8,6 +8,12 @@
     "swagger-ui-dist": "^3.38.0",
     "uuid": "^8.3.2"
   },
+  "scripts": {
+    "deploy:dynamodb": "./node_modules/.bin/sls deploy -v -c serverless-dynamodb.yml",
+    "deploy:lambda": "./node_modules/.bin/sls deploy -v -c serverless-lambda.yml",
+    "deploy:": "./node_modules/.bin/sls deploy -v",
+    "confirmAdmin": "util/confirm_admin.sh"
+  },
   "name": "remote-patient-monitoring",
   "devDependencies": {
     "@types/swagger-ui-dist": "^3.30.0",
