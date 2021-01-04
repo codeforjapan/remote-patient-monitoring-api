@@ -40,25 +40,12 @@ config/dev.json
 }
 ```
 
-### 5. Setup Dynamodb and S3
+### 5. Setup
 
 ```bash
-sls deploy -v -c serverless-dynamodb.yml
+npm run deploy
 ```
-
-### 6. Deploy lamdga funciton
-
-```bash
-sls deploy -v -c serverless-lambda.yml
-```
-
-### 7. Deploy API Gateway
-
-```bash
-sls deploy -v
-```
-
-### 8. Confirm admin user
+### 6. Confirm admin user
 
 `util/.secret` というファイルを作り、以下の内容を設定してください。
 
@@ -77,3 +64,23 @@ npm run confirmAdmin -- -c '仮パスワード'
 ```
 
 `.secret` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
+
+
+## 開発用情報
+
+### API や serverless.yml を修正後、再デプロイする
+
+```bash
+npm run deploy:gateway
+```
+### APIを削除する
+
+```bash
+sls remove
+```
+
+### DynamoDB を削除する
+
+```bash
+sls remove -c serverless-dynamodb.yml
+```
