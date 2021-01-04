@@ -73,6 +73,7 @@ npm run confirmAdmin -- -c '仮パスワード'
 ```bash
 npm run deploy:gateway
 ```
+
 ### APIを削除する
 
 ```bash
