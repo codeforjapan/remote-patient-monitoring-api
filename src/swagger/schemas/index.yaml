@@ -1,0 +1,8 @@
+Center:
+  $ref: "./Center.yaml"
+consumeCenter:
+  $ref: "./consumeCenter.yaml"
+Centers:
+  $ref: "./Centers.yaml"
+Error:
+  $ref: "./Error.yaml"

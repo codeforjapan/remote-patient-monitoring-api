@@ -86,7 +86,6 @@ npm run confirmAdmin -- -c '仮パスワード'
 
 `.secret` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
 
-
 ### 6. Swagger UI にアクセスする
 
 以下のコマンドで、Swagger UI が開きます。step5 で作ったユーザ名/パスワードでログインできます。

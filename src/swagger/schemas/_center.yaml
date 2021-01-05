@@ -1,0 +1,13 @@
+consumeCenterModel:
+  type: object
+  properties:
+    centerName:
+      type: string
+produceCenterModel:
+  type: object
+  properties:
+    centerId:
+      type: integer
+      format: int64
+    centerName:
+      type: string

@@ -1,0 +1,7 @@
+type: object
+properties:
+  centerId:
+    type: integer
+    format: int64
+  centerName:
+    type: string
