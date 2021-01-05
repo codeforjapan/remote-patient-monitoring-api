@@ -42,9 +42,27 @@ config/dev.json
 
 ### 5. Setup
 
+Dynamo DB のセットアップと、Lambda Function 及び API Gateway の作成の２種類の CloudFormation Stack を作成します。
+
+全て一度で deploy する場合
+
 ```bash
 npm run deploy
 ```
+
+DynamoDB 以外を deploy する場合
+
+```bash
+npm run deploy:all-gateway
+```
+
+※初回のデプロイ時のみ、API Gateway の Authorization の CLIENT_POOL のIDを設定するため、以下の手順で2回 deploy をしてください。
+
+```bash
+npm run deploy && npm run deploy:gateway
+```
+
+
 
 ### 6. Confirm admin user
 
