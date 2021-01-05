@@ -28,7 +28,6 @@ config/dev.json
 
 ```bash
 {
-  "SwaggerUIUserPoolDomain":"your.domain",
   "AuthUserPoolDomain":"your.api.domain",
   "OauthCallbackURL":"https://your.callback.url",
   "OauthSignoutURL":"https://your.signout.url",

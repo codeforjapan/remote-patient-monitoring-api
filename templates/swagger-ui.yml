@@ -51,58 +51,6 @@ Resources:
   SwaggerBucket:
     Type: AWS::S3::Bucket
 
-  UserPool:
-    Type: AWS::Cognito::UserPool
-    Properties:
-      UserPoolName: swaggerui
-      Schema:
-        - Name: email
-          Required: true
-          Mutable: true
-      AdminCreateUserConfig:
-        AllowAdminCreateUserOnly: true
-
-  UserPoolDomain:
-    Type: AWS::Cognito::UserPoolDomain
-    Properties:
-      UserPoolId: !Ref UserPool
-      Domain: ${self:provider.environment.SwaggerUIUserPoolDomain}
-
-  SwaggerUIAppClient:
-    Type: AWS::Cognito::UserPoolClient
-    Properties:
-      ClientName: SwaggerUI
-      UserPoolId: !Ref UserPool
-      GenerateSecret: false
-      SupportedIdentityProviders:
-        - COGNITO
-      AllowedOAuthFlowsUserPoolClient: true
-      AllowedOAuthFlows:
-        - code
-      AllowedOAuthScopes:
-        - email
-        - openid
-      CallbackURLs:
-        - "https://#{SwaggerDistribution.DomainName}"
-      LogoutURLs:
-        - "https://#{SwaggerDistribution.DomainName}"
-
-  SwaggerUIIdentityProvider:
-    Type: AWS::Cognito::IdentityPool
-    Properties:
-      IdentityPoolName: swaggerui
-      CognitoIdentityProviders:
-        - ProviderName: "cognito-idp.#{AWS::Region}.amazonaws.com/#{UserPool}"
-          ClientId: !Ref SwaggerUIAppClient
-      AllowUnauthenticatedIdentities: false
-
-  SwaggerUIIdentityProviderRoles:
-    Type: AWS::Cognito::IdentityPoolRoleAttachment
-    Properties:
-      IdentityPoolId: !Ref SwaggerUIIdentityProvider
-      Roles:
-        authenticated: !GetAtt SwaggerUIAuthRole.Arn
-
   SwaggerUIAuthRole:
     Type: AWS::IAM::Role
     Properties:
@@ -115,7 +63,7 @@ Resources:
             Action: sts:AssumeRoleWithWebIdentity
             Condition:
               StringEquals:
-                cognito-identity.amazonaws.com:aud: !Ref SwaggerUIIdentityProvider
+                cognito-identity.amazonaws.com:aud: !Ref RPMIdentityProvider
               ForAnyValue:StringLike:
                 cognito-identity.amazonaws.com:amr: authenticated
       Policies:

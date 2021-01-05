@@ -13,7 +13,7 @@
     "deploy:all-gateway": "run-s deploy:lambda deploy:gateway",
     "deploy:dynamodb": "sls deploy -v -c serverless-dynamodb.yml",
     "deploy:lambda": "sls deploy -v -c serverless-lambda.yml",
-    "deploy:gateway": "util/build_swagger_yml.sh; sls deploy -v",
+    "deploy:gateway": "util/build_swagger_yml.sh; sls deploy -v --force",
     "confirmAdmin": "util/confirm_admin.sh"
   },
   "name": "remote-patient-monitoring",

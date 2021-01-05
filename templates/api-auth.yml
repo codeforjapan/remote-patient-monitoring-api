@@ -31,9 +31,9 @@ Resources:
         - email
         - openid
       CallbackURLs:
-        - ${self:provider.environment.OauthCallbackURL}
+        - "https://#{SwaggerDistribution.DomainName}"
       LogoutURLs:
-        - ${self:provider.environment.OauthSignoutURL}
+        - "https://#{SwaggerDistribution.DomainName}"
       ExplicitAuthFlows:
         - ALLOW_ADMIN_USER_PASSWORD_AUTH
         - ALLOW_CUSTOM_AUTH

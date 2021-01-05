@@ -24,9 +24,9 @@ const listStackResources = async (resources, nextToken) => {
 const createConfig = stackResources => ({
   region: provider.region,
   cognito: {
-    identityPoolId: getPhysicalId(stackResources, 'SwaggerUIIdentityProvider'),
-    userPoolId: getPhysicalId(stackResources, 'UserPool'),
-    userPoolWebClientId: getPhysicalId(stackResources, 'SwaggerUIAppClient'),
+    identityPoolId: getPhysicalId(stackResources, 'RPMIdentityProvider'),
+    userPoolId: getPhysicalId(stackResources, 'RPMUserPool'),
+    userPoolWebClientId: getPhysicalId(stackResources, 'RPMAppClient'),
     oauthDomain: `${getPhysicalId(stackResources, 'UserPoolDomain')}.auth.${provider.region}.amazoncognito.com`,
   },
   apiGateway: {
