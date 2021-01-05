@@ -4,5 +4,9 @@ consumeCenter:
   $ref: "./consumeCenter.yaml"
 Centers:
   $ref: "./Centers.yaml"
+Observer:
+  $ref: "./Observer.yaml"
+Observers:
+  $ref: "./Observers.yaml"
 Error:
   $ref: "./Error.yaml"

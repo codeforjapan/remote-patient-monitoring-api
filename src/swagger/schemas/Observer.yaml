@@ -1,0 +1,10 @@
+type: object
+properties:
+  observerId:
+    type: string
+  observerName:
+    type: string
+  manageCenters:
+    type: array
+    items:
+      $ref: "./Center.yaml"

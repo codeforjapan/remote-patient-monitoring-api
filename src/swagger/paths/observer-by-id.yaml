@@ -1,12 +1,12 @@
 get:
   tags:
-    - Center
-  summary: 保健所の取得
-  description: 指定された{centerId}を持つ保健所情報を返します
+    - Observer
+  summary: 観察者の取得
+  description: 指定された{observerId}を持つ観察者情報を返します
   parameters:
-    - name: centerId
+    - name: observerId
       in: path
-      description: 取得したい保健所のID
+      description: 取得したい観察者のID
       required: true
       schema:
         type: string
@@ -26,7 +26,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Center.yaml"
+            $ref: "../schemas/Observer.yaml"
     400:
       description: Bad Request
       headers:
@@ -80,30 +80,30 @@ get:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getCenter-dev/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getObserver-by-id-dev/invocations
     passthroughBehavior: when_no_match
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
 put:
   tags:
-    - Center
-  summary: 保健所の更新
-  description: 指定されたcenterIdの保健所情報を更新します
+    - Observer
+  summary: 観察者の更新
+  description: 指定されたobserverIdの観察者情報を更新します
   security:
     - APIGatewayAuthorizer: []
   parameters:
-    - name: centerId
+    - name: observerId
       in: path
-      description: 更新したい保健所のID
+      description: 更新したい観察者のID
       required: true
       schema:
         type: string
   requestBody:
-    description: center model which you want to update.
+    description: observer model which you want to update.
     content:
       application/json:
         schema:
-          $ref: "../schemas/consumeCenter.yaml"
+          $ref: "../schemas/consumeObserver.yaml"
     required: true
   responses:
     200:
@@ -121,7 +121,7 @@ put:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Center.yaml"
+            $ref: "../schemas/Observer.yaml"
     400:
       description: Bad Request
       headers:
@@ -175,7 +175,7 @@ put:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-putCenter-dev/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-putObserver-dev/invocations
     passthroughBehavior: when_no_match
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
@@ -187,9 +187,9 @@ options:
   description: |
     Enable CORS by returning correct headers
   parameters:
-    - name: centerId
+    - name: observerId
       in: path
-      description: 取得したい保健所のID
+      description: 取得したい観察者のID
       required: true
       schema:
         type: string

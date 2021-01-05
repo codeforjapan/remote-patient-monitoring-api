@@ -16,6 +16,10 @@ paths:
     $ref: ./paths/center.yaml
   /api/center/{centerId}:
     $ref: ./paths/center-by-id.yaml
+  /api/center/{centerId}/observer/:
+    $ref: ./paths/observer-by-center-id.yaml
+  /api/observer/{observerId}:
+    $ref: ./paths/observer-by-id.yaml
 components:
   schemas:
     $ref: "./schemas/index.yaml"
