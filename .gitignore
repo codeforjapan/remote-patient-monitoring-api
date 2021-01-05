@@ -9,3 +9,4 @@ src/swagger/_swagger.yaml
 util/config.json
 util/.secret
 templates/swagger.yaml
+dist/**
