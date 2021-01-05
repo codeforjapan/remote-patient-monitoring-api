@@ -1,0 +1,33 @@
+service: remote-patient-monitoring-dynamoDb
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+  # you can overwrite defaults here
+  stage: dev
+  region: ap-northeast-1
+
+  # 中略
+  environment:
+    Bucket: ${file(./config/${self:provider.stage}.json):Bucket}
+    DBPrefix: ${file(./config/${self:provider.stage}.json):DBPrefix}
+# you can add packaging information here
+package:
+  #  include:
+  #    - include-me.js
+  #    - include-me-dir/**
+  ${file(./templates/exclude-files.yml)}
+
+#functions:
+#　functionsは記載しない
+
+# you can add CloudFormation resource templates here
+resources:
+  - ${file(./templates/dynamodb.yml)}
+  - ${file(./templates/iam.yml)}
+
+plugins:
+  - serverless-pseudo-parameters

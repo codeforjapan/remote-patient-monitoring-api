@@ -1,0 +1,41 @@
+openapi: 3.0.1
+info:
+  title: Remote Patient Monitoring System API
+  description: 遠隔療養者モニタリングシステムのAPIです。
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: hal@code4japan.org
+  license:
+    name: MIT License
+    url: https://github.com/codeforjapan/remote-patient-monitoring-api/blob/main/LICENSE
+  version: 1.0.0
+servers:
+  - url: /
+paths:
+  /api/center/:
+    $ref: ./paths/center.yaml
+  /api/center/{centerId}:
+    $ref: ./paths/center-by-id.yaml
+  /api/center/{centerId}/observer/:
+    $ref: ./paths/observer-by-center-id.yaml
+  /api/observer/{observerId}:
+    $ref: ./paths/observer-by-id.yaml
+components:
+  schemas:
+    $ref: "./schemas/index.yaml"
+  securitySchemes:
+    APIGatewayAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_USER_POOL_ID_TO_BE_REPLACED"
+        identityValidationExpression: ".*"
+tags:
+  - name: Center
+    description: 補完所に関するモデル
+  - name: CORS
+    description: Cross-Origin Resource Sharing 設定

@@ -1,0 +1,6 @@
+type: object
+properties:
+  centerId:
+    type: string
+  centerName:
+    type: string

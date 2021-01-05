@@ -1,0 +1,15 @@
+exclude:
+  - node_modules/**
+  - "!node_modules/@aws-amplify/**"
+  - "!node_modules/uuid/**"
+  - "!node_modules/aws-lambda-cors/**"
+  - docs/**
+  - templates/**
+  - .eslintrc.json
+  - LICENSE
+  - README.md
+  - yarn.lock
+  - package.json
+  - util/**
+  - package-lock.json
+  - package.json

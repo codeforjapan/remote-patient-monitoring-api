@@ -48,12 +48,7 @@ provider:
   environment:
     Bucket: ${file(config/${self:provider.stage}.json):Bucket}
     DebugMode: ${file(config/${self:provider.stage}.json):DebugMode}
-    OauthCallbackURL: ${file(config/${self:provider.stage}.json):OauthCallbackURL}
-    OauthSignoutURL: ${file(config/${self:provider.stage}.json):OauthSignoutURL}
-    AuthUserPoolDomain: ${file(config/${self:provider.stage}.json):AuthUserPoolDomain}
-    DBPrefix: ${file(config/${self:provider.stage}.json):DBPrefix}
-    AdminUserEmail: ${file(config/${self:provider.stage}.json):AdminUserEmail}
-    AdminUserName: ${file(config/${self:provider.stage}.json):AdminUserName}
+    DBPrefix: ${file(./config/${self:provider.stage}.json):DBPrefix}
 
 # you can add packaging information here
 package:
@@ -67,9 +62,6 @@ functions: ${file(./templates/functions.yml)}
 # you can add CloudFormation resource templates here
 resources:
   # Please comment out below two lines for the first deploy. After the deployment, enable it and deploy again.
-  - ${file(./templates/api-auth.yml)}
-  - ${file(./templates/api-gateway.yml)}
-  - ${file(./templates/swagger-ui.yml)}
   # Swagger UI 関連の設計は https://betterdev.blog/serverless-swagger-ui-for-api-gateway/ を参考にした。
 
 plugins:
@@ -77,24 +69,6 @@ plugins:
   - serverless-s3-deploy
   - serverless-scriptable-plugin
   - serverless-cloudformation-sub-variables
-  - serverless-s3-remover
 custom:
   project: remote-patient-monitoring
-  baseName: ${self:custom.project}-${self:provider.stage}
-  scriptHooks:
-    after:aws:deploy:deploy:updateStack:
-      - generateConfigFile.js
-      - generateAuthConfigFile.js
-      - ./node_modules/.bin/webpack --mode production --progress
-  assets:
-    auto: true
-    targets:
-      - bucket: !Ref SwaggerBucket
-        files:
-          - source: dist
-            empty: true
-            globs: "**/*"
-  # empty the Swagger UI S3 bucket content when removing the service so the bucket can be removed
-  remover:
-    buckets:
-      - ${cf:${self:custom.baseName}.SwaggerBucketName, ''}
+  baseName: ${self:custom.project}-${self:provider.stage}-${self:service}

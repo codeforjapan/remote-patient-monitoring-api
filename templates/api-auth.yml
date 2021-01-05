@@ -1,0 +1,89 @@
+Resources:
+  RPMUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: RPMUserPool
+      Schema:
+        - Name: email
+          Required: true
+          Mutable: true
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: true
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      UserPoolId: !Ref RPMUserPool
+      Domain: ${self:provider.environment.AuthUserPoolDomain}
+
+  RPMAppClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: RPMAppClient
+      UserPoolId: !Ref RPMUserPool
+      GenerateSecret: false
+      SupportedIdentityProviders:
+        - COGNITO
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthFlows:
+        - code
+      AllowedOAuthScopes:
+        - email
+        - openid
+      CallbackURLs:
+        - "https://#{SwaggerDistribution.DomainName}"
+      LogoutURLs:
+        - "https://#{SwaggerDistribution.DomainName}"
+      ExplicitAuthFlows:
+        - ALLOW_ADMIN_USER_PASSWORD_AUTH
+        - ALLOW_CUSTOM_AUTH
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+
+  RPMIdentityProvider:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      IdentityPoolName: RPMIdentityPool
+      CognitoIdentityProviders:
+        - ProviderName: "cognito-idp.#{AWS::Region}.amazonaws.com/#{RPMUserPool}"
+          ClientId: !Ref RPMAppClient
+      AllowUnauthenticatedIdentities: false
+
+  RPMIdentityProviderRoles:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId: !Ref RPMIdentityProvider
+      Roles:
+        authenticated: !GetAtt RPMAuthRole.Arn
+
+  RPMAuthRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: cognito-identity.amazonaws.com
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                cognito-identity.amazonaws.com:aud: !Ref RPMIdentityProvider
+              ForAnyValue:StringLike:
+                cognito-identity.amazonaws.com:amr: authenticated
+      Policies:
+        - PolicyName: api-gateway
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: apigateway:GET
+                Resource: "arn:aws:apigateway:#{AWS::Region}::/restapis/#{ApiGatewayRestApi}/stages/${self:provider.stage}/exports/*"
+  RPMAdminUser:
+    Type: "AWS::Cognito::UserPoolUser"
+    Properties:
+      UserPoolId: !Ref RPMUserPool
+      UserAttributes:
+        - Name: "email"
+          Value: ${self:provider.environment.AdminUserEmail}
+      Username: ${self:provider.environment.AdminUserName}

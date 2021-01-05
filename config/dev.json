@@ -1,0 +1,10 @@
+{
+  "AuthUserPoolDomain":"remote-patient-monitoring",
+  "OauthCallbackURL":"https://dev.remotepatientmonitoring.jp",
+  "OauthSignoutURL":"https://dev.remotepatientmonitoring.jp",
+  "Bucket":"remote-patient-monitoring-dev",
+  "DebugMode":"on",
+  "DBPrefix":"RemotePatientMonitoring-",
+  "AdminUserEmail":"hal@code4japan.org",
+  "AdminUserName":"admin"
+}
