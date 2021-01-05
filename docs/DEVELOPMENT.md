@@ -64,8 +64,6 @@ npm run deploy && npm run deploy:gateway
 
 認証がうまく行かないばあい、AWS の AWS Gateway Console から該当APIを選び、 `Deploy API` を行って下さい。
 
-
-
 ### 6. Confirm admin user
 
 `util/.secret` というファイルを作り、以下の内容を設定してください。
@@ -86,6 +84,13 @@ npm run confirmAdmin -- -c '仮パスワード'
 
 `.secret` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
 
+
+### 7. Swagger UI にアクセスする
+
+AWS コンソールから Cognito を選び、swaggerui の UserPool を選択して、`Users and Groups` から新しいユーザを作成してください。
+その後、CloudFront を選び、作成された Distoribution の `Domain Name` のURLにアクセスすると、ログイン画面が表示されますので、上記のユーザ情報を入力してください。（初回はパスワード変更を求められます。）
+Authorize が必要なAPIにアクセスする場合、`Authorize` ボタンから、ステップ6で取得した、`IdToken` の内容を入力する必要があります。
+（入力してもうまく行かない場合、 AWS Gateway Console から `Deploy API` を行ってみて下さい。）
 ## 開発用情報
 
 ### API や serverless.yml を修正後、再デプロイする
