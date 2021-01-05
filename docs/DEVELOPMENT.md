@@ -1,10 +1,13 @@
 # Set up environment
 
-## install Serverless
+## install dependencies
 
-### 1. Install node version 12.x
+* Serverless
+* node version 12.x
+* jq
+* sed
 
-### 2. Setup aws-cli
+### 1. Setup aws-cli
 
 Follow [this AWS instruction](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/install-cliv2.html)
 
@@ -15,11 +18,11 @@ aws configure --profile your-profile-name
 export AWS_PROFILE="your-profile-name"
 ```
 
-### 3. Install Serverless environment
+### 2. Install Serverless environment
 
 `npm install`
 
-### 4. Edit environment settings
+### 3. Edit environment settings
 
 リージョン毎に一意なので、Bucket名とドメイン名は変えて下さい。
 また、AdminUserEmail も変更してください。
@@ -39,7 +42,7 @@ config/dev.json
 }
 ```
 
-### 5. Setup
+### 4. Setup
 
 Dynamo DB のセットアップと、Lambda Function 及び API Gateway の作成の２種類の CloudFormation Stack を作成します。
 
@@ -63,7 +66,7 @@ npm run deploy && npm run deploy:gateway
 
 認証がうまく行かないばあい、AWS の AWS Gateway Console から該当APIを選び、 `Deploy API` を行って下さい。
 
-### 6. Confirm admin user
+### 5. Confirm admin user
 
 `util/.secret` というファイルを作り、以下の内容を設定してください。
 
@@ -84,10 +87,14 @@ npm run confirmAdmin -- -c '仮パスワード'
 `.secret` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
 
 
-### 7. Swagger UI にアクセスする
+### 6. Swagger UI にアクセスする
 
-AWS コンソールから Cognito を選び、swaggerui の UserPool を選択して、`Users and Groups` から新しいユーザを作成してください。
-その後、CloudFront を選び、作成された Distoribution の `Domain Name` のURLにアクセスすると、ログイン画面が表示されますので、上記のユーザ情報を入力してください。（初回はパスワード変更を求められます。）
+以下のコマンドで、Swagger UI が開きます。step5 で作ったユーザ名/パスワードでログインできます。
+
+```bash
+npm run openSwaggerUI
+```
+
 Authorize が必要なAPIにアクセスする場合、`Authorize` ボタンから、ステップ6で取得した、`IdToken` の内容を入力する必要があります。
 （入力してもうまく行かない場合、 AWS Gateway Console から `Deploy API` を行ってみて下さい。）
 ## 開発用情報

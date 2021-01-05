@@ -27,6 +27,9 @@ const createConfig = stackResources => ({
     identityPoolId: getPhysicalId(stackResources, 'RPMIdentityProvider'),
     userPoolId: getPhysicalId(stackResources, 'RPMUserPool'),
     userPoolWebClientId: getPhysicalId(stackResources, 'RPMAppClient')
+  },
+  distribution: {
+    SwaggerUIDistribution: getPhysicalId(stackResources, 'SwaggerDistribution')
   }
 });
 

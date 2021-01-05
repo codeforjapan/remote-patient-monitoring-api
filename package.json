@@ -14,7 +14,8 @@
     "deploy:dynamodb": "sls deploy -v -c serverless-dynamodb.yml",
     "deploy:lambda": "sls deploy -v -c serverless-lambda.yml",
     "deploy:gateway": "util/build_swagger_yml.sh; sls deploy -v --force",
-    "confirmAdmin": "util/confirm_admin.sh"
+    "confirmAdmin": "util/confirm_admin.sh",
+    "openSwaggerUI": "util/open_swagger-ui.sh"
   },
   "name": "remote-patient-monitoring",
   "devDependencies": {
