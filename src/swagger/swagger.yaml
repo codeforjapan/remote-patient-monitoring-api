@@ -18,8 +18,6 @@ paths:
         - center
       summary: get centers.
       description: get all centers.
-      security:
-        - APIGatewayAuthorizer: []
       responses:
         200:
           description: OK
@@ -100,6 +98,8 @@ paths:
         - center
       summary: Create a new center.
       description: Create a new center.
+      security:
+        - APIGatewayAuthorizer: []
       requestBody:
         description: center model which you want to create.
         content:
@@ -311,6 +311,8 @@ paths:
         - center
       summary: 保健所の更新
       description: 指定されたcenterIdの保健所情報を更新します
+      security:
+        - APIGatewayAuthorizer: []
       parameters:
         - name: centerId
           in: path

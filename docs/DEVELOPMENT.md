@@ -97,6 +97,7 @@ npm run openSwaggerUI
 
 Authorize が必要なAPIにアクセスする場合、`Authorize` ボタンから、ステップ6で取得した、`IdToken` の内容を入力する必要があります。
 （入力してもうまく行かない場合、 AWS Gateway Console から `Deploy API` を行ってみて下さい。）
+
 ## 開発用情報
 
 ### API や serverless.yml を修正後、再デプロイする
