@@ -62,6 +62,8 @@ npm run deploy:all-gateway
 npm run deploy && npm run deploy:gateway
 ```
 
+認証がうまく行かないばあい、AWS の AWS Gateway Console から該当APIを選び、 `Deploy API` を行って下さい。
+
 
 
 ### 6. Confirm admin user
