@@ -1,16 +1,15 @@
 get:
   tags:
-    - center
-  summary: 保健所ID
-  description: 指定されたcenterIdの保健所情報を返します
+    - Center
+  summary: 保健所の取得
+  description: 指定された{centerId}を持つ保健所情報を返します
   parameters:
     - name: centerId
       in: path
       description: 取得したい保健所のID
       required: true
       schema:
-        type: integer
-        format: int64
+        type: string
   responses:
     200:
       description: OK
@@ -87,7 +86,7 @@ get:
     contentHandling: CONVERT_TO_TEXT
 put:
   tags:
-    - center
+    - Center
   summary: 保健所の更新
   description: 指定されたcenterIdの保健所情報を更新します
   security:

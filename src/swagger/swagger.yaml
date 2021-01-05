@@ -30,3 +30,8 @@ components:
         providerARNs:
           - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_USER_POOL_ID_TO_BE_REPLACED"
         identityValidationExpression: ".*"
+tags:
+  - name: Center
+    description: 補完所に関するモデル
+  - name: CORS
+    description: Cross-Origin Resource Sharing 設定

@@ -1,8 +1,8 @@
 get:
   tags:
-    - center
-  summary: get centers.
-  description: get all centers.
+    - Center
+  summary: 保健所を取得する
+  description: 全ての保健所を取得
   responses:
     200:
       description: OK
@@ -78,9 +78,9 @@ get:
     contentHandling: CONVERT_TO_TEXT
 post:
   tags:
-    - center
-  summary: Create a new center.
-  description: Create a new center.
+    - Center
+  summary: 新たに保健所を作成する
+  description: 指定された名前で、新たに保健所を作成します。
   security:
     - APIGatewayAuthorizer: []
   requestBody:
