@@ -87,16 +87,3 @@ Resources:
         - Name: "email"
           Value: ${self:provider.environment.AdminUserEmail}
       Username: ${self:provider.environment.AdminUserName}
-
-  MyAuthorizer:
-    Type: AWS::ApiGateway::Authorizer
-    DependsOn:
-      - ApiGatewayRestApi # 暗黙的に適用されるが一応入れておく
-    Properties:
-      Name: MyAuthorizer
-      RestApiId:
-        Ref: ApiGatewayRestApi
-      IdentitySource: method.request.header.Authorization
-      Type: COGNITO_USER_POOLS
-      ProviderARNs:
-        - { Fn::GetAtt: [RPMUserPool, Arn] }

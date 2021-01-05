@@ -2,12 +2,12 @@ openapi: 3.0.1
 info:
   title: Remote Patient Monitoring System API
   description: 遠隔療養者モニタリングシステムのAPIです。
-  termsOfService: 'http://swagger.io/terms/'
+  termsOfService: http://swagger.io/terms/
   contact:
     email: hal@code4japan.org
   license:
     name: MIT License
-    url: 'https://github.com/codeforjapan/remote-patient-monitoring-api/blob/main/LICENSE'
+    url: https://github.com/codeforjapan/remote-patient-monitoring-api/blob/main/LICENSE
   version: 1.0.0
 servers:
   - url: /
@@ -21,7 +21,7 @@ paths:
       security:
         - APIGatewayAuthorizer: []
       responses:
-        '200':
+        200:
           description: OK
           headers:
             Access-Control-Allow-Origin:
@@ -38,8 +38,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/produceCenterModel'
-        '400':
+                  $ref: "#/components/schemas/produceCenterModel"
+        400:
           description: Bad Request
           headers:
             Access-Control-Allow-Origin:
@@ -54,8 +54,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
-        '500':
+                $ref: "#/components/schemas/error"
+        500:
           description: Internal error
           headers:
             Access-Control-Allow-Origin:
@@ -70,29 +70,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: "#/components/schemas/error"
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
           default:
-            statusCode: '200'
+            statusCode: "200"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
           BAD.*:
-            statusCode: '400'
+            statusCode: "400"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
           INT.*:
-            statusCode: '500'
+            statusCode: "500"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
-        uri: 'arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getCenters-dev/invocations'
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getCenters-dev/invocations
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
     post:
@@ -105,10 +105,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/consumeCenterModel'
+              $ref: "#/components/schemas/consumeCenterModel"
         required: true
       responses:
-        '200':
+        200:
           description: OK
           headers:
             Access-Control-Allow-Origin:
@@ -123,8 +123,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/produceCenterModel'
-        '400':
+                $ref: "#/components/schemas/produceCenterModel"
+        400:
           description: Bad Request
           headers:
             Access-Control-Allow-Origin:
@@ -139,8 +139,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
-        '500':
+                $ref: "#/components/schemas/error"
+        500:
           description: Internal error
           headers:
             Access-Control-Allow-Origin:
@@ -155,29 +155,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: "#/components/schemas/error"
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
           default:
-            statusCode: '200'
+            statusCode: "200"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
           BAD.*:
-            statusCode: '400'
+            statusCode: "400"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
           INT.*:
-            statusCode: '500'
+            statusCode: "500"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
-        uri: 'arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postCenter-dev/invocations'
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postCenter-dev/invocations
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
       x-codegen-request-body-name: centerModel
@@ -188,7 +188,7 @@ paths:
       description: |
         Enable CORS by returning correct headers
       responses:
-        '200':
+        200:
           description: Default response for CORS method
           headers:
             Access-Control-Allow-Origin:
@@ -210,15 +210,15 @@ paths:
             }
         responses:
           default:
-            statusCode: '200'
+            statusCode: "200"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: |
                 {}
-  '/api/center/{centerId}':
+  /api/center/{centerId}:
     get:
       tags:
         - center
@@ -233,7 +233,7 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        200:
           description: OK
           headers:
             Access-Control-Allow-Origin:
@@ -248,8 +248,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/produceCenterModel'
-        '400':
+                $ref: "#/components/schemas/produceCenterModel"
+        400:
           description: Bad Request
           headers:
             Access-Control-Allow-Origin:
@@ -264,8 +264,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
-        '500':
+                $ref: "#/components/schemas/error"
+        500:
           description: Internal error
           headers:
             Access-Control-Allow-Origin:
@@ -280,29 +280,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: "#/components/schemas/error"
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
           default:
-            statusCode: '200'
+            statusCode: "200"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
           BAD.*:
-            statusCode: '400'
+            statusCode: "400"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
           INT.*:
-            statusCode: '500'
+            statusCode: "500"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
-        uri: 'arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getCenter-dev/invocations'
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getCenter-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -324,10 +324,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/consumeCenterModel'
+              $ref: "#/components/schemas/consumeCenterModel"
         required: true
       responses:
-        '200':
+        200:
           description: OK
           headers:
             Access-Control-Allow-Origin:
@@ -342,8 +342,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/produceCenterModel'
-        '400':
+                $ref: "#/components/schemas/produceCenterModel"
+        400:
           description: Bad Request
           headers:
             Access-Control-Allow-Origin:
@@ -358,8 +358,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
-        '500':
+                $ref: "#/components/schemas/error"
+        500:
           description: Internal error
           headers:
             Access-Control-Allow-Origin:
@@ -374,29 +374,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: "#/components/schemas/error"
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
           default:
-            statusCode: '200'
+            statusCode: "200"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
           BAD.*:
-            statusCode: '400'
+            statusCode: "400"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
           INT.*:
-            statusCode: '500'
+            statusCode: "500"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
-        uri: 'arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-putCenter-dev/invocations'
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-putCenter-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -416,7 +416,7 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        200:
           description: Default response for CORS method
           headers:
             Access-Control-Allow-Origin:
@@ -438,11 +438,11 @@ paths:
             }
         responses:
           default:
-            statusCode: '200'
+            statusCode: "200"
             responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: |
                 {}
@@ -470,12 +470,12 @@ components:
           type: string
   securitySchemes:
     APIGatewayAuthorizer:
-      type: apiKey
-      name: Authorization
-      in: header
-      x-amazon-apigateway-authtype: cognito_user_pools
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
       x-amazon-apigateway-authorizer:
         type: cognito_user_pools
         providerARNs:
-          - 'arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_uZkPsZPUK'
-        identityValidationExpression: .*
+          - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_uZkPsZPUK"
+        identityValidationExpression: ".*"
