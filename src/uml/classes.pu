@@ -1,5 +1,6 @@
 @startuml RemotePatientMonitoring
 title 遠隔療養患者モニタリングシステムクラス図
+skinparam backgroundColor white
 
 Center "0..*" --- "0..*" Observer
 Center o-- "0..*" Patient
