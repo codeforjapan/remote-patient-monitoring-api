@@ -95,7 +95,7 @@ options:
   description: |
     Enable CORS by returning correct headers
   parameters:
-    - name: centerId
+    - name: patientId
       in: path
       description: 取得したい保健所のID
       required: true
