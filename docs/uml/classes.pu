@@ -1,0 +1,56 @@
+@startuml RemotePatientMonitoring
+title 遠隔療養患者モニタリングシステムクラス図
+skinparam backgroundColor white
+
+Center "0..*" --- "0..*" Observer
+Center o-- "0..*" Patient
+Patient o-- "0..*" Status
+Status *-- "1" Symptoms
+Patient o-- "0..*" Notification :通知を送った時に作成(2重送信防止)
+
+class Center {
+    String centerId
+    String centerName
+    Observer[] Observers
+}
+
+class Observer {
+    String observerId
+    String loginId
+    String password
+    String observerName
+    Center[] Centers
+}
+
+class Patient {
+    String patientId
+    String loginId
+    String password
+    String phone
+    Boolean display
+    DateTime policy_accepted
+    Status[] Statuses
+}
+
+class Status {
+    String statusId
+    DateTime created
+    Integer SpO2
+    Float body_temperature
+    Integer pulse
+    Symptoms symptoms
+}
+
+class Symptoms {
+    Boolean cough
+    Boolean phlegm
+    Boolean suffocation
+    Boolean headache
+    Boolean sore_throat
+    String Remarks
+}
+
+class Notification {
+    DateTime sent_time
+}
+@enduml
