@@ -15,4 +15,6 @@ sed -e "s/COGNITO_USER_POOL_ID_TO_BE_REPLACED/${USER_POOL_ID}/g" ../src/swagger/
 cd ..
 ./node_modules/.bin/swagger-merger -i ./src/swagger/_swagger.yaml -o ./templates/swagger.yaml
 
+# copy to swager-ui
+cp ./templates/swagger.yaml ./src/gh-swagger-ui/swagger.yaml
 #${COGNITO_USER_POOL_ID}

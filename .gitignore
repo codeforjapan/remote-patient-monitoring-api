@@ -10,3 +10,4 @@ util/config.json
 util/.secret
 templates/swagger.yaml
 dist/**
+./src/gh-swagger-ui/swagger.yaml
