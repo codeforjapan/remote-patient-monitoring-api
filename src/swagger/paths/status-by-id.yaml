@@ -1,0 +1,138 @@
+delete:
+  tags:
+    - Status
+  summary: 病状報告の削除
+  description: 指定されたStatusIdの症状報告情報を削除します。成功したら、responseCode 0 を返します。
+  security:
+    - APIGatewayAuthorizer: []
+  parameters:
+    - name: StatusId
+      in: path
+      description: 削除したい症状報告のID
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: DELETED
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              responseCode:
+                type: number
+              responseMessage:
+                type: string
+    400:
+      description: Bad Request
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Error.yaml"
+    500:
+      description: Internal error
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Error.yaml"
+  x-amazon-apigateway-integration:
+    type: aws_proxy
+    responses:
+      default:
+        statusCode: "200"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+      BAD.*:
+        statusCode: "400"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+      INT.*:
+        statusCode: "500"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-deleteStatus-dev/invocations
+    passthroughBehavior: when_no_match
+    httpMethod: POST
+    contentHandling: CONVERT_TO_TEXT
+  x-codegen-request-body-name: body
+options:
+  tags:
+    - CORS
+  summary: CORS support
+  description: |
+    Enable CORS by returning correct headers
+  parameters:
+    - name: StatusId
+      in: path
+      description: 取得したい療養者のID
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: Default response for CORS method
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content: {}
+  x-amazon-apigateway-integration:
+    type: mock
+    requestTemplates:
+      application/json: |
+        {
+          "statusCode" : 200
+        }
+    responses:
+      default:
+        statusCode: "200"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+        responseTemplates:
+          application/json: |
+            {}

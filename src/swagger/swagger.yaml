@@ -26,6 +26,8 @@ paths:
     $ref: ./paths/patient-by-id.yaml
   /api/patient/{patientId}/statuses:
     $ref: ./paths/statuses-by-patient-id.yaml
+  /api/status/{statusId}:
+    $ref: ./paths/status-by-id.yaml
 components:
   schemas:
     $ref: "./schemas/index.yaml"
