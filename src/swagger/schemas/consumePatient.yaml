@@ -1,0 +1,11 @@
+type: object
+properties:
+  policy_accepted:
+    type: string
+    format: date-time
+  loginId:
+    type: string
+  phone:
+    type: string
+  display:
+    type: boolean
