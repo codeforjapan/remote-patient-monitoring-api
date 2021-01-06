@@ -59,8 +59,6 @@ module.exports.getCenters = cors.cors({
   ]
 })(origGetCenters);
 
-
-
 const origPostCenter = async (event, context, callback) => {
   console.log('called postCenter');
   const centerTable = new CenterTable(docClient);
