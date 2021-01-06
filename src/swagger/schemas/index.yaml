@@ -10,6 +10,8 @@ Observers:
   $ref: "./Observers.yaml"
 Patient:
   $ref: "./Patient.yaml"
+consumePatient:
+  $ref: "./consumePatient.yaml"
 Patients:
   $ref: "./Patients.yaml"
 Statuses:

@@ -2407,6 +2407,13 @@ components:
                     type: boolean
                   remarks:
                     type: string
+    consumePatient:
+      type: object
+      properties:
+        phone:
+          type: string
+        display:
+          type: boolean
     Patients:
       type: array
       items:
