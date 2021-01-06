@@ -3,8 +3,6 @@
 PATH_DIR_SCRIPT=$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)
 cd "$PATH_DIR_SCRIPT"
 
-USERNAME=`cat .secret | jq -r '.auth_user'`
-
 USER_POOL_ID='COGNITO_USER_POOL_ID'
 if [ -e ./config.json ]; then
   USER_POOL_ID=`cat ./config.json | jq -r '.cognito.userPoolId'`
