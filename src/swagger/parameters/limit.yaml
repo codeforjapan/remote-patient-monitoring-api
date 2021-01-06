@@ -1,0 +1,6 @@
+name: limit
+in: query
+description: 取得件数
+required: false
+schema:
+  type: integer

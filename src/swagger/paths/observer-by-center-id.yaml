@@ -3,6 +3,8 @@ get:
     - Observer
   summary: 指定の保健所に所属する観察者を表示
   description: 指定された{centerId}に所属する観察者の一覧を表示します
+  security:
+    - APIGatewayAuthorizer: []
   parameters:
     - name: centerId
       in: path
@@ -150,7 +152,7 @@ post:
         schema:
           type: object
           properties:
-            observerName:
+            observerId:
               type: string
     required: true
   responses:

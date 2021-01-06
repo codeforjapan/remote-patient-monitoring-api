@@ -1,5 +1,9 @@
 type: object
 properties:
+  loginId:
+    type: string
+  password:
+    type: string
   patientId:
     type: string
   centerId:
@@ -11,6 +15,3 @@ properties:
     type: string
   display:
     type: boolean
-  statuses:
-    type: object
-    $ref: ./Statuses.yaml

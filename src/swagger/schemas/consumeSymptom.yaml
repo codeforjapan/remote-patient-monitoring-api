@@ -1,7 +1,5 @@
 type: object
 properties:
-  symptomId:
-    type: string
   couth:
     type: boolean
   phiegm:
