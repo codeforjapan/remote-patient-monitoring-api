@@ -1,6 +1,6 @@
 type: object
 properties:
-  patientId:
+  symptomId:
     type: string
   couth:
     type: boolean

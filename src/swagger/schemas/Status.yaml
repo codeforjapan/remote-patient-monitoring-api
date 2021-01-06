@@ -1,5 +1,7 @@
 type: object
 properties:
+  statusId:
+    type: string
   patientId:
     type: string
   centerId:
