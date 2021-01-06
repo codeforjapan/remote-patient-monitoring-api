@@ -12,7 +12,7 @@ Patient:
   $ref: "./Patient.yaml"
 Patients:
   $ref: "./Patients.yaml"
-Symptom:
-  $ref: "./Symptom.yaml"
-Error:
-  $ref: "./Error.yaml"
+Statuses:
+  $ref: "./Statuses.yaml"
+Status:
+  $ref: "./Status.yaml"

@@ -3,6 +3,8 @@ get:
     - Observer
   summary: 観察者の取得
   description: 指定された{observerId}を持つ観察者情報を返します
+  security:
+    - APIGatewayAuthorizer: []
   parameters:
     - name: observerId
       in: path

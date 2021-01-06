@@ -1,0 +1,14 @@
+type: object
+properties:
+  couth:
+    type: boolean
+  phiegm:
+    type: boolean
+  suffocation:
+    type: boolean
+  headache:
+    type: boolean
+  sore_throat:
+    type: boolean
+  remarks:
+    type: string

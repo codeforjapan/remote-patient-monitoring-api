@@ -24,6 +24,8 @@ paths:
     $ref: ./paths/patient-by-center-id.yaml
   /api/patient/{patientId}:
     $ref: ./paths/patient-by-id.yaml
+  /api/patient/{patientId}/statuses:
+    $ref: ./paths/statuses-by-patient-id.yaml
 components:
   schemas:
     $ref: "./schemas/index.yaml"
@@ -45,5 +47,7 @@ tags:
     description: 観察者（保健師など）に関するモデル
   - name: Patient
     description: 療養者に関するモデル
+  - name: Status
+    description: 症状報告に関するモデル
   - name: CORS
     description: Cross-Origin Resource Sharing 設定

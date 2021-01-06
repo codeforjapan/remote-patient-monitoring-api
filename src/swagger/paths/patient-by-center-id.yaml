@@ -2,7 +2,9 @@ get:
   tags:
     - Patient
   summary: 指定の保健所に所属する療養者を表示
-  description: 指定された{centerId}に所属する療養者の一覧を表示します
+  description: 指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。閣僚容赦の持つ病状報告は、最新10件のみ入っています。
+  security:
+    - APIGatewayAuthorizer: []
   parameters:
     - name: centerId
       in: path
@@ -10,6 +12,12 @@ get:
       required: true
       schema:
         type: string
+    - name: includeall
+      in: query
+      description: ダッシュボードに表示するかどうかのフラグがオフのユーザも取得する。省略すると false
+      required: false
+      schema:
+        type: boolean
   responses:
     200:
       description: OK
@@ -144,13 +152,11 @@ post:
       schema:
         type: string
   requestBody:
-    description: 新たに療養者を登録する。loginID を入れると、システムで自動でパスワードを生成して返す。
+    description: 新たに療養者を登録する。システムで自動でログインID及びパスワードを生成して返す。
     content:
       application/json:
         schema:
-          type: object
-          properties:
-            $ref: "../schemas/consumePatient.yaml"
+          $ref: "../schemas/consumePatient.yaml"
     required: true
   responses:
     201:
@@ -168,7 +174,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Patient.yaml"
+            $ref: "../schemas/producePatient.yaml"
     400:
       description: Bad Request
       headers:

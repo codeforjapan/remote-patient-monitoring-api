@@ -1,0 +1,6 @@
+name: offset
+in: query
+description: オフセット件数
+required: false
+schema:
+  type: integer

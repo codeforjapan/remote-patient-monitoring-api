@@ -1,12 +1,5 @@
 type: object
 properties:
-  patientId:
-    type: string
-  centerId:
-    type: string
-  created:
-    type: string
-    format: date-time
   SpO2:
     type: integer
     format: int32
@@ -17,4 +10,4 @@ properties:
     type: integer
     format: int32
   symptom:
-    $ref: ./Symptom.yaml
+    $ref: ./consumeSymptom.yaml

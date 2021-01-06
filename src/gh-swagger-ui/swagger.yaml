@@ -522,6 +522,8 @@ paths:
         - Observer
       summary: 指定の保健所に所属する観察者を表示
       description: '指定された{centerId}に所属する観察者の一覧を表示します'
+      security:
+        - APIGatewayAuthorizer: []
       parameters:
         - name: centerId
           in: path
@@ -696,7 +698,7 @@ paths:
             schema:
               type: object
               properties:
-                observerName:
+                observerId:
                   type: string
         required: true
       responses:
@@ -804,6 +806,8 @@ paths:
         - Observer
       summary: 観察者の取得
       description: '指定された{observerId}を持つ観察者情報を返します'
+      security:
+        - APIGatewayAuthorizer: []
       parameters:
         - name: observerId
           in: path
@@ -1092,7 +1096,10 @@ paths:
       tags:
         - Patient
       summary: 指定の保健所に所属する療養者を表示
-      description: '指定された{centerId}に所属する療養者の一覧を表示します'
+      description: >-
+        指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。閣僚容赦の持つ病状報告は、最新10件のみ入っています。
+      security:
+        - APIGatewayAuthorizer: []
       parameters:
         - name: centerId
           in: path
@@ -1100,6 +1107,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: includeall
+          in: query
+          description: ダッシュボードに表示するかどうかのフラグがオフのユーザも取得する。省略すると false
+          required: false
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK
@@ -1122,7 +1135,7 @@ paths:
                   properties:
                     patientId:
                       type: string
-                    centeerId:
+                    centerId:
                       type: string
                     policy_accepted:
                       type: string
@@ -1131,14 +1144,14 @@ paths:
                       type: string
                     display:
                       type: boolean
-                    status:
+                    statuses:
                       type: array
                       items:
                         type: object
                         properties:
                           patientId:
                             type: string
-                          centeerId:
+                          centerId:
                             type: string
                           created:
                             type: string
@@ -1297,23 +1310,16 @@ paths:
           schema:
             type: string
       requestBody:
-        description: 新たに療養者を登録する。loginID を入れると、システムで自動でパスワードを生成して返す。
+        description: 新たに療養者を登録する。システムで自動でログインID及びパスワードを生成して返す。
         content:
           application/json:
             schema:
               type: object
               properties:
-                type: object
-                properties:
-                  policy_accepted:
-                    type: string
-                    format: date-time
-                  loginId:
-                    type: string
-                  phone:
-                    type: string
-                  display:
-                    type: boolean
+                phone:
+                  type: string
+                display:
+                  type: boolean
         required: true
       responses:
         '201':
@@ -1333,9 +1339,13 @@ paths:
               schema:
                 type: object
                 properties:
+                  loginId:
+                    type: string
+                  password:
+                    type: string
                   patientId:
                     type: string
-                  centeerId:
+                  centerId:
                     type: string
                   policy_accepted:
                     type: string
@@ -1344,44 +1354,6 @@ paths:
                     type: string
                   display:
                     type: boolean
-                  status:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        patientId:
-                          type: string
-                        centeerId:
-                          type: string
-                        created:
-                          type: string
-                          format: date-time
-                        SpO2:
-                          type: integer
-                          format: int32
-                        body_temperature:
-                          type: number
-                          format: float
-                        pulse:
-                          type: integer
-                          format: int32
-                        symptom:
-                          type: object
-                          properties:
-                            patientId:
-                              type: string
-                            couth:
-                              type: boolean
-                            phiegm:
-                              type: boolean
-                            suffocation:
-                              type: boolean
-                            headache:
-                              type: boolean
-                            sore_throat:
-                              type: boolean
-                            remarks:
-                              type: string
         '400':
           description: Bad Request
           headers:
@@ -1456,6 +1428,8 @@ paths:
         - Patient
       summary: 療養者の取得
       description: '指定された{PatientId}を持つ療養者情報を返します'
+      security:
+        - APIGatewayAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -1483,7 +1457,7 @@ paths:
                 properties:
                   patientId:
                     type: string
-                  centeerId:
+                  centerId:
                     type: string
                   policy_accepted:
                     type: string
@@ -1492,14 +1466,14 @@ paths:
                     type: string
                   display:
                     type: boolean
-                  status:
+                  statuses:
                     type: array
                     items:
                       type: object
                       properties:
                         patientId:
                           type: string
-                        centeerId:
+                        centerId:
                           type: string
                         created:
                           type: string
@@ -1619,11 +1593,6 @@ paths:
             schema:
               type: object
               properties:
-                policy_accepted:
-                  type: string
-                  format: date-time
-                loginId:
-                  type: string
                 phone:
                   type: string
                 display:
@@ -1649,7 +1618,7 @@ paths:
                 properties:
                   patientId:
                     type: string
-                  centeerId:
+                  centerId:
                     type: string
                   policy_accepted:
                     type: string
@@ -1658,14 +1627,14 @@ paths:
                     type: string
                   display:
                     type: boolean
-                  status:
+                  statuses:
                     type: array
                     items:
                       type: object
                       properties:
                         patientId:
                           type: string
-                        centeerId:
+                        centerId:
                           type: string
                         created:
                           type: string
@@ -1809,6 +1778,364 @@ paths:
             responseTemplates:
               application/json: |
                 {}
+  '/api/patient/{patientId}/statuses':
+    get:
+      tags:
+        - Status
+      summary: 指定の保健所に所属する症状報告を表示
+      description: '指定された{patientId}に所属する症状報告の一覧を表示します'
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: patientId
+          in: path
+          description: 取得したい症状報告の対象となる療養者ID
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: 取得件数
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: オフセット件数
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    patientId:
+                      type: string
+                    centerId:
+                      type: string
+                    created:
+                      type: string
+                      format: date-time
+                    SpO2:
+                      type: integer
+                      format: int32
+                    body_temperature:
+                      type: number
+                      format: float
+                    pulse:
+                      type: integer
+                      format: int32
+                    symptom:
+                      type: object
+                      properties:
+                        patientId:
+                          type: string
+                        couth:
+                          type: boolean
+                        phiegm:
+                          type: boolean
+                        suffocation:
+                          type: boolean
+                        headache:
+                          type: boolean
+                        sore_throat:
+                          type: boolean
+                        remarks:
+                          type: string
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-getStatus-by-centerid-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: centerId
+          in: path
+          description: 取得したい保健所のID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+    post:
+      tags:
+        - Status
+      summary: 新たに症状報告を作成する
+      description: 指定された療養者に対し、新たに症状報告を作成します。
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: patientId
+          in: path
+          description: 作成したい症状報告を報告する療養者ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 症状情報を登録する。Symptom のデータも合わせて登録する。
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                SpO2:
+                  type: integer
+                  format: int32
+                body_temperature:
+                  type: number
+                  format: float
+                pulse:
+                  type: integer
+                  format: int32
+                symptom:
+                  type: object
+                  properties:
+                    couth:
+                      type: boolean
+                    phiegm:
+                      type: boolean
+                    suffocation:
+                      type: boolean
+                    headache:
+                      type: boolean
+                    sore_throat:
+                      type: boolean
+                    remarks:
+                      type: string
+        required: true
+      responses:
+        '201':
+          description: Creted
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  created:
+                    type: string
+                    format: date-time
+                  SpO2:
+                    type: integer
+                    format: int32
+                  body_temperature:
+                    type: number
+                    format: float
+                  pulse:
+                    type: integer
+                    format: int32
+                  symptom:
+                    type: object
+                    properties:
+                      patientId:
+                        type: string
+                      couth:
+                        type: boolean
+                      phiegm:
+                        type: boolean
+                      suffocation:
+                        type: boolean
+                      headache:
+                        type: boolean
+                      sore_throat:
+                        type: boolean
+                      remarks:
+                        type: string
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-postStatus-dev/invocations
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
 components:
   schemas:
     Center:
@@ -1871,7 +2198,7 @@ components:
       properties:
         patientId:
           type: string
-        centeerId:
+        centerId:
           type: string
         policy_accepted:
           type: string
@@ -1880,14 +2207,14 @@ components:
           type: string
         display:
           type: boolean
-        status:
+        statuses:
           type: array
           items:
             type: object
             properties:
               patientId:
                 type: string
-              centeerId:
+              centerId:
                 type: string
               created:
                 type: string
@@ -1925,7 +2252,7 @@ components:
         properties:
           patientId:
             type: string
-          centeerId:
+          centerId:
             type: string
           policy_accepted:
             type: string
@@ -1934,14 +2261,14 @@ components:
             type: string
           display:
             type: boolean
-          status:
+          statuses:
             type: array
             items:
               type: object
               properties:
                 patientId:
                   type: string
-                centeerId:
+                centerId:
                   type: string
                 created:
                   type: string
@@ -1972,30 +2299,80 @@ components:
                       type: boolean
                     remarks:
                       type: string
-    Symptom:
+    Statuses:
+      type: array
+      items:
+        type: object
+        properties:
+          patientId:
+            type: string
+          centerId:
+            type: string
+          created:
+            type: string
+            format: date-time
+          SpO2:
+            type: integer
+            format: int32
+          body_temperature:
+            type: number
+            format: float
+          pulse:
+            type: integer
+            format: int32
+          symptom:
+            type: object
+            properties:
+              patientId:
+                type: string
+              couth:
+                type: boolean
+              phiegm:
+                type: boolean
+              suffocation:
+                type: boolean
+              headache:
+                type: boolean
+              sore_throat:
+                type: boolean
+              remarks:
+                type: string
+    Status:
       type: object
       properties:
         patientId:
           type: string
-        couth:
-          type: boolean
-        phiegm:
-          type: boolean
-        suffocation:
-          type: boolean
-        headache:
-          type: boolean
-        sore_throat:
-          type: boolean
-        remarks:
+        centerId:
           type: string
-    Error:
-      type: object
-      properties:
-        errorCode:
+        created:
           type: string
-        errorMessage:
-          type: string
+          format: date-time
+        SpO2:
+          type: integer
+          format: int32
+        body_temperature:
+          type: number
+          format: float
+        pulse:
+          type: integer
+          format: int32
+        symptom:
+          type: object
+          properties:
+            patientId:
+              type: string
+            couth:
+              type: boolean
+            phiegm:
+              type: boolean
+            suffocation:
+              type: boolean
+            headache:
+              type: boolean
+            sore_throat:
+              type: boolean
+            remarks:
+              type: string
   securitySchemes:
     APIGatewayAuthorizer:
       type: apiKey
@@ -2015,5 +2392,7 @@ tags:
     description: 観察者（保健師など）に関するモデル
   - name: Patient
     description: 療養者に関するモデル
+  - name: Status
+    description: 症状報告に関するモデル
   - name: CORS
     description: Cross-Origin Resource Sharing 設定
