@@ -1,0 +1,16 @@
+type: object
+properties:
+  patientId:
+    type: string
+  centeerId:
+    type: string
+  policy_accepted:
+    type: string
+    format: date-time
+  phone:
+    type: string
+  display:
+    type: boolean
+  status:
+    type: object
+    $ref: ./Statuses.yaml

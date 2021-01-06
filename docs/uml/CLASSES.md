@@ -6,13 +6,13 @@ Chrome 拡張[PlantUML Visualizer](https://chrome.google.com/webstore/detail/pla
 
 ```uml
 @startuml RemotePatientMonitoring
-title 遠隔療養患者モニタリングシステムクラス図
+title 遠隔療養患者モニタリングシステムオブジェクト図
 skinparam backgroundColor white
 
 Center "0..*" --- "0..*" Observer
 Center o-- "0..*" Patient
 Patient o-- "0..*" Status
-Status *-- "1" Symptoms
+Status *-- "1" Symptom
 Patient o-- "0..*" Notification :通知を送った時に作成(2重送信防止)
 
 class Center {
@@ -45,10 +45,10 @@ class Status {
     Integer SpO2
     Float body_temperature
     Integer pulse
-    Symptoms symptoms
+    Symptom symptom
 }
 
-class Symptoms {
+class Symptom {
     Boolean cough
     Boolean phlegm
     Boolean suffocation

@@ -20,6 +20,10 @@ paths:
     $ref: ./paths/observer-by-center-id.yaml
   /api/observer/{observerId}:
     $ref: ./paths/observer-by-id.yaml
+  /api/center/{centerId}/patient/:
+    $ref: ./paths/patient-by-center-id.yaml
+  /api/patient/{patientId}:
+    $ref: ./paths/patient-by-id.yaml
 components:
   schemas:
     $ref: "./schemas/index.yaml"
@@ -36,6 +40,10 @@ components:
         identityValidationExpression: ".*"
 tags:
   - name: Center
-    description: 補完所に関するモデル
+    description: 保健所に関するモデル
+  - name: Observer
+    description: 観察者（保健師など）に関するモデル
+  - name: Patient
+    description: 療養者に関するモデル
   - name: CORS
     description: Cross-Origin Resource Sharing 設定

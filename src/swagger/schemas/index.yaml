@@ -8,5 +8,11 @@ Observer:
   $ref: "./Observer.yaml"
 Observers:
   $ref: "./Observers.yaml"
+Patient:
+  $ref: "./Patient.yaml"
+Patients:
+  $ref: "./Patients.yaml"
+Symptom:
+  $ref: "./Symptom.yaml"
 Error:
   $ref: "./Error.yaml"

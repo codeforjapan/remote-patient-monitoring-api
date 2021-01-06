@@ -1,0 +1,20 @@
+type: object
+properties:
+  patientId:
+    type: string
+  centeerId:
+    type: string
+  created:
+    type: string
+    format: date-time
+  SpO2:
+    type: integer
+    format: int32
+  body_temperature:
+    type: number
+    format: float
+  pulse:
+    type: integer
+    format: int32
+  symptom:
+    $ref: ./Symptom.yaml
