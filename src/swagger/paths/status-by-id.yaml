@@ -2,11 +2,11 @@ delete:
   tags:
     - Status
   summary: 病状報告の削除
-  description: 指定されたStatusIdの症状報告情報を削除します。成功したら、responseCode 0 を返します。
+  description: 指定されたstatusIdの症状報告情報を削除します。成功したら、responseCode 0 を返します。
   security:
     - APIGatewayAuthorizer: []
   parameters:
-    - name: StatusId
+    - name: statusId
       in: path
       description: 削除したい症状報告のID
       required: true
@@ -99,7 +99,7 @@ options:
   description: |
     Enable CORS by returning correct headers
   parameters:
-    - name: StatusId
+    - name: statusId
       in: path
       description: 取得したい療養者のID
       required: true
