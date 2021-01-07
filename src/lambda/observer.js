@@ -8,16 +8,16 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: "2012-08-10"
 });
-var CenterTable = require("../aws/centerTable");
+var ObserverTable = require("../aws/observerTable");
 var Validator = require("../util/validator");
 var Formatter = require("../util/formatter");
 
-const origGetCenters = async (event, context, callback) => {
-  const centerTable = new CenterTable(docClient);
+const origGetObservers = async (event, context, callback) => {
+  const observerTable = new ObserverTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
   try {
-    const res = await centerTable.getCenters();
+    const res = await observerTable.getObservers();
     if (validator.checkDyanmoQueryResultEmpty(res)) {
       const errorModel = {
         errorCode: "RPM00001",
@@ -35,7 +35,7 @@ const origGetCenters = async (event, context, callback) => {
       body: JSON.stringify(res),
     });
   } catch (err) {
-    console.log("getCenterTable-index error");
+    console.log("getObserverTable-index error");
     callback(null, {
       statusCode: 500,
       body: JSON.stringify({
@@ -45,7 +45,7 @@ const origGetCenters = async (event, context, callback) => {
   }
 };
 
-module.exports.getCenters = cors.cors({
+module.exports.getObservers = cors.cors({
   allowCredentials: true,
   allowOrigins: "*",
   allowMethods: [
@@ -57,14 +57,14 @@ module.exports.getCenters = cors.cors({
     'Authorization',
     'Content-Type',
   ]
-})(origGetCenters);
+})(origGetObservers);
 
-const origPostCenter = async (event, context, callback) => {
-  console.log('called postCenter');
-  const centerTable = new CenterTable(docClient);
+const origPostObserver = async (event, context, callback) => {
+  console.log('called postObserver');
+  const observerTable = new ObserverTable(docClient);
   const validator = new Validator();
   try {
-    if (!validator.checkCenterBody(JSON.parse(event.body))) {
+    if (!validator.checkObserverBody(JSON.parse(event.body))) {
       const errorModel = {
         errorCode: "RPM00002",
         errorMessage: "Invalid Body",
@@ -76,13 +76,13 @@ const origPostCenter = async (event, context, callback) => {
         }),
       });
     }
-    const res = await centerTable.postCenter(JSON.parse(event.body));
+    const res = await observerTable.postObserver(JSON.parse(event.body));
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(res),
     });
   } catch (err) {
-    console.log("postCenterTable-index error");
+    console.log("postObserverTable-index error");
     callback(null, {
       statusCode: 500,
       body: JSON.stringify({
@@ -92,7 +92,7 @@ const origPostCenter = async (event, context, callback) => {
   }
 };
 
-module.exports.postCenter = cors.cors({
+module.exports.postObserver = cors.cors({
   allowCredentials: true,
   allowOrigins: "*",
   allowMethods: [
@@ -104,15 +104,15 @@ module.exports.postCenter = cors.cors({
     'Authorization',
     'Content-Type',
   ]
-})(origPostCenter);
+})(origPostObserver);
 
-const origGetCenter = async (event, context, callback) => {
-  const centerTable = new CenterTable(docClient);
+const origGetObserver = async (event, context, callback) => {
+  const observerTable = new ObserverTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
-  console.log('call getCenter with ' + event.pathParameters.centerId);
+  console.log('call getObserver with ' + event.pathParameters.observerId);
   try {
-    const res = await centerTable.getCenter(event.pathParameters.centerId);
+    const res = await observerTable.getObserver(event.pathParameters.observerId);
     console.log(res);
     if (validator.checkDynamoGetResultEmpty(res)) {
       const errorModel = {
@@ -133,7 +133,7 @@ const origGetCenter = async (event, context, callback) => {
       body: JSON.stringify(res),
     });
   } catch (err) {
-    console.log("getCenterTable-index error");
+    console.log("getObserverTable-index error");
     callback(null, {
       statusCode: 500,
       body: JSON.stringify({
@@ -143,7 +143,7 @@ const origGetCenter = async (event, context, callback) => {
   }
 };
 
-module.exports.getCenter = cors.cors({
+module.exports.getObserver = cors.cors({
   allowCredentials: true,
   allowOrigins: "*",
   allowMethods: [
@@ -155,13 +155,13 @@ module.exports.getCenter = cors.cors({
     'Authorization',
     'Content-Type',
   ]
-})(origGetCenter);
+})(origGetObserver);
 
-const origPutCenter = async (event, context, callback) => {
-  const centerTable = new CenterTable(docClient);
+const origPutObserver = async (event, context, callback) => {
+  const observerTable = new ObserverTable(docClient);
   const validator = new Validator();
   try {
-    if (!validator.checkCenterBody(JSON.parse(event.body))) {
+    if (!validator.checkObserverBody(JSON.parse(event.body))) {
       const errorModel = {
         errorCode: "RPM00002",
         errorMessage: "Invalid Body",
@@ -173,8 +173,8 @@ const origPutCenter = async (event, context, callback) => {
         }),
       });
     }
-    const res = await centerTable.putCenter(
-      event.pathParameters.centerId,
+    const res = await observerTable.putObserver(
+      event.pathParameters.observerId,
       JSON.parse(event.body)
     );
     callback(null, {
@@ -182,7 +182,7 @@ const origPutCenter = async (event, context, callback) => {
       body: JSON.stringify(res),
     });
   } catch (err) {
-    console.log("putCenterTable-index error");
+    console.log("putObserverTable-index error");
     callback(null, {
       statusCode: 500,
       body: JSON.stringify({
@@ -192,7 +192,7 @@ const origPutCenter = async (event, context, callback) => {
   }
 };
 
-module.exports.putCenter = cors.cors({
+module.exports.putObserver = cors.cors({
   allowCredentials: true,
   allowOrigins: "*",
   allowMethods: [
@@ -204,4 +204,4 @@ module.exports.putCenter = cors.cors({
     'Authorization',
     'Content-Type',
   ]
-})(origPutCenter);
+})(origPutObserver);

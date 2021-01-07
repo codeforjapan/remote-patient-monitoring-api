@@ -10,3 +10,25 @@ Resources:
         - AttributeName: centerId
           AttributeType: S
       BillingMode: PAY_PER_REQUEST
+  RemotePatientMonitoringObserverTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.DBPrefix}ObserverTable-${self:provider.stage}
+      KeySchema:
+        - AttributeName: observerId
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: observerId
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+  RemotePatientMonitoringPatientTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+      KeySchema:
+        - AttributeName: patientId
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: patientId
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST

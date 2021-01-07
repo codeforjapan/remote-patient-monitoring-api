@@ -2558,7 +2558,7 @@ components:
         type: cognito_user_pools
         providerARNs:
           - >-
-            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_bu4N4f42H
+            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_WqyfQWEUJ
         identityValidationExpression: .*
 tags:
   - name: Center

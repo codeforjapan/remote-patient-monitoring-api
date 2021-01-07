@@ -26,4 +26,26 @@ module.exports = class Validator {
       return false;
     }
   }
+  checkObserverBody(res) {
+    if (
+      res.hasOwnProperty("observerName")
+    ) {
+      console.log("checkObserverBody True");
+      return true;
+    } else {
+      console.log("checkObserverBody Flase");
+      return false;
+    }
+  }
+  checkPatientBody(res) {
+    if (
+      res.hasOwnProperty("patientName")
+    ) {
+      console.log("checkPatientBody True");
+      return true;
+    } else {
+      console.log("checkPatientBody Flase");
+      return false;
+    }
+  }
 };
