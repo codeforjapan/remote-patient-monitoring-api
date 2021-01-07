@@ -130,7 +130,7 @@ const origGetCenter = async (event, context, callback) => {
     console.log(JSON.stringify(res));
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(res),
+      body: JSON.stringify(res.Item),
     });
   } catch (err) {
     console.log("getCenterTable-index error");

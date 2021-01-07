@@ -2,6 +2,7 @@
   "dependencies": {
     "@aws-amplify/auth": "^3.4.16",
     "aws-lambda-cors": "0.0.2",
+    "crypto": "^1.0.1",
     "serverless": "^2.16.1",
     "serverless-cloudformation-sub-variables": "^0.2.1",
     "serverless-pseudo-parameters": "^2.5.0",
@@ -14,7 +15,7 @@
     "deploy:dynamodb": "sls deploy -v -c serverless-dynamodb.yml",
     "deploy:lambda": "sls deploy -v -c serverless-lambda.yml",
     "deploy:gateway": "util/build_swagger_yml.sh; sls deploy -v --force",
-    "build:swagger-yaml":"util/build_swagger_yml.sh",
+    "build:swagger-yaml": "util/build_swagger_yml.sh",
     "confirmAdmin": "util/confirm_admin.sh",
     "openSwaggerUI": "util/open_swagger-ui.sh"
   },

@@ -13,7 +13,7 @@ info:
 servers:
   - url: /
 paths:
-  /api/center/:
+  /api/admin/center/:
     get:
       tags:
         - Center
@@ -35,14 +35,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    centerId:
-                      type: string
-                    centerName:
-                      type: string
+                $ref: ../schemas/Centers.yaml
         '400':
           description: Bad Request
           headers:
@@ -58,12 +51,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -79,12 +67,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -122,10 +105,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                centerName:
-                  type: string
+              $ref: ../schemas/consumeCenter.yaml
         required: true
       responses:
         '200':
@@ -143,12 +123,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  centerId:
-                    type: string
-                  centerName:
-                    type: string
+                $ref: ../schemas/Center.yaml
         '400':
           description: Bad Request
           headers:
@@ -164,12 +139,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -185,12 +155,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -254,7 +219,124 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/center/{centerId}':
+  /api/nurse/center/:
+    get:
+      tags:
+        - Center
+      summary: 保健所を取得する(保健師用)
+      description: 全ての保健所を取得
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Centers.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getCenters-dev/invocations
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+  '/api/admin/center/{centerId}':
     get:
       tags:
         - Center
@@ -283,12 +365,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  centerId:
-                    type: string
-                  centerName:
-                    type: string
+                $ref: ../schemas/Center.yaml
         '400':
           description: Bad Request
           headers:
@@ -304,12 +381,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -325,12 +397,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -376,10 +443,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                centerName:
-                  type: string
+              $ref: ../schemas/consumeCenter.yaml
         required: true
       responses:
         '200':
@@ -397,12 +461,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  centerId:
-                    type: string
-                  centerName:
-                    type: string
+                $ref: ../schemas/Center.yaml
         '400':
           description: Bad Request
           headers:
@@ -418,12 +477,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -439,12 +493,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -516,10 +565,142 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/center/{centerId}/observer/':
+  '/api/nurse/center/{centerId}':
     get:
       tags:
-        - Observer
+        - Center
+      summary: 保健所の取得(保健師用)
+      description: '指定された{centerId}を持つ保健所情報を返します。'
+      parameters:
+        - name: centerId
+          in: path
+          description: 取得したい保健所のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Center.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getCenter-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: centerId
+          in: path
+          description: 取得したい保健所のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+  '/api/admin/center/{centerId}/nurse/':
+    get:
+      tags:
+        - Nurse
       summary: 指定の保健所に所属する観察者を表示
       description: '指定された{centerId}に所属する観察者の一覧を表示します'
       security:
@@ -547,23 +728,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    observerId:
-                      type: string
-                    observerName:
-                      type: string
-                    manageCenters:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          centerId:
-                            type: string
-                          centerName:
-                            type: string
+                $ref: ../schemas/Nurses.yaml
         '400':
           description: Bad Request
           headers:
@@ -579,12 +744,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -600,12 +760,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -628,7 +783,7 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getObserver-by-centerid-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-by-centerid-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -679,7 +834,7 @@ paths:
                 {}
     post:
       tags:
-        - Observer
+        - Nurse
       summary: 新たに観察者を作成する
       description: 指定された保健所に対し、新たに観察者を作成します。
       security:
@@ -692,13 +847,13 @@ paths:
           schema:
             type: string
       requestBody:
-        description: observer model which you want to create.
+        description: nurse model which you want to create.
         content:
           application/json:
             schema:
               type: object
               properties:
-                observerId:
+                nurseId:
                   type: string
         required: true
       responses:
@@ -717,21 +872,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  observerId:
-                    type: string
-                  observerName:
-                    type: string
-                  manageCenters:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        centerId:
-                          type: string
-                        centerName:
-                          type: string
+                $ref: ../schemas/Nurse.yaml
         '400':
           description: Bad Request
           headers:
@@ -747,12 +888,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -768,12 +904,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -796,20 +927,156 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postObserver-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postNurse-dev/invocations
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
       x-codegen-request-body-name: body
-  '/api/observer/{observerId}':
+  '/api/nurse/center/{centerId}/nurse/':
     get:
       tags:
-        - Observer
-      summary: 観察者の取得
-      description: '指定された{observerId}を持つ観察者情報を返します'
+        - Nurse
+      summary: 指定の保健所に所属する観察者(保健師)を表示(保健師用)
+      description: '指定された{centerId}に所属する観察者(保健師)の一覧を表示します'
       security:
         - APIGatewayAuthorizer: []
       parameters:
-        - name: observerId
+        - name: centerId
+          in: path
+          description: 取得したい観察者が所属する保健所のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Nurses.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-by-centerid-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: centerId
+          in: path
+          description: 取得したい保健所のID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+      x-codegen-request-body-name: body
+  '/api/admin/nurse/{nurseId}':
+    get:
+      tags:
+        - Nurse
+      summary: 観察者の取得
+      description: '指定された{nurseId}を持つ観察者情報を返します'
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: nurseId
           in: path
           description: 取得したい観察者のID
           required: true
@@ -831,21 +1098,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  observerId:
-                    type: string
-                  observerName:
-                    type: string
-                  manageCenters:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        centerId:
-                          type: string
-                        centerName:
-                          type: string
+                $ref: ../schemas/Nurse.yaml
         '400':
           description: Bad Request
           headers:
@@ -861,12 +1114,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -882,12 +1130,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -910,42 +1153,30 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getObserver-by-id-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-by-id-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
     put:
       tags:
-        - Observer
+        - Nurse
       summary: 観察者の更新
-      description: 指定されたobserverIdの観察者情報を更新します
+      description: 指定されたnurseIdの観察者情報を更新します
       security:
         - APIGatewayAuthorizer: []
       parameters:
-        - name: observerId
+        - name: nurseId
           in: path
           description: 更新したい観察者のID
           required: true
           schema:
             type: string
       requestBody:
-        description: observer model which you want to update.
+        description: nurse model which you want to update.
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                observerName:
-                  type: string
-                manageCenters:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      centerId:
-                        type: string
-                      centerName:
-                        type: string
+              $ref: ../schemas/consumeNurse.yaml
         required: true
       responses:
         '200':
@@ -963,21 +1194,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  observerId:
-                    type: string
-                  observerName:
-                    type: string
-                  manageCenters:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        centerId:
-                          type: string
-                        centerName:
-                          type: string
+                $ref: ../schemas/Nurse.yaml
         '400':
           description: Bad Request
           headers:
@@ -993,12 +1210,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -1014,12 +1226,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1042,7 +1249,7 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-putObserver-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-putNurse-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -1054,7 +1261,7 @@ paths:
       description: |
         Enable CORS by returning correct headers
       parameters:
-        - name: observerId
+        - name: nurseId
           in: path
           description: 取得したい観察者のID
           required: true
@@ -1091,7 +1298,141 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/center/{centerId}/patient/':
+  '/api/nurse/nurse/{nurseId}':
+    get:
+      tags:
+        - Nurse
+      summary: 観察者(保健師)の取得(保健師用)
+      description: '指定された{nurseId}を持つ観察者情報を返します。'
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: nurseId
+          in: path
+          description: 取得したい観察者のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Nurse.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-by-id-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: nurseId
+          in: path
+          description: 取得したい観察者のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+  '/api/admin/center/{centerId}/patient/':
     get:
       tags:
         - Patient
@@ -1129,61 +1470,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    patientId:
-                      type: string
-                    centerId:
-                      type: string
-                    policy_accepted:
-                      type: string
-                      format: date-time
-                    phone:
-                      type: string
-                    display:
-                      type: boolean
-                    statuses:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          statusId:
-                            type: string
-                          patientId:
-                            type: string
-                          centerId:
-                            type: string
-                          created:
-                            type: string
-                            format: date-time
-                          SpO2:
-                            type: integer
-                            format: int32
-                          body_temperature:
-                            type: number
-                            format: float
-                          pulse:
-                            type: integer
-                            format: int32
-                          symptom:
-                            type: object
-                            properties:
-                              symptomId:
-                                type: string
-                              couth:
-                                type: boolean
-                              phiegm:
-                                type: boolean
-                              suffocation:
-                                type: boolean
-                              headache:
-                                type: boolean
-                              sore_throat:
-                                type: boolean
-                              remarks:
-                                type: string
+                $ref: ../schemas/Patients.yaml
         '400':
           description: Bad Request
           headers:
@@ -1199,12 +1486,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -1220,12 +1502,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1316,12 +1593,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                phone:
-                  type: string
-                display:
-                  type: boolean
+              $ref: ../schemas/consumePatient.yaml
         required: true
       responses:
         '201':
@@ -1339,23 +1611,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  loginId:
-                    type: string
-                  password:
-                    type: string
-                  patientId:
-                    type: string
-                  centerId:
-                    type: string
-                  policy_accepted:
-                    type: string
-                    format: date-time
-                  phone:
-                    type: string
-                  display:
-                    type: boolean
+                $ref: ../schemas/producePatient.yaml
         '400':
           description: Bad Request
           headers:
@@ -1371,12 +1627,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -1392,12 +1643,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1424,7 +1670,245 @@ paths:
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
       x-codegen-request-body-name: body
-  '/api/patient/{patientId}':
+  '/api/nurse/center/{centerId}/patient/':
+    get:
+      tags:
+        - Patient
+      summary: 指定の保健所に所属する療養者を表示(保健師用)
+      description: >-
+        (自分が所属する保健所のみ操作可能)指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。閣僚容赦の持つ病状報告は、最新10件のみ入っています。
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: centerId
+          in: path
+          description: 取得したい療養者が所属する保健所のID
+          required: true
+          schema:
+            type: string
+        - name: includeall
+          in: query
+          description: ダッシュボードに表示するかどうかのフラグがオフのユーザも取得する。省略すると false
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Patients.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-by-centerid-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: centerId
+          in: path
+          description: 取得したい保健所のID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+    post:
+      tags:
+        - Patient
+      summary: 新たに療養者を作成する(保健師用)
+      description: (自分が所属する保健所のみ操作可能)指定された保健所に対し、新たに療養者を作成します。
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: centerId
+          in: path
+          description: 作成したい療養者が所属する保健所のID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 新たに療養者を登録する。システムで自動でログインID及びパスワードを生成して返す。
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/consumePatient.yaml
+        required: true
+      responses:
+        '201':
+          description: Creted
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/producePatient.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postPatient-dev/invocations
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
+  '/api/admin/patient/{patientId}':
     get:
       tags:
         - Patient
@@ -1455,59 +1939,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  patientId:
-                    type: string
-                  centerId:
-                    type: string
-                  policy_accepted:
-                    type: string
-                    format: date-time
-                  phone:
-                    type: string
-                  display:
-                    type: boolean
-                  statuses:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        statusId:
-                          type: string
-                        patientId:
-                          type: string
-                        centerId:
-                          type: string
-                        created:
-                          type: string
-                          format: date-time
-                        SpO2:
-                          type: integer
-                          format: int32
-                        body_temperature:
-                          type: number
-                          format: float
-                        pulse:
-                          type: integer
-                          format: int32
-                        symptom:
-                          type: object
-                          properties:
-                            symptomId:
-                              type: string
-                            couth:
-                              type: boolean
-                            phiegm:
-                              type: boolean
-                            suffocation:
-                              type: boolean
-                            headache:
-                              type: boolean
-                            sore_throat:
-                              type: boolean
-                            remarks:
-                              type: string
+                $ref: ../schemas/Patient.yaml
         '400':
           description: Bad Request
           headers:
@@ -1523,12 +1955,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -1544,12 +1971,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1595,12 +2017,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                phone:
-                  type: string
-                display:
-                  type: boolean
+              $ref: ../schemas/consumePatient.yaml
         required: true
       responses:
         '200':
@@ -1618,59 +2035,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  patientId:
-                    type: string
-                  centerId:
-                    type: string
-                  policy_accepted:
-                    type: string
-                    format: date-time
-                  phone:
-                    type: string
-                  display:
-                    type: boolean
-                  statuses:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        statusId:
-                          type: string
-                        patientId:
-                          type: string
-                        centerId:
-                          type: string
-                        created:
-                          type: string
-                          format: date-time
-                        SpO2:
-                          type: integer
-                          format: int32
-                        body_temperature:
-                          type: number
-                          format: float
-                        pulse:
-                          type: integer
-                          format: int32
-                        symptom:
-                          type: object
-                          properties:
-                            symptomId:
-                              type: string
-                            couth:
-                              type: boolean
-                            phiegm:
-                              type: boolean
-                            suffocation:
-                              type: boolean
-                            headache:
-                              type: boolean
-                            sore_throat:
-                              type: boolean
-                            remarks:
-                              type: string
+                $ref: ../schemas/Patient.yaml
         '400':
           description: Bad Request
           headers:
@@ -1686,12 +2051,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -1707,12 +2067,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1784,33 +2139,21 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/patient/{patientId}/statuses':
+  '/api/nurse/patient/{patientId}':
     get:
       tags:
-        - Status
-      summary: 指定の保健所に所属する症状報告を表示
-      description: '指定された{patientId}に所属する症状報告の一覧を表示します'
+        - Patient
+      summary: 療養者の取得(保険師用)
+      description: '(自分が所属する保健所のみ操作可能)指定された{PatientId}を持つ療養者情報を返します'
       security:
         - APIGatewayAuthorizer: []
       parameters:
         - name: patientId
           in: path
-          description: 取得したい症状報告の対象となる療養者ID
+          description: 取得したい療養者のID
           required: true
           schema:
             type: string
-        - name: limit
-          in: query
-          description: 取得件数
-          required: false
-          schema:
-            type: integer
-        - name: offset
-          in: query
-          description: オフセット件数
-          required: false
-          schema:
-            type: integer
       responses:
         '200':
           description: OK
@@ -1827,45 +2170,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    statusId:
-                      type: string
-                    patientId:
-                      type: string
-                    centerId:
-                      type: string
-                    created:
-                      type: string
-                      format: date-time
-                    SpO2:
-                      type: integer
-                      format: int32
-                    body_temperature:
-                      type: number
-                      format: float
-                    pulse:
-                      type: integer
-                      format: int32
-                    symptom:
-                      type: object
-                      properties:
-                        symptomId:
-                          type: string
-                        couth:
-                          type: boolean
-                        phiegm:
-                          type: boolean
-                        suffocation:
-                          type: boolean
-                        headache:
-                          type: boolean
-                        sore_throat:
-                          type: boolean
-                        remarks:
-                          type: string
+                $ref: ../schemas/Patient.yaml
         '400':
           description: Bad Request
           headers:
@@ -1881,12 +2186,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -1902,12 +2202,374 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-by-id-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+    put:
+      tags:
+        - Patient
+      summary: 療養者の更新(保健師用)
+      description: (自分が所属する保健所のみ操作可能)指定されたPatientIdの療養者情報を更新します
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: patientId
+          in: path
+          description: 更新したい療養者のID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Patient model which you want to update.
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/consumePatient.yaml
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Patient.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-putPatient-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: patientId
+          in: path
+          description: 取得したい療養者のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+  '/api/patient/patient/{patientId}':
+    get:
+      tags:
+        - Patient
+      summary: 療養者の取得(療養者用)
+      description: '(自分のみ操作可能)指定された{PatientId}を持つ療養者情報を返します'
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: patientId
+          in: path
+          description: 取得したい療養者のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Patient.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-by-id-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: patientId
+          in: path
+          description: 取得したい療養者のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+  '/api/admin/patient/{patientId}/statuses':
+    get:
+      tags:
+        - Status
+      summary: 指定の療養者が所有する症状報告を表示
+      description: '指定された{patientId}に所属する症状報告の一覧を表示します'
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: patientId
+          in: path
+          description: 取得したい症状報告の対象となる療養者ID
+          required: true
+          schema:
+            type: string
+        - $ref: ../parameters/limit.yaml
+        - $ref: ../parameters/offset.yaml
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Statuses.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1941,7 +2603,7 @@ paths:
       description: |
         Enable CORS by returning correct headers
       parameters:
-        - name: centerId
+        - name: patientId
           in: path
           description: 取得したい保健所のID
           required: true
@@ -1998,32 +2660,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                SpO2:
-                  type: integer
-                  format: int32
-                body_temperature:
-                  type: number
-                  format: float
-                pulse:
-                  type: integer
-                  format: int32
-                symptom:
-                  type: object
-                  properties:
-                    couth:
-                      type: boolean
-                    phiegm:
-                      type: boolean
-                    suffocation:
-                      type: boolean
-                    headache:
-                      type: boolean
-                    sore_throat:
-                      type: boolean
-                    remarks:
-                      type: string
+              $ref: ../schemas/consumeStatus.yaml
         required: true
       responses:
         '201':
@@ -2041,43 +2678,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  statusId:
-                    type: string
-                  patientId:
-                    type: string
-                  centerId:
-                    type: string
-                  created:
-                    type: string
-                    format: date-time
-                  SpO2:
-                    type: integer
-                    format: int32
-                  body_temperature:
-                    type: number
-                    format: float
-                  pulse:
-                    type: integer
-                    format: int32
-                  symptom:
-                    type: object
-                    properties:
-                      symptomId:
-                        type: string
-                      couth:
-                        type: boolean
-                      phiegm:
-                        type: boolean
-                      suffocation:
-                        type: boolean
-                      headache:
-                        type: boolean
-                      sore_throat:
-                        type: boolean
-                      remarks:
-                        type: string
+                $ref: ../schemas/Status.yaml
         '400':
           description: Bad Request
           headers:
@@ -2093,12 +2694,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -2114,12 +2710,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2146,7 +2737,473 @@ paths:
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
       x-codegen-request-body-name: body
-  '/api/status/{statusId}':
+  '/api/nurse/patient/{patientId}/statuses':
+    get:
+      tags:
+        - Status
+      summary: 指定の療養者が持つ症状報告を表示
+      description: '(自分が所属する保健所に所属する療養者のみ表示可能)指定された{patientId}に所属する症状報告の一覧を表示します'
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: patientId
+          in: path
+          description: 取得したい症状報告の対象となる療養者ID
+          required: true
+          schema:
+            type: string
+        - $ref: ../parameters/limit.yaml
+        - $ref: ../parameters/offset.yaml
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Statuses.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-getStatus-by-centerid-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: patientId
+          in: path
+          description: 取得したい保健所のID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+    post:
+      tags:
+        - Status
+      summary: 新たに症状報告を作成する
+      description: (自分が所属する保健所に所属する療養者のみ作成可能)指定された療養者に対し、新たに症状報告を作成します。
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: patientId
+          in: path
+          description: 作成したい症状報告を報告する療養者ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 症状情報を登録する。Symptom のデータも合わせて登録する。
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/consumeStatus.yaml
+        required: true
+      responses:
+        '201':
+          description: Creted
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Status.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-postStatus-dev/invocations
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
+  '/api/patient/patient/{patientId}/statuses':
+    get:
+      tags:
+        - Status
+      summary: 指定の療養者が持つ症状報告を表示
+      description: '(自分の症状のみ表示可能)指定された{patientId}に所属する症状報告の一覧を表示します'
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: patientId
+          in: path
+          description: 取得したい症状報告の対象となる療養者ID
+          required: true
+          schema:
+            type: string
+        - $ref: ../parameters/limit.yaml
+        - $ref: ../parameters/offset.yaml
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Statuses.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-getStatus-by-centerid-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: patientId
+          in: path
+          description: 取得したい保健所のID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+    post:
+      tags:
+        - Status
+      summary: 新たに症状報告を作成する
+      description: (自分の症状のみ作成可能)指定された療養者に対し、新たに症状報告を作成します。
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: patientId
+          in: path
+          description: 作成したい症状報告を報告する療養者ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 症状情報を登録する。Symptom のデータも合わせて登録する。
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/consumeStatus.yaml
+        required: true
+      responses:
+        '201':
+          description: Creted
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Status.yaml
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-postStatus-dev/invocations
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
+  '/api/admin/status/{statusId}':
     delete:
       tags:
         - Status
@@ -2198,12 +3255,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
+                $ref: ../schemas/Error.yaml
         '500':
           description: Internal error
           headers:
@@ -2219,12 +3271,287 @@ paths:
           content:
             application/json:
               schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-deleteStatus-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: statusId
+          in: path
+          description: 取得したい療養者のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+  '/api/nurse/status/{statusId}':
+    delete:
+      tags:
+        - Status
+      summary: 病状報告の削除
+      description: (自分が所属する保健所のみ操作可能)指定されたstatusIdの症状報告情報を削除します。成功したら、responseCode 0 を返します。
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: statusId
+          in: path
+          description: 削除したい症状報告のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DELETED
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  errorCode:
+                  responseCode:
+                    type: number
+                  responseMessage:
                     type: string
-                  errorMessage:
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-deleteStatus-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: statusId
+          in: path
+          description: 取得したい療養者のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+  '/api/patient/status/{statusId}':
+    delete:
+      tags:
+        - Status
+      summary: 病状報告の削除
+      description: (自分の症状のみ操作可能)指定されたstatusIdの症状報告情報を削除します。成功したら、responseCode 0 を返します。
+      security:
+        - APIGatewayAuthorizer: []
+      parameters:
+        - name: statusId
+          in: path
+          description: 削除したい症状報告のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DELETED
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: number
+                  responseMessage:
                     type: string
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/Error.yaml
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2319,12 +3646,12 @@ components:
             type: string
           centerName:
             type: string
-    Observer:
+    Nurse:
       type: object
       properties:
-        observerId:
+        nurseId:
           type: string
-        observerName:
+        nurseName:
           type: string
         manageCenters:
           type: array
@@ -2335,14 +3662,14 @@ components:
                 type: string
               centerName:
                 type: string
-    Observers:
+    Nurses:
       type: array
       items:
         type: object
         properties:
-          observerId:
+          nurseId:
             type: string
-          observerName:
+          nurseName:
             type: string
           manageCenters:
             type: array
@@ -2558,12 +3885,12 @@ components:
         type: cognito_user_pools
         providerARNs:
           - >-
-            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_bu4N4f42H
+            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_WqyfQWEUJ
         identityValidationExpression: .*
 tags:
   - name: Center
     description: 保健所に関するモデル
-  - name: Observer
+  - name: Nurse
     description: 観察者（保健師など）に関するモデル
   - name: Patient
     description: 療養者に関するモデル

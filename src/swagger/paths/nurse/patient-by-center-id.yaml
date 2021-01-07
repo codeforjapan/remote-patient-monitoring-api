@@ -1,17 +1,23 @@
 get:
   tags:
-    - Observer
-  summary: 指定の保健所に所属する観察者を表示
-  description: 指定された{centerId}に所属する観察者の一覧を表示します
+    - Patient
+  summary: 指定の保健所に所属する療養者を表示(保健師用)
+  description: (自分が所属する保健所のみ操作可能)指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。閣僚容赦の持つ病状報告は、最新10件のみ入っています。
   security:
     - APIGatewayAuthorizer: []
   parameters:
     - name: centerId
       in: path
-      description: 取得したい観察者が所属する保健所のID
+      description: 取得したい療養者が所属する保健所のID
       required: true
       schema:
         type: string
+    - name: includeall
+      in: query
+      description: ダッシュボードに表示するかどうかのフラグがオフのユーザも取得する。省略すると false
+      required: false
+      schema:
+        type: boolean
   responses:
     200:
       description: OK
@@ -28,7 +34,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Observers.yaml"
+            $ref: "../schemas/Patients.yaml"
     400:
       description: Bad Request
       headers:
@@ -82,7 +88,7 @@ get:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getObserver-by-centerid-dev/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-by-centerid-dev/invocations
     passthroughBehavior: when_no_match
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
@@ -133,31 +139,28 @@ options:
             {}
 post:
   tags:
-    - Observer
-  summary: 新たに観察者を作成する
-  description: 指定された保健所に対し、新たに観察者を作成します。
+    - Patient
+  summary: 新たに療養者を作成する(保健師用)
+  description: (自分が所属する保健所のみ操作可能)指定された保健所に対し、新たに療養者を作成します。
   security:
     - APIGatewayAuthorizer: []
   parameters:
     - name: centerId
       in: path
-      description: 作成したい観察者が所属する保健所のID
+      description: 作成したい療養者が所属する保健所のID
       required: true
       schema:
         type: string
   requestBody:
-    description: observer model which you want to create.
+    description: 新たに療養者を登録する。システムで自動でログインID及びパスワードを生成して返す。
     content:
       application/json:
         schema:
-          type: object
-          properties:
-            observerId:
-              type: string
+          $ref: "../schemas/consumePatient.yaml"
     required: true
   responses:
-    200:
-      description: OK
+    201:
+      description: Creted
       headers:
         Access-Control-Allow-Origin:
           schema:
@@ -171,7 +174,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Observer.yaml"
+            $ref: "../schemas/producePatient.yaml"
     400:
       description: Bad Request
       headers:
@@ -225,7 +228,7 @@ post:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postObserver-dev/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postPatient-dev/invocations
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
   x-codegen-request-body-name: body

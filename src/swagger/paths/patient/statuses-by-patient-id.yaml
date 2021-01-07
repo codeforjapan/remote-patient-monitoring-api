@@ -1,17 +1,19 @@
 get:
   tags:
-    - Observer
-  summary: 観察者の取得
-  description: 指定された{observerId}を持つ観察者情報を返します
+    - Status
+  summary: 指定の療養者が持つ症状報告を表示
+  description: (自分の症状のみ表示可能)指定された{patientId}に所属する症状報告の一覧を表示します
   security:
     - APIGatewayAuthorizer: []
   parameters:
-    - name: observerId
+    - name: patientId
       in: path
-      description: 取得したい観察者のID
+      description: 取得したい症状報告の対象となる療養者ID
       required: true
       schema:
         type: string
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/offset.yaml
   responses:
     200:
       description: OK
@@ -28,7 +30,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Observer.yaml"
+            $ref: "../schemas/Statuses.yaml"
     400:
       description: Bad Request
       headers:
@@ -82,106 +84,10 @@ get:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getObserver-by-id-dev/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-getStatus-by-centerid-dev/invocations
     passthroughBehavior: when_no_match
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
-put:
-  tags:
-    - Observer
-  summary: 観察者の更新
-  description: 指定されたobserverIdの観察者情報を更新します
-  security:
-    - APIGatewayAuthorizer: []
-  parameters:
-    - name: observerId
-      in: path
-      description: 更新したい観察者のID
-      required: true
-      schema:
-        type: string
-  requestBody:
-    description: observer model which you want to update.
-    content:
-      application/json:
-        schema:
-          $ref: "../schemas/consumeObserver.yaml"
-    required: true
-  responses:
-    200:
-      description: OK
-      headers:
-        Access-Control-Allow-Origin:
-          schema:
-            type: string
-        Access-Control-Allow-Methods:
-          schema:
-            type: string
-        Access-Control-Allow-Headers:
-          schema:
-            type: string
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/Observer.yaml"
-    400:
-      description: Bad Request
-      headers:
-        Access-Control-Allow-Origin:
-          schema:
-            type: string
-        Access-Control-Allow-Methods:
-          schema:
-            type: string
-        Access-Control-Allow-Headers:
-          schema:
-            type: string
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/Error.yaml"
-    500:
-      description: Internal error
-      headers:
-        Access-Control-Allow-Origin:
-          schema:
-            type: string
-        Access-Control-Allow-Methods:
-          schema:
-            type: string
-        Access-Control-Allow-Headers:
-          schema:
-            type: string
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/Error.yaml"
-  x-amazon-apigateway-integration:
-    type: aws_proxy
-    responses:
-      default:
-        statusCode: "200"
-        responseParameters:
-          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-          method.response.header.Access-Control-Allow-Methods: "'*'"
-          method.response.header.Access-Control-Allow-Origin: "'*'"
-      BAD.*:
-        statusCode: "400"
-        responseParameters:
-          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-          method.response.header.Access-Control-Allow-Methods: "'*'"
-          method.response.header.Access-Control-Allow-Origin: "'*'"
-      INT.*:
-        statusCode: "500"
-        responseParameters:
-          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-          method.response.header.Access-Control-Allow-Methods: "'*'"
-          method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-putObserver-dev/invocations
-    passthroughBehavior: when_no_match
-    httpMethod: POST
-    contentHandling: CONVERT_TO_TEXT
-  x-codegen-request-body-name: body
 options:
   tags:
     - CORS
@@ -189,12 +95,13 @@ options:
   description: |
     Enable CORS by returning correct headers
   parameters:
-    - name: observerId
+    - name: patientId
       in: path
-      description: 取得したい観察者のID
+      description: 取得したい保健所のID
       required: true
       schema:
-        type: string
+        type: integer
+        format: int64
   responses:
     200:
       description: Default response for CORS method
@@ -226,3 +133,98 @@ options:
         responseTemplates:
           application/json: |
             {}
+post:
+  tags:
+    - Status
+  summary: 新たに症状報告を作成する
+  description: (自分の症状のみ作成可能)指定された療養者に対し、新たに症状報告を作成します。
+  security:
+    - APIGatewayAuthorizer: []
+  parameters:
+    - name: patientId
+      in: path
+      description: 作成したい症状報告を報告する療養者ID
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: 症状情報を登録する。Symptom のデータも合わせて登録する。
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/consumeStatus.yaml"
+    required: true
+  responses:
+    201:
+      description: Creted
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Status.yaml"
+    400:
+      description: Bad Request
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Error.yaml"
+    500:
+      description: Internal error
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Error.yaml"
+  x-amazon-apigateway-integration:
+    type: aws_proxy
+    responses:
+      default:
+        statusCode: "200"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+      BAD.*:
+        statusCode: "400"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+      INT.*:
+        statusCode: "500"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-postStatus-dev/invocations
+    httpMethod: POST
+    contentHandling: CONVERT_TO_TEXT
+  x-codegen-request-body-name: body

@@ -1,6 +1,8 @@
 type: object
 properties:
-  observerName:
+  nurseId:
+    type: string
+  nurseName:
     type: string
   manageCenters:
     type: array

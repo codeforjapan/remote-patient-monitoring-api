@@ -9,7 +9,7 @@ Chrome 拡張[PlantUML Visualizer](https://chrome.google.com/webstore/detail/pla
 title 遠隔療養患者モニタリングシステムオブジェクト図
 skinparam backgroundColor white
 
-Center "0..*" --- "0..*" Observer
+Center "0..*" --- "0..*" Nurse
 Center o-- "0..*" Patient
 Patient o-- "0..*" Status
 Status *-- "1" Symptom
@@ -18,14 +18,14 @@ Patient o-- "0..*" Notification :通知を送った時に作成(2重送信防止
 class Center {
     String centerId
     String centerName
-    Observer[] Observers
+    Nurse[] Nurses
 }
 
-class Observer {
-    String observerId
+class Nurse {
+    String nurseId
     String loginId
     String password
-    String observerName
+    String nurseName
     Center[] Centers
 }
 

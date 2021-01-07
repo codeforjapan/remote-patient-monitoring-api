@@ -1,28 +1,84 @@
 getCenters:
-  handler: src/lambda/handler.getCenters
+  handler: src/lambda/center.getCenters
   name: "remote-patient-monitoring-getCenters-${self:provider.stage}"
-  description: "This function is test app."
+  description: "get Centers"
   role: "arn:aws:iam::#{AWS::AccountId}:role/GetCentersRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
 getCenter:
-  handler: src/lambda/handler.getCenter
+  handler: src/lambda/center.getCenter
   name: "remote-patient-monitoring-getCenter-${self:provider.stage}"
-  description: "This function is test app."
+  description: "get Center"
   role: "arn:aws:iam::#{AWS::AccountId}:role/GetCenterRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
 postCenter:
-  handler: src/lambda/handler.postCenter
+  handler: src/lambda/center.postCenter
   name: "remote-patient-monitoring-postCenter-${self:provider.stage}"
-  description: "This function is test app."
+  description: "post Center"
   role: "arn:aws:iam::#{AWS::AccountId}:role/PostCenterRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
 putCenter:
-  handler: src/lambda/handler.putCenter
+  handler: src/lambda/center.putCenter
   name: "remote-patient-monitoring-putCenter-${self:provider.stage}"
-  description: "This function is test app."
+  description: "put Center"
   role: "arn:aws:iam::#{AWS::AccountId}:role/PutCenterRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+getNurses:
+  handler: src/lambda/nurse.getNurses
+  name: "remote-patient-monitoring-getNurses-${self:provider.stage}"
+  description: "get Nurses"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/NurseTableRole-${self:provider.stage}"
+  environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+getNurse:
+  handler: src/lambda/nurse.getNurse
+  name: "remote-patient-monitoring-getNurse-${self:provider.stage}"
+  description: "get Nurse"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/NurseTableRole-${self:provider.stage}"
+  environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+posNurse:
+  handler: src/lambda/nurse.postNurse
+  name: "remote-patient-monitoring-postNurse-${self:provider.stage}"
+  description: "post Nurse"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/NurseTableRole-${self:provider.stage}"
+  environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+putNurse:
+  handler: src/lambda/nurse.putNurse
+  name: "remote-patient-monitoring-putNurse-${self:provider.stage}"
+  description: "put Nurse"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/NurseTableRole-${self:provider.stage}"
+  environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+getPatients:
+  handler: src/lambda/patient.getPatients
+  name: "remote-patient-monitoring-getPatients-${self:provider.stage}"
+  description: "get Patients"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/PatientTableRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+getPatient:
+  handler: src/lambda/patient.getPatient
+  name: "remote-patient-monitoring-getPatient-${self:provider.stage}"
+  description: "get Patient"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/PatientTableRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+posPatient:
+  handler: src/lambda/patient.postPatient
+  name: "remote-patient-monitoring-postPatient-${self:provider.stage}"
+  description: "post Patient"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/PatientTableRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+putPatient:
+  handler: src/lambda/patient.putPatient
+  name: "remote-patient-monitoring-putPatient-${self:provider.stage}"
+  description: "put Patient"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/PatientTableRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}

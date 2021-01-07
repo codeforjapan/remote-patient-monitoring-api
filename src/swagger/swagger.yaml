@@ -12,22 +12,44 @@ info:
 servers:
   - url: /
 paths:
-  /api/center/:
-    $ref: ./paths/center.yaml
-  /api/center/{centerId}:
-    $ref: ./paths/center-by-id.yaml
-  /api/center/{centerId}/observer/:
-    $ref: ./paths/observer-by-center-id.yaml
-  /api/observer/{observerId}:
-    $ref: ./paths/observer-by-id.yaml
-  /api/center/{centerId}/patient/:
-    $ref: ./paths/patient-by-center-id.yaml
-  /api/patient/{patientId}:
-    $ref: ./paths/patient-by-id.yaml
-  /api/patient/{patientId}/statuses:
-    $ref: ./paths/statuses-by-patient-id.yaml
-  /api/status/{statusId}:
-    $ref: ./paths/status-by-id.yaml
+  /api/admin/center/:
+    $ref: ./paths/admin/center.yaml
+  /api/nurse/center/:
+    $ref: ./paths/nurse/center.yaml
+  /api/admin/center/{centerId}:
+    $ref: ./paths/admin/center-by-id.yaml
+  /api/nurse/center/{centerId}:
+    $ref: ./paths/nurse/center-by-id.yaml
+  /api/admin/center/{centerId}/nurse/:
+    $ref: ./paths/admin/nurse-by-center-id.yaml
+  /api/nurse/center/{centerId}/nurse/:
+    $ref: ./paths/nurse/nurse-by-center-id.yaml
+  /api/admin/nurse/{nurseId}:
+    $ref: ./paths/admin/nurse-by-id.yaml
+  /api/nurse/nurse/{nurseId}:
+    $ref: ./paths/nurse/nurse-by-id.yaml
+  /api/admin/center/{centerId}/patient/:
+    $ref: ./paths/admin/patient-by-center-id.yaml
+  /api/nurse/center/{centerId}/patient/:
+    $ref: ./paths/nurse/patient-by-center-id.yaml
+  /api/admin/patient/{patientId}:
+    $ref: ./paths/admin/patient-by-id.yaml
+  /api/nurse/patient/{patientId}:
+    $ref: ./paths/nurse/patient-by-id.yaml
+  /api/patient/patient/{patientId}:
+    $ref: ./paths/patient/patient-by-id.yaml
+  /api/admin/patient/{patientId}/statuses:
+    $ref: ./paths/admin/statuses-by-patient-id.yaml
+  /api/nurse/patient/{patientId}/statuses:
+    $ref: ./paths/nurse/statuses-by-patient-id.yaml
+  /api/patient/patient/{patientId}/statuses:
+    $ref: ./paths/patient/statuses-by-patient-id.yaml
+  /api/admin/status/{statusId}:
+    $ref: ./paths/admin/status-by-id.yaml
+  /api/nurse/status/{statusId}:
+    $ref: ./paths/nurse/status-by-id.yaml
+  /api/patient/status/{statusId}:
+    $ref: ./paths/patient/status-by-id.yaml
 components:
   schemas:
     $ref: "./schemas/index.yaml"
@@ -45,7 +67,7 @@ components:
 tags:
   - name: Center
     description: 保健所に関するモデル
-  - name: Observer
+  - name: Nurse
     description: 観察者（保健師など）に関するモデル
   - name: Patient
     description: 療養者に関するモデル
