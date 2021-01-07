@@ -1,7 +1,7 @@
 get:
   tags:
     - Status
-  summary: 指定の保健所に所属する症状報告を表示
+  summary: 指定の療養者が所有する症状報告を表示
   description: 指定された{patientId}に所属する症状報告の一覧を表示します
   security:
     - APIGatewayAuthorizer: []

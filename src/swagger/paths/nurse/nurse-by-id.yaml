@@ -1,8 +1,8 @@
 get:
   tags:
     - Nurse
-  summary: 観察者の取得
-  description: 指定された{nurseId}を持つ観察者情報を返します
+  summary: 観察者(保健師)の取得(保健師用)
+  description: 指定された{nurseId}を持つ観察者情報を返します。
   security:
     - APIGatewayAuthorizer: []
   parameters:
@@ -86,102 +86,6 @@ get:
     passthroughBehavior: when_no_match
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
-put:
-  tags:
-    - Nurse
-  summary: 観察者の更新
-  description: 指定されたnurseIdの観察者情報を更新します
-  security:
-    - APIGatewayAuthorizer: []
-  parameters:
-    - name: nurseId
-      in: path
-      description: 更新したい観察者のID
-      required: true
-      schema:
-        type: string
-  requestBody:
-    description: nurse model which you want to update.
-    content:
-      application/json:
-        schema:
-          $ref: "../schemas/consumeNurse.yaml"
-    required: true
-  responses:
-    200:
-      description: OK
-      headers:
-        Access-Control-Allow-Origin:
-          schema:
-            type: string
-        Access-Control-Allow-Methods:
-          schema:
-            type: string
-        Access-Control-Allow-Headers:
-          schema:
-            type: string
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/Nurse.yaml"
-    400:
-      description: Bad Request
-      headers:
-        Access-Control-Allow-Origin:
-          schema:
-            type: string
-        Access-Control-Allow-Methods:
-          schema:
-            type: string
-        Access-Control-Allow-Headers:
-          schema:
-            type: string
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/Error.yaml"
-    500:
-      description: Internal error
-      headers:
-        Access-Control-Allow-Origin:
-          schema:
-            type: string
-        Access-Control-Allow-Methods:
-          schema:
-            type: string
-        Access-Control-Allow-Headers:
-          schema:
-            type: string
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/Error.yaml"
-  x-amazon-apigateway-integration:
-    type: aws_proxy
-    responses:
-      default:
-        statusCode: "200"
-        responseParameters:
-          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-          method.response.header.Access-Control-Allow-Methods: "'*'"
-          method.response.header.Access-Control-Allow-Origin: "'*'"
-      BAD.*:
-        statusCode: "400"
-        responseParameters:
-          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-          method.response.header.Access-Control-Allow-Methods: "'*'"
-          method.response.header.Access-Control-Allow-Origin: "'*'"
-      INT.*:
-        statusCode: "500"
-        responseParameters:
-          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-          method.response.header.Access-Control-Allow-Methods: "'*'"
-          method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-putNurse-dev/invocations
-    passthroughBehavior: when_no_match
-    httpMethod: POST
-    contentHandling: CONVERT_TO_TEXT
-  x-codegen-request-body-name: body
 options:
   tags:
     - CORS
