@@ -10,15 +10,15 @@ Resources:
         - AttributeName: centerId
           AttributeType: S
       BillingMode: PAY_PER_REQUEST
-  RemotePatientMonitoringObserverTable:
+  RemotePatientMonitoringNurseTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: ${self:provider.environment.DBPrefix}ObserverTable-${self:provider.stage}
+      TableName: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
       KeySchema:
-        - AttributeName: observerId
+        - AttributeName: nurseId
           KeyType: HASH
       AttributeDefinitions:
-        - AttributeName: observerId
+        - AttributeName: nurseId
           AttributeType: S
       BillingMode: PAY_PER_REQUEST
   RemotePatientMonitoringPatientTable:

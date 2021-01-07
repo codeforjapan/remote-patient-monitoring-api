@@ -1,14 +1,14 @@
 "use strict";
 const uuid = require('uuid');
 
-module.exports = class ObserverTable {
+module.exports = class NurseTable {
   constructor(serviceClient) {
     this.client = serviceClient;
   }
 
-  getObservers() {
+  getNurses() {
     const params = {
-      TableName: process.env.OBSERVER_TABLE_NAME
+      TableName: process.env.NURSE_TABLE_NAME
     };
     return new Promise((resolve, reject) => {
       this.client.scan(params, (err, data) => {
@@ -16,18 +16,18 @@ module.exports = class ObserverTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("getObserver Success!");
+          console.log("getNurse Success!");
           resolve(data);
         }
       });
     });
   }
 
-  getObserver(observerId) {
+  getNurse(nurseId) {
     const params = {
-      TableName: process.env.OBSERVER_TABLE_NAME,
+      TableName: process.env.NURSE_TABLE_NAME,
       Key: {
-        "observerId": observerId
+        "nurseId": nurseId
       }
     };
     return new Promise((resolve, reject) => {
@@ -36,21 +36,21 @@ module.exports = class ObserverTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("getObserver Success!");
+          console.log("getNurse Success!");
           resolve(data);
         }
       });
     });
   }
 
-  postObserver(body) {
-    const observer = {
+  postNurse(body) {
+    const nurse = {
       ...body,
-      observerId: uuid.v4(),
+      nurseId: uuid.v4(),
     };
     const params = {
-      TableName: process.env.OBSERVER_TABLE_NAME,
-      Item: observer,
+      TableName: process.env.NURSE_TABLE_NAME,
+      Item: nurse,
     };
     console.log(params);
     return new Promise((resolve, reject) => {
@@ -59,30 +59,30 @@ module.exports = class ObserverTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("postObserver Success!");
-          resolve(observer);
+          console.log("postNurse Success!");
+          resolve(nurse);
         }
       });
     });
   }
 
-  putObserver(observerId, body) {
-    const observer = {
+  putNurse(nurseId, body) {
+    const nurse = {
       ...body,
-      observerId: observerId,
+      nurseId: nurseId,
     };
-    console.log(observer);
+    console.log(nurse);
     const params = {
-      TableName: process.env.OBSERVER_TABLE_NAME,
+      TableName: process.env.NURSE_TABLE_NAME,
       Key: {
-        observerId: observer.observerId
+        nurseId: nurse.nurseId
       },
-      UpdateExpression: "set #observerName = :observerName",
+      UpdateExpression: "set #nurseName = :nurseName",
       ExpressionAttributeNames: {
-        "#observerName": "observerName"
+        "#nurseName": "nurseName"
       },
       ExpressionAttributeValues: {
-        ":observerName": observer.observerName
+        ":nurseName": nurse.nurseName
       },
     };
     console.log(params);
@@ -92,8 +92,8 @@ module.exports = class ObserverTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("putObserver Success!");
-          resolve(observer);
+          console.log("putNurse Success!");
+          resolve(nurse);
         }
       });
     });

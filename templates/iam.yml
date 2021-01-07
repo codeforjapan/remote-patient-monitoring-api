@@ -98,10 +98,10 @@ Resources:
                   - dynamodb:UpdateItem
                 Resource:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}"
-  ObserverTableRole:
+  NurseTableRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "ObserverTableRole-${self:provider.stage}"
+      RoleName: "NurseTableRole-${self:provider.stage}"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -113,7 +113,7 @@ Resources:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: "/"
       Policies:
-        - PolicyName: "ObserverTablePolicy-${self:provider.stage}"
+        - PolicyName: "NurseTablePolicy-${self:provider.stage}"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -125,7 +125,7 @@ Resources:
                   - dynamodb:PutItem
                   - dynamodb:UpdateItem
                 Resource:
-                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}ObserverTable-${self:provider.stage}"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}"
   PatientTableRole:
     Type: AWS::IAM::Role
     Properties:

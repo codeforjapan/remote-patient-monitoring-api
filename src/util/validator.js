@@ -26,14 +26,14 @@ module.exports = class Validator {
       return false;
     }
   }
-  checkObserverBody(res) {
+  checkNurseBody(res) {
     if (
-      res.hasOwnProperty("observerName")
+      res.hasOwnProperty("nurseName")
     ) {
-      console.log("checkObserverBody True");
+      console.log("checkNurseBody True");
       return true;
     } else {
-      console.log("checkObserverBody Flase");
+      console.log("checkNurseBody Flase");
       return false;
     }
   }

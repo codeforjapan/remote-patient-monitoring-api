@@ -8,16 +8,16 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: "2012-08-10"
 });
-var ObserverTable = require("../aws/observerTable");
+var NurseTable = require("../aws/nurseTable");
 var Validator = require("../util/validator");
 var Formatter = require("../util/formatter");
 
-const origGetObservers = async (event, context, callback) => {
-  const observerTable = new ObserverTable(docClient);
+const origGetNurses = async (event, context, callback) => {
+  const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
   try {
-    const res = await observerTable.getObservers();
+    const res = await nurseTable.getNurses();
     if (validator.checkDyanmoQueryResultEmpty(res)) {
       const errorModel = {
         errorCode: "RPM00001",
@@ -35,7 +35,7 @@ const origGetObservers = async (event, context, callback) => {
       body: JSON.stringify(res),
     });
   } catch (err) {
-    console.log("getObserverTable-index error");
+    console.log("getNurseTable-index error");
     callback(null, {
       statusCode: 500,
       body: JSON.stringify({
@@ -45,7 +45,7 @@ const origGetObservers = async (event, context, callback) => {
   }
 };
 
-module.exports.getObservers = cors.cors({
+module.exports.getNurses = cors.cors({
   allowCredentials: true,
   allowOrigins: "*",
   allowMethods: [
@@ -57,14 +57,14 @@ module.exports.getObservers = cors.cors({
     'Authorization',
     'Content-Type',
   ]
-})(origGetObservers);
+})(origGetNurses);
 
-const origPostObserver = async (event, context, callback) => {
-  console.log('called postObserver');
-  const observerTable = new ObserverTable(docClient);
+const origPostNurse = async (event, context, callback) => {
+  console.log('called postNurse');
+  const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
   try {
-    if (!validator.checkObserverBody(JSON.parse(event.body))) {
+    if (!validator.checkNurseBody(JSON.parse(event.body))) {
       const errorModel = {
         errorCode: "RPM00002",
         errorMessage: "Invalid Body",
@@ -76,13 +76,13 @@ const origPostObserver = async (event, context, callback) => {
         }),
       });
     }
-    const res = await observerTable.postObserver(JSON.parse(event.body));
+    const res = await nurseTable.postNurse(JSON.parse(event.body));
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(res),
     });
   } catch (err) {
-    console.log("postObserverTable-index error");
+    console.log("postNurseTable-index error");
     callback(null, {
       statusCode: 500,
       body: JSON.stringify({
@@ -92,7 +92,7 @@ const origPostObserver = async (event, context, callback) => {
   }
 };
 
-module.exports.postObserver = cors.cors({
+module.exports.postNurse = cors.cors({
   allowCredentials: true,
   allowOrigins: "*",
   allowMethods: [
@@ -104,15 +104,15 @@ module.exports.postObserver = cors.cors({
     'Authorization',
     'Content-Type',
   ]
-})(origPostObserver);
+})(origPostNurse);
 
-const origGetObserver = async (event, context, callback) => {
-  const observerTable = new ObserverTable(docClient);
+const origGetNurse = async (event, context, callback) => {
+  const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
-  console.log('call getObserver with ' + event.pathParameters.observerId);
+  console.log('call getNurse with ' + event.pathParameters.nurseId);
   try {
-    const res = await observerTable.getObserver(event.pathParameters.observerId);
+    const res = await nurseTable.getNurse(event.pathParameters.nurseId);
     console.log(res);
     if (validator.checkDynamoGetResultEmpty(res)) {
       const errorModel = {
@@ -133,7 +133,7 @@ const origGetObserver = async (event, context, callback) => {
       body: JSON.stringify(res),
     });
   } catch (err) {
-    console.log("getObserverTable-index error");
+    console.log("getNurseTable-index error");
     callback(null, {
       statusCode: 500,
       body: JSON.stringify({
@@ -143,7 +143,7 @@ const origGetObserver = async (event, context, callback) => {
   }
 };
 
-module.exports.getObserver = cors.cors({
+module.exports.getNurse = cors.cors({
   allowCredentials: true,
   allowOrigins: "*",
   allowMethods: [
@@ -155,13 +155,13 @@ module.exports.getObserver = cors.cors({
     'Authorization',
     'Content-Type',
   ]
-})(origGetObserver);
+})(origGetNurse);
 
-const origPutObserver = async (event, context, callback) => {
-  const observerTable = new ObserverTable(docClient);
+const origPutNurse = async (event, context, callback) => {
+  const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
   try {
-    if (!validator.checkObserverBody(JSON.parse(event.body))) {
+    if (!validator.checkNurseBody(JSON.parse(event.body))) {
       const errorModel = {
         errorCode: "RPM00002",
         errorMessage: "Invalid Body",
@@ -173,8 +173,8 @@ const origPutObserver = async (event, context, callback) => {
         }),
       });
     }
-    const res = await observerTable.putObserver(
-      event.pathParameters.observerId,
+    const res = await nurseTable.putNurse(
+      event.pathParameters.nurseId,
       JSON.parse(event.body)
     );
     callback(null, {
@@ -182,7 +182,7 @@ const origPutObserver = async (event, context, callback) => {
       body: JSON.stringify(res),
     });
   } catch (err) {
-    console.log("putObserverTable-index error");
+    console.log("putNurseTable-index error");
     callback(null, {
       statusCode: 500,
       body: JSON.stringify({
@@ -192,7 +192,7 @@ const origPutObserver = async (event, context, callback) => {
   }
 };
 
-module.exports.putObserver = cors.cors({
+module.exports.putNurse = cors.cors({
   allowCredentials: true,
   allowOrigins: "*",
   allowMethods: [
@@ -204,4 +204,4 @@ module.exports.putObserver = cors.cors({
     'Authorization',
     'Content-Type',
   ]
-})(origPutObserver);
+})(origPutNurse);
