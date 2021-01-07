@@ -12,22 +12,22 @@ info:
 servers:
   - url: /
 paths:
-  /api/center/:
-    $ref: ./paths/center.yaml
-  /api/center/{centerId}:
-    $ref: ./paths/center-by-id.yaml
-  /api/center/{centerId}/nurse/:
-    $ref: ./paths/nurse-by-center-id.yaml
-  /api/nurse/{nurseId}:
-    $ref: ./paths/nurse-by-id.yaml
-  /api/center/{centerId}/patient/:
-    $ref: ./paths/patient-by-center-id.yaml
-  /api/patient/{patientId}:
-    $ref: ./paths/patient-by-id.yaml
-  /api/patient/{patientId}/statuses:
-    $ref: ./paths/statuses-by-patient-id.yaml
-  /api/status/{statusId}:
-    $ref: ./paths/status-by-id.yaml
+  /api/admin/center/:
+    $ref: ./paths/admin/center.yaml
+  /api/admin/center/{centerId}:
+    $ref: ./paths/admin/center-by-id.yaml
+  /api/admin/center/{centerId}/nurse/:
+    $ref: ./paths/admin/nurse-by-center-id.yaml
+  /api/admin/nurse/{nurseId}:
+    $ref: ./paths/admin/nurse-by-id.yaml
+  /api/admin/center/{centerId}/patient/:
+    $ref: ./paths/admin/patient-by-center-id.yaml
+  /api/admin/patient/{patientId}:
+    $ref: ./paths/admin/patient-by-id.yaml
+  /api/admin/patient/{patientId}/statuses:
+    $ref: ./paths/admin/statuses-by-patient-id.yaml
+  /api/admin/status/{statusId}:
+    $ref: ./paths/admin/status-by-id.yaml
 components:
   schemas:
     $ref: "./schemas/index.yaml"
