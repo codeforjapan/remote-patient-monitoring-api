@@ -1,26 +1,26 @@
 getCenters:
-  handler: src/lambda/center.getCenters
+  handler: src/lambda/handler.getCenters
   name: "remote-patient-monitoring-getCenters-${self:provider.stage}"
   description: "get Centers"
   role: "arn:aws:iam::#{AWS::AccountId}:role/GetCentersRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
 getCenter:
-  handler: src/lambda/center.getCenter
+  handler: src/lambda/handler.getCenter
   name: "remote-patient-monitoring-getCenter-${self:provider.stage}"
   description: "get Center"
   role: "arn:aws:iam::#{AWS::AccountId}:role/GetCenterRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
 postCenter:
-  handler: src/lambda/center.postCenter
+  handler: src/lambda/handler.postCenter
   name: "remote-patient-monitoring-postCenter-${self:provider.stage}"
   description: "post Center"
   role: "arn:aws:iam::#{AWS::AccountId}:role/PostCenterRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
 putCenter:
-  handler: src/lambda/center.putCenter
+  handler: src/lambda/handler.putCenter
   name: "remote-patient-monitoring-putCenter-${self:provider.stage}"
   description: "put Center"
   role: "arn:aws:iam::#{AWS::AccountId}:role/PutCenterRole-${self:provider.stage}"

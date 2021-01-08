@@ -1,6 +1,5 @@
 "use strict";
 var AWS = require("aws-sdk");
-var cors = require('aws-lambda-cors');
 
 AWS.config.update({
   region: process.env.region
@@ -12,7 +11,7 @@ var CenterTable = require("../aws/centerTable");
 var Validator = require("../util/validator");
 var Formatter = require("../util/formatter");
 
-const origGetCenters = async (event, context, callback) => {
+exports.getCenters = async (event, context, callback) => {
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
@@ -45,21 +44,7 @@ const origGetCenters = async (event, context, callback) => {
   }
 };
 
-module.exports.getCenters = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'GET'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origGetCenters);
-
-const origPostCenter = async (event, context, callback) => {
+exports.postCenter = async (event, context, callback) => {
   console.log('called postCenter');
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
@@ -92,21 +77,7 @@ const origPostCenter = async (event, context, callback) => {
   }
 };
 
-module.exports.postCenter = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'POST'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origPostCenter);
-
-const origGetCenter = async (event, context, callback) => {
+exports.getCenter = async (event, context, callback) => {
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
@@ -143,21 +114,7 @@ const origGetCenter = async (event, context, callback) => {
   }
 };
 
-module.exports.getCenter = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'GET'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origGetCenter);
-
-const origPutCenter = async (event, context, callback) => {
+exports.putCenter = async (event, context, callback) => {
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
   try {
@@ -191,17 +148,3 @@ const origPutCenter = async (event, context, callback) => {
     });
   }
 };
-
-module.exports.putCenter = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'PUT'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origPutCenter);

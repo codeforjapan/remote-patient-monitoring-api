@@ -1,7 +1,7 @@
 {
   "AuthAdminUserPoolDomain":"remote-patient-monitoring-admin",
   "AuthNurseUserPoolDomain":"remote-patient-monitoring-nurse",
-  "AuthPatitntUserPoolDomain":"remote-patient-monitoring-patient",
+  "AuthPatientUserPoolDomain":"remote-patient-monitoring-patient",
   "OauthCallbackURL":"https://dev.remotepatientmonitoring.jp",
   "OauthSignoutURL":"https://dev.remotepatientmonitoring.jp",
   "Bucket":"remote-patient-monitoring-dev",

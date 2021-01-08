@@ -5072,7 +5072,7 @@ components:
         type: cognito_user_pools
         providerARNs:
           - >-
-            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_WqyfQWEUJ
+            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_oyGGA7mWk
         identityValidationExpression: .*
 tags:
   - name: Center

@@ -1,6 +1,5 @@
 "use strict";
 var AWS = require("aws-sdk");
-var cors = require('aws-lambda-cors');
 
 AWS.config.update({
   region: process.env.region
@@ -12,7 +11,7 @@ var PatientTable = require("../aws/patientTable");
 var Validator = require("../util/validator");
 var Formatter = require("../util/formatter");
 
-const origGetPatients = async (event, context, callback) => {
+exports.getPatients = async (event, context, callback) => {
   const patientTable = new PatientTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
@@ -45,21 +44,7 @@ const origGetPatients = async (event, context, callback) => {
   }
 };
 
-module.exports.getPatients = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'GET'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origGetPatients);
-
-const origPostPatient = async (event, context, callback) => {
+exports.postPatient = async (event, context, callback) => {
   console.log('called postPatient');
   const patientTable = new PatientTable(docClient);
   const validator = new Validator();
@@ -92,21 +77,7 @@ const origPostPatient = async (event, context, callback) => {
   }
 };
 
-module.exports.postPatient = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'POST'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origPostPatient);
-
-const origGetPatient = async (event, context, callback) => {
+exports.getPatient = async (event, context, callback) => {
   const patientTable = new PatientTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
@@ -143,21 +114,7 @@ const origGetPatient = async (event, context, callback) => {
   }
 };
 
-module.exports.getPatient = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'GET'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origGetPatient);
-
-const origPutPatient = async (event, context, callback) => {
+exports.putPatient = async (event, context, callback) => {
   const patientTable = new PatientTable(docClient);
   const validator = new Validator();
   try {
@@ -191,17 +148,3 @@ const origPutPatient = async (event, context, callback) => {
     });
   }
 };
-
-module.exports.putPatient = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'PUT'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origPutPatient);
