@@ -63,7 +63,7 @@ Resources:
             Action: sts:AssumeRoleWithWebIdentity
             Condition:
               StringEquals:
-                cognito-identity.amazonaws.com:aud: !Ref RPMIdentityProvider
+                cognito-identity.amazonaws.com:aud: !Ref RPMAdminIdentityProvider
               ForAnyValue:StringLike:
                 cognito-identity.amazonaws.com:amr: authenticated
       Policies:

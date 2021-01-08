@@ -31,7 +31,10 @@ config/dev.json
 
 ```bash
 {
-  "AuthUserPoolDomain":"your.api.domain",
+  "AuthAdminUserPoolDomain":"your-api-domain-admin",
+  "AuthNurseUserPoolDomain":"your-api-domain-nurse",
+  "AuthPatientUserPoolDomain":"your-api-domain-patient",
+  "AuthAdminUserPoolDomain":"your.api.domain",
   "OauthCallbackURL":"https://your.callback.url",
   "OauthSignoutURL":"https://your.signout.url",
   "Bucket":"your-bucket-name",
