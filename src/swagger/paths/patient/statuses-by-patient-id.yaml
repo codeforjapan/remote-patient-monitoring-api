@@ -12,8 +12,8 @@ get:
       required: true
       schema:
         type: string
-    - $ref: ../parameters/limit.yaml
-    - $ref: ../parameters/offset.yaml
+    - $ref: ../../parameters/limit.yaml
+    - $ref: ../../parameters/offset.yaml
   responses:
     200:
       description: OK
@@ -30,7 +30,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Statuses.yaml"
+            $ref: "../../schemas/Statuses.yaml"
     400:
       description: Bad Request
       headers:
@@ -46,7 +46,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Error.yaml"
+            $ref: "../../schemas/Error.yaml"
     500:
       description: Internal error
       headers:
@@ -62,7 +62,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Error.yaml"
+            $ref: "../../schemas/Error.yaml"
   x-amazon-apigateway-integration:
     type: aws_proxy
     responses:
@@ -152,7 +152,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: "../schemas/consumeStatus.yaml"
+          $ref: "../../schemas/consumeStatus.yaml"
     required: true
   responses:
     201:
@@ -170,7 +170,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Status.yaml"
+            $ref: "../../schemas/Status.yaml"
     400:
       description: Bad Request
       headers:
@@ -186,7 +186,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Error.yaml"
+            $ref: "../../schemas/Error.yaml"
     500:
       description: Internal error
       headers:
@@ -202,7 +202,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Error.yaml"
+            $ref: "../../schemas/Error.yaml"
   x-amazon-apigateway-integration:
     type: aws_proxy
     responses:
