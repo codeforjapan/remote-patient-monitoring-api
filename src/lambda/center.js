@@ -11,7 +11,7 @@ var CenterTable = require("../aws/centerTable");
 var Validator = require("../util/validator");
 var Formatter = require("../util/formatter");
 
-exports.getCenters = async (event, context, callback) => {
+module.exports.getCenters = async (event, context, callback) => {
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
@@ -44,7 +44,7 @@ exports.getCenters = async (event, context, callback) => {
   }
 };
 
-exports.postCenter = async (event, context, callback) => {
+module.exports.postCenter = async (event, context, callback) => {
   console.log('called postCenter');
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
@@ -77,7 +77,7 @@ exports.postCenter = async (event, context, callback) => {
   }
 };
 
-exports.getCenter = async (event, context, callback) => {
+module.exports.getCenter = async (event, context, callback) => {
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
@@ -114,7 +114,7 @@ exports.getCenter = async (event, context, callback) => {
   }
 };
 
-exports.putCenter = async (event, context, callback) => {
+module.exports.putCenter = async (event, context, callback) => {
   const centerTable = new CenterTable(docClient);
   const validator = new Validator();
   try {

@@ -11,7 +11,7 @@ var NurseTable = require("../aws/nurseTable");
 var Validator = require("../util/validator");
 var Formatter = require("../util/formatter");
 
-exports.getNurses = async (event, context, callback) => {
+module.exports.getNurses = async (event, context, callback) => {
   const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
@@ -44,7 +44,7 @@ exports.getNurses = async (event, context, callback) => {
   }
 };
 
-exports.postNurse = async (event, context, callback) => {
+module.exports.postNurse = async (event, context, callback) => {
   console.log('called postNurse');
   const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
@@ -77,7 +77,7 @@ exports.postNurse = async (event, context, callback) => {
   }
 };
 
-exports.getNurse = async (event, context, callback) => {
+module.exports.getNurse = async (event, context, callback) => {
   const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
@@ -114,7 +114,7 @@ exports.getNurse = async (event, context, callback) => {
   }
 };
 
-exports.putNurse = async (event, context, callback) => {
+module.exports.putNurse = async (event, context, callback) => {
   const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
   try {
