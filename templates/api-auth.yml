@@ -96,8 +96,8 @@ Resources:
         AllowAdminCreateUserOnly: true
       AccountRecoverySetting:
         RecoveryMechanisms:
-          - Name: admin_only
-            Value: 1
+          - Name: "admin_only"
+            Priority: 1
       Policies:
         PasswordPolicy:
           MinimumLength: 6
