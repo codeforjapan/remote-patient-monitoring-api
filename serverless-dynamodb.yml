@@ -31,3 +31,20 @@ resources:
 
 plugins:
   - serverless-pseudo-parameters
+  - serverless-dynamodb-local
+  - serverless-offline
+
+custom:
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
+    seed:
+      development:
+        sources:
+          - table: RemotePatientMonitoring-CenterTable-dev
+            sources: [./migrations/centers.json]

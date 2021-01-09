@@ -102,6 +102,20 @@ Authorize が必要なAPIにアクセスする場合、`Authorize` ボタンか�
 
 ## 開発用情報
 
+### ローカル環境での DynamoDB のインストール
+
+Dynamo DB をインストールする
+
+```bash
+sls dynamodb install
+```
+
+### DynamoDB のローカルインスタンスを開始
+
+```bash
+npm dynamodb:start
+```
+
 ### API や serverless.yml を修正後、再デプロイする
 
 ```bash
