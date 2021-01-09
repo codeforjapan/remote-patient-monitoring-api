@@ -69,6 +69,12 @@ plugins:
   - serverless-s3-deploy
   - serverless-scriptable-plugin
   - serverless-cloudformation-sub-variables
+  - serverless-webpack
 custom:
   project: remote-patient-monitoring
   baseName: ${self:custom.project}-${self:provider.stage}-${self:service}
+  webpack:
+    webpackConfig: "webpack-lambda.config.js" # Name of webpack configuration file
+    includeModules: false # Node modules configuration for packaging
+    packager: "npm" # Packager that will be used to package your external modules
+

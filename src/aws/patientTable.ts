@@ -1,15 +1,15 @@
 "use strict";
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { AWSError, DynamoDB } from 'aws-sdk'
 
 export default class PatientTable {
-  client:DynamoDB.DocumentClient;
-  constructor(serviceClient) {
+  client: DynamoDB.DocumentClient;
+  constructor(serviceClient: DynamoDB.DocumentClient) {
     this.client = serviceClient;
   }
 
   getPatients() {
-    const params:DynamoDB.ScanInput = {
+    const params: DynamoDB.DocumentClient.ScanInput = {
       TableName: process.env.PATIENT_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
@@ -25,8 +25,8 @@ export default class PatientTable {
     });
   }
 
-  getPatient(patientId):Promise<DynamoDB.GetItemOutput | AWSError> {
-    const params:DynamoDB.GetItemInput = {
+  getPatient(patientId: string): Promise<DynamoDB.GetItemOutput | AWSError> {
+    const params: DynamoDB.DocumentClient.GetItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Key: {
         "patientId": patientId
@@ -45,12 +45,12 @@ export default class PatientTable {
     });
   }
 
-  postPatient(body):Promise<DynamoDB.PutItemOutput | AWSError> {
+  postPatient(body: { patientName: string }): Promise<DynamoDB.PutItemOutput | AWSError> {
     const patient = {
       ...body,
-      patientId: uuid.v4(),
+      patientId: uuid(),
     };
-    const params:DynamoDB.PutItemInput = {
+    const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Item: patient,
     };
@@ -62,19 +62,19 @@ export default class PatientTable {
           reject(err);
         } else {
           console.log("postPatient Success!");
-          resolve(patient);
+          resolve(data);
         }
       });
     });
   }
 
-  putPatient(patientId, body):Promise<DynamoDB.UpdateItemOutput | AWSError> {
+  putPatient(patientId: string, body: { patientName: string }): Promise<DynamoDB.DocumentClient.UpdateItemOutput | AWSError> {
     const patient = {
       ...body,
       patientId: patientId,
     };
     console.log(patient);
-    const params:DynamoDB.UpdateItemInput = {
+    const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Key: {
         patientId: patient.patientId
@@ -95,7 +95,7 @@ export default class PatientTable {
           reject(err);
         } else {
           console.log("putPatient Success!");
-          resolve(patient);
+          resolve(data);
         }
       });
     });

@@ -1,15 +1,15 @@
 "use strict";
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { AWSError, DynamoDB } from 'aws-sdk'
 
 export default class NurseTable {
-  client:DynamoDB.DocumentClient;
-  constructor(serviceClient) {
+  client: DynamoDB.DocumentClient;
+  constructor(serviceClient: DynamoDB.DocumentClient) {
     this.client = serviceClient;
   }
 
   getNurses() {
-    const params:DynamoDB.ScanInput  = {
+    const params: DynamoDB.ScanInput = {
       TableName: process.env.NURSE_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
@@ -25,8 +25,8 @@ export default class NurseTable {
     });
   }
 
-  getNurse(nurseId):Promise<DynamoDB.GetItemOutput | AWSError> {
-    const params:DynamoDB.GetItemInput = {
+  getNurse(nurseId: string): Promise<DynamoDB.DocumentClient.GetItemOutput | AWSError> {
+    const params: DynamoDB.DocumentClient.GetItemInput = {
       TableName: process.env.NURSE_TABLE_NAME!,
       Key: {
         "nurseId": nurseId
@@ -45,12 +45,12 @@ export default class NurseTable {
     });
   }
 
-  postNurse(body) {
+  postNurse(body: { nurseName: string }) {
     const nurse = {
       ...body,
-      nurseId: uuid.v4(),
+      nurseId: uuid(),
     };
-    const params:DynamoDB.PutItemInput = {
+    const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.NURSE_TABLE_NAME!,
       Item: nurse,
     };
@@ -62,19 +62,19 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("postNurse Success!");
-          resolve(nurse);
+          resolve(data);
         }
       });
     });
   }
 
-  putNurse(nurseId, body) {
+  putNurse(nurseId: string, body: { nurseName: string }) {
     const nurse = {
       ...body,
       nurseId: nurseId,
     };
     console.log(nurse);
-    const params:DynamoDB.UpdateItemInput = {
+    const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.NURSE_TABLE_NAME!,
       Key: {
         nurseId: nurse.nurseId
@@ -95,7 +95,7 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("putNurse Success!");
-          resolve(nurse);
+          resolve(data);
         }
       });
     });

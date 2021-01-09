@@ -12,7 +12,7 @@ import Validator from "../util/validator";
 import Formatter from "../util/formatter";
 
 export namespace Patient {
-  export async function getPatients(event, context, callback) {
+  export async function getPatients(event: any, context: any, callback: Function) {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
     const formatter = new Formatter();
@@ -45,7 +45,7 @@ export namespace Patient {
     }
   }
 
-  export async function postPatient(event, context, callback) {
+  export async function postPatient(event: any, context: any, callback: Function) {
     console.log('called postPatient');
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
@@ -78,7 +78,7 @@ export namespace Patient {
     }
   }
 
-  export async function getPatient(event, context, callback) {
+  export async function getPatient(event: any, context: any, callback: Function) {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
     const formatter = new Formatter();
@@ -115,7 +115,7 @@ export namespace Patient {
     }
   }
 
-  export async function putPatient(event, context, callback) {
+  export async function putPatient(event: any, context: any, callback: Function) {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
     try {

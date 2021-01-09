@@ -12,7 +12,7 @@ import Validator from "../util/validator";
 import Formatter from "../util/formatter";
 
 export namespace Center {
-  export async function getCenters(event, context, callback) {
+  export async function getCenters(event: any, context: any, callback: Function) {
     const centerTable = new CenterTable(docClient);
     const validator = new Validator();
     const formatter = new Formatter();
@@ -45,7 +45,7 @@ export namespace Center {
     }
   }
 
-  export async function postCenter(event, context, callback) {
+  export async function postCenter(event: any, context: any, callback: Function) {
     console.log('called postCenter');
     const centerTable = new CenterTable(docClient);
     const validator = new Validator();
@@ -78,7 +78,7 @@ export namespace Center {
     }
   }
 
-  export async function getCenter(event, context, callback) {
+  export async function getCenter(event: any, context: any, callback: Function) {
     const centerTable = new CenterTable(docClient);
     const validator = new Validator();
     const formatter = new Formatter();
@@ -115,7 +115,7 @@ export namespace Center {
     }
   }
 
-  export async function putCenter(event, context, callback) {
+  export async function putCenter(event: any, context: any, callback: Function) {
     const centerTable = new CenterTable(docClient);
     const validator = new Validator();
     try {

@@ -13,7 +13,7 @@ import Formatter from "../util/formatter";
 
 export namespace Nurse {
 
-  export async function getNurses(event, context, callback) {
+  export async function getNurses(event: any, context: any, callback: Function) {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
     const formatter = new Formatter();
@@ -46,7 +46,7 @@ export namespace Nurse {
     }
   }
 
-  export async function postNurse(event, context, callback) {
+  export async function postNurse(event: any, context: any, callback: Function) {
     console.log('called postNurse');
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
@@ -79,7 +79,7 @@ export namespace Nurse {
     }
   }
 
-  export async function getNurse(event, context, callback) {
+  export async function getNurse(event: any, context: any, callback: Function) {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
     const formatter = new Formatter();
@@ -116,7 +116,7 @@ export namespace Nurse {
     }
   }
 
-  export async function putNurse(event, context, callback) {
+  export async function putNurse(event: any, context: any, callback: Function) {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
     try {

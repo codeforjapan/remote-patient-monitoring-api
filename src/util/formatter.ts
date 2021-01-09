@@ -1,7 +1,7 @@
 "use strict";
 
 export default class Formatter {
-  getCenterFormatter(queryResult) {
+  getCenterFormatter(queryResult: any) {
     return queryResult.Items[0];
   }
 };

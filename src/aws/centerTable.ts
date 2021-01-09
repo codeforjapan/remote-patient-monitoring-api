@@ -1,15 +1,15 @@
 "use strict";
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid'
 import { AWSError, DynamoDB } from 'aws-sdk'
 
 export default class CenterTable {
-  client:DynamoDB.DocumentClient;
-  constructor(serviceClient:DynamoDB.DocumentClient) {
+  client: DynamoDB.DocumentClient;
+  constructor(serviceClient: DynamoDB.DocumentClient) {
     this.client = serviceClient;
   }
 
   getCenters() {
-    const params:DynamoDB.ScanInput = {
+    const params: DynamoDB.ScanInput = {
       TableName: process.env.CENTER_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
@@ -25,8 +25,8 @@ export default class CenterTable {
     });
   }
 
-  getCenter(centerId):Promise<DynamoDB.GetItemOutput | AWSError> {
-    const params:DynamoDB.GetItemInput = {
+  getCenter(centerId: string): Promise<DynamoDB.DocumentClient.GetItemOutput | AWSError> {
+    const params: DynamoDB.DocumentClient.GetItemInput = {
       TableName: process.env.CENTER_TABLE_NAME!,
       Key: {
         "centerId": centerId
@@ -45,12 +45,12 @@ export default class CenterTable {
     });
   }
 
-  postCenter(body) {
+  postCenter(body: { centerName: string }) {
     const center = {
       ...body,
-      centerId: uuid.v4(),
+      centerId: uuid(),
     };
-    const params:DynamoDB.PutItemInput = {
+    const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.CENTER_TABLE_NAME!,
       Item: center,
     };
@@ -62,19 +62,19 @@ export default class CenterTable {
           reject(err);
         } else {
           console.log("postCenter Success!");
-          resolve(center);
+          resolve(data);
         }
       });
     });
   }
 
-  putCenter(centerId, body) {
+  putCenter(centerId: string, body: { centerName: string }) {
     const center = {
       ...body,
       centerId: centerId,
     };
     console.log(center);
-    const params:DynamoDB.UpdateItemInput = {
+    const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.CENTER_TABLE_NAME!,
       Key: {
         centerId: center.centerId
@@ -95,7 +95,7 @@ export default class CenterTable {
           reject(err);
         } else {
           console.log("putCenter Success!");
-          resolve(center);
+          resolve(data);
         }
       });
     });
