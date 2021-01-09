@@ -4,6 +4,7 @@ jspm_packages
 
 # Serverless directories
 .serverless
+.build
 src/webpack/config.json
 src/swagger/_swagger.yaml
 util/config.json
