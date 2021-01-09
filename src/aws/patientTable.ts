@@ -45,7 +45,7 @@ export default class PatientTable {
     });
   }
 
-  postPatient(body: { patientName: string }): Promise<DynamoDB.PutItemOutput | AWSError> {
+  postPatient(body: { patientName: string }) {
     const patient = {
       ...body,
       patientId: uuid(),
@@ -62,13 +62,13 @@ export default class PatientTable {
           reject(err);
         } else {
           console.log("postPatient Success!");
-          resolve(data);
+          resolve(patient);
         }
       });
     });
   }
 
-  putPatient(patientId: string, body: { patientName: string }): Promise<DynamoDB.DocumentClient.UpdateItemOutput | AWSError> {
+  putPatient(patientId: string, body: { patientName: string }) {
     const patient = {
       ...body,
       patientId: patientId,
@@ -95,7 +95,7 @@ export default class PatientTable {
           reject(err);
         } else {
           console.log("putPatient Success!");
-          resolve(data);
+          resolve(patient);
         }
       });
     });

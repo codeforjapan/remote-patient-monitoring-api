@@ -62,7 +62,7 @@ export default class CenterTable {
           reject(err);
         } else {
           console.log("postCenter Success!");
-          resolve(data);
+          resolve(center);
         }
       });
     });
@@ -95,7 +95,7 @@ export default class CenterTable {
           reject(err);
         } else {
           console.log("putCenter Success!");
-          resolve(data);
+          resolve(center);
         }
       });
     });

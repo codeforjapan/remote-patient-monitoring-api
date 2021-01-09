@@ -62,7 +62,7 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("postNurse Success!");
-          resolve(data);
+          resolve(nurse);
         }
       });
     });
@@ -95,7 +95,7 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("putNurse Success!");
-          resolve(data);
+          resolve(nurse);
         }
       });
     });

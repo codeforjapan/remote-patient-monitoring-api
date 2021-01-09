@@ -1,20 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
-    "lib": [
-      "ES2020",
-      "dom"
-    ],
-    "module": "ES6",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "lib": ["esnext"],
+    "module": "commonjs",
     "moduleResolution": "node",
-    "baseUrl": ".",
-    "strict": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "lib",
     "sourceMap": true,
-    "removeComments": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true
-  }
+    "target": "esnext"
+  },
+  "exclude": ["src/swagger", "src/gh-swagger-ui", "src/webpack"]
 }
