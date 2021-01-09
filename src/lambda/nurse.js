@@ -1,6 +1,5 @@
 "use strict";
 var AWS = require("aws-sdk");
-var cors = require('aws-lambda-cors');
 
 AWS.config.update({
   region: process.env.region
@@ -12,7 +11,7 @@ var NurseTable = require("../aws/nurseTable");
 var Validator = require("../util/validator");
 var Formatter = require("../util/formatter");
 
-const origGetNurses = async (event, context, callback) => {
+module.exports.getNurses = async (event, context, callback) => {
   const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
@@ -45,21 +44,7 @@ const origGetNurses = async (event, context, callback) => {
   }
 };
 
-module.exports.getNurses = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'GET'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origGetNurses);
-
-const origPostNurse = async (event, context, callback) => {
+module.exports.postNurse = async (event, context, callback) => {
   console.log('called postNurse');
   const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
@@ -92,21 +77,7 @@ const origPostNurse = async (event, context, callback) => {
   }
 };
 
-module.exports.postNurse = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'POST'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origPostNurse);
-
-const origGetNurse = async (event, context, callback) => {
+module.exports.getNurse = async (event, context, callback) => {
   const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
   const formatter = new Formatter();
@@ -143,21 +114,7 @@ const origGetNurse = async (event, context, callback) => {
   }
 };
 
-module.exports.getNurse = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'GET'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origGetNurse);
-
-const origPutNurse = async (event, context, callback) => {
+module.exports.putNurse = async (event, context, callback) => {
   const nurseTable = new NurseTable(docClient);
   const validator = new Validator();
   try {
@@ -191,17 +148,3 @@ const origPutNurse = async (event, context, callback) => {
     });
   }
 };
-
-module.exports.putNurse = cors.cors({
-  allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'PUT'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
-})(origPutNurse);

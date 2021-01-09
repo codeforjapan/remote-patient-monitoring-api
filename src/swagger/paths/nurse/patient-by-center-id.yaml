@@ -34,7 +34,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Patients.yaml"
+            $ref: "../../schemas/Patients.yaml"
     400:
       description: Bad Request
       headers:
@@ -50,7 +50,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Error.yaml"
+            $ref: "../../schemas/Error.yaml"
     500:
       description: Internal error
       headers:
@@ -66,7 +66,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Error.yaml"
+            $ref: "../../schemas/Error.yaml"
   x-amazon-apigateway-integration:
     type: aws_proxy
     responses:
@@ -156,7 +156,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: "../schemas/consumePatient.yaml"
+          $ref: "../../schemas/consumePatient.yaml"
     required: true
   responses:
     201:
@@ -174,7 +174,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../schemas/producePatient.yaml"
+            $ref: "../../schemas/producePatient.yaml"
     400:
       description: Bad Request
       headers:
@@ -190,7 +190,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Error.yaml"
+            $ref: "../../schemas/Error.yaml"
     500:
       description: Internal error
       headers:
@@ -206,7 +206,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Error.yaml"
+            $ref: "../../schemas/Error.yaml"
   x-amazon-apigateway-integration:
     type: aws_proxy
     responses:

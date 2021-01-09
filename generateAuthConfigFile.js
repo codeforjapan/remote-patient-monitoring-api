@@ -24,9 +24,9 @@ const listStackResources = async (resources, nextToken) => {
 const createConfig = stackResources => ({
   region: provider.region,
   cognito: {
-    identityPoolId: getPhysicalId(stackResources, 'RPMIdentityProvider'),
-    userPoolId: getPhysicalId(stackResources, 'RPMUserPool'),
-    userPoolWebClientId: getPhysicalId(stackResources, 'RPMAppClient')
+    identityPoolId: getPhysicalId(stackResources, 'RPMAdminIdentityProvider'),
+    userPoolId: getPhysicalId(stackResources, 'RPMAdminUserPool'),
+    userPoolWebClientId: getPhysicalId(stackResources, 'RPMAdminAppClient')
   },
   distribution: {
     SwaggerUIDistribution: getPhysicalId(stackResources, 'SwaggerDistribution')

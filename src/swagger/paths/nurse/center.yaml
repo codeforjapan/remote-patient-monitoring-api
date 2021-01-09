@@ -19,7 +19,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Centers.yaml"
+            $ref: "../../schemas/Centers.yaml"
     400:
       description: Bad Request
       headers:
@@ -35,7 +35,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Error.yaml"
+            $ref: "../../schemas/Error.yaml"
     500:
       description: Internal error
       headers:
@@ -51,7 +51,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Error.yaml"
+            $ref: "../../schemas/Error.yaml"
   x-amazon-apigateway-integration:
     type: aws_proxy
     responses:
