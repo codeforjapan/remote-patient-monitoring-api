@@ -35,7 +35,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Centers.yaml
+                type: array
+                items:
+                  type: object
+                  properties:
+                    centerId:
+                      type: string
+                    centerName:
+                      type: string
         '400':
           description: Bad Request
           headers:
@@ -51,7 +58,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -67,7 +79,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -105,7 +122,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/consumeCenter.yaml
+              type: object
+              properties:
+                centerName:
+                  type: string
         required: true
       responses:
         '200':
@@ -123,7 +143,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Center.yaml
+                type: object
+                properties:
+                  centerId:
+                    type: string
+                  centerName:
+                    type: string
         '400':
           description: Bad Request
           headers:
@@ -139,7 +164,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -155,7 +185,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -241,7 +276,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Centers.yaml
+                type: array
+                items:
+                  type: object
+                  properties:
+                    centerId:
+                      type: string
+                    centerName:
+                      type: string
         '400':
           description: Bad Request
           headers:
@@ -257,7 +299,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -273,7 +320,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -365,7 +417,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Center.yaml
+                type: object
+                properties:
+                  centerId:
+                    type: string
+                  centerName:
+                    type: string
         '400':
           description: Bad Request
           headers:
@@ -381,7 +438,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -397,7 +459,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -443,7 +510,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/consumeCenter.yaml
+              type: object
+              properties:
+                centerName:
+                  type: string
         required: true
       responses:
         '200':
@@ -461,7 +531,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Center.yaml
+                type: object
+                properties:
+                  centerId:
+                    type: string
+                  centerName:
+                    type: string
         '400':
           description: Bad Request
           headers:
@@ -477,7 +552,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -493,7 +573,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -594,7 +679,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Center.yaml
+                type: object
+                properties:
+                  centerId:
+                    type: string
+                  centerName:
+                    type: string
         '400':
           description: Bad Request
           headers:
@@ -610,7 +700,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -626,7 +721,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -728,7 +828,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Nurses.yaml
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nurseId:
+                      type: string
+                    nurseName:
+                      type: string
+                    manageCenters:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          centerId:
+                            type: string
+                          centerName:
+                            type: string
         '400':
           description: Bad Request
           headers:
@@ -744,7 +860,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -760,7 +881,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -872,7 +998,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Nurse.yaml
+                type: object
+                properties:
+                  nurseId:
+                    type: string
+                  nurseName:
+                    type: string
+                  manageCenters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        centerId:
+                          type: string
+                        centerName:
+                          type: string
         '400':
           description: Bad Request
           headers:
@@ -888,7 +1028,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -904,7 +1049,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -962,7 +1112,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Nurses.yaml
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nurseId:
+                      type: string
+                    nurseName:
+                      type: string
+                    manageCenters:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          centerId:
+                            type: string
+                          centerName:
+                            type: string
         '400':
           description: Bad Request
           headers:
@@ -978,7 +1144,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -994,7 +1165,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1098,7 +1274,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Nurse.yaml
+                type: object
+                properties:
+                  nurseId:
+                    type: string
+                  nurseName:
+                    type: string
+                  manageCenters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        centerId:
+                          type: string
+                        centerName:
+                          type: string
         '400':
           description: Bad Request
           headers:
@@ -1114,7 +1304,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -1130,7 +1325,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1176,7 +1376,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/consumeNurse.yaml
+              type: object
+              properties:
+                nurseName:
+                  type: string
+                manageCenters:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      centerId:
+                        type: string
+                      centerName:
+                        type: string
         required: true
       responses:
         '200':
@@ -1194,7 +1406,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Nurse.yaml
+                type: object
+                properties:
+                  nurseId:
+                    type: string
+                  nurseName:
+                    type: string
+                  manageCenters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        centerId:
+                          type: string
+                        centerName:
+                          type: string
         '400':
           description: Bad Request
           headers:
@@ -1210,7 +1436,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -1226,7 +1457,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1329,7 +1565,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Nurse.yaml
+                type: object
+                properties:
+                  nurseId:
+                    type: string
+                  nurseName:
+                    type: string
+                  manageCenters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        centerId:
+                          type: string
+                        centerName:
+                          type: string
         '400':
           description: Bad Request
           headers:
@@ -1345,7 +1595,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -1361,7 +1616,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1470,7 +1730,61 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Patients.yaml
+                type: array
+                items:
+                  type: object
+                  properties:
+                    patientId:
+                      type: string
+                    centerId:
+                      type: string
+                    policy_accepted:
+                      type: string
+                      format: date-time
+                    phone:
+                      type: string
+                    display:
+                      type: boolean
+                    statuses:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          statusId:
+                            type: string
+                          patientId:
+                            type: string
+                          centerId:
+                            type: string
+                          created:
+                            type: string
+                            format: date-time
+                          SpO2:
+                            type: integer
+                            format: int32
+                          body_temperature:
+                            type: number
+                            format: float
+                          pulse:
+                            type: integer
+                            format: int32
+                          symptom:
+                            type: object
+                            properties:
+                              symptomId:
+                                type: string
+                              couth:
+                                type: boolean
+                              phiegm:
+                                type: boolean
+                              suffocation:
+                                type: boolean
+                              headache:
+                                type: boolean
+                              sore_throat:
+                                type: boolean
+                              remarks:
+                                type: string
         '400':
           description: Bad Request
           headers:
@@ -1486,7 +1800,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -1502,7 +1821,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1593,7 +1917,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/consumePatient.yaml
+              type: object
+              properties:
+                phone:
+                  type: string
+                display:
+                  type: boolean
         required: true
       responses:
         '201':
@@ -1611,7 +1940,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/producePatient.yaml
+                type: object
+                properties:
+                  loginId:
+                    type: string
+                  password:
+                    type: string
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  policy_accepted:
+                    type: string
+                    format: date-time
+                  phone:
+                    type: string
+                  display:
+                    type: boolean
         '400':
           description: Bad Request
           headers:
@@ -1627,7 +1972,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -1643,7 +1993,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1708,7 +2063,61 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Patients.yaml
+                type: array
+                items:
+                  type: object
+                  properties:
+                    patientId:
+                      type: string
+                    centerId:
+                      type: string
+                    policy_accepted:
+                      type: string
+                      format: date-time
+                    phone:
+                      type: string
+                    display:
+                      type: boolean
+                    statuses:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          statusId:
+                            type: string
+                          patientId:
+                            type: string
+                          centerId:
+                            type: string
+                          created:
+                            type: string
+                            format: date-time
+                          SpO2:
+                            type: integer
+                            format: int32
+                          body_temperature:
+                            type: number
+                            format: float
+                          pulse:
+                            type: integer
+                            format: int32
+                          symptom:
+                            type: object
+                            properties:
+                              symptomId:
+                                type: string
+                              couth:
+                                type: boolean
+                              phiegm:
+                                type: boolean
+                              suffocation:
+                                type: boolean
+                              headache:
+                                type: boolean
+                              sore_throat:
+                                type: boolean
+                              remarks:
+                                type: string
         '400':
           description: Bad Request
           headers:
@@ -1724,7 +2133,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -1740,7 +2154,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1831,7 +2250,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/consumePatient.yaml
+              type: object
+              properties:
+                phone:
+                  type: string
+                display:
+                  type: boolean
         required: true
       responses:
         '201':
@@ -1849,7 +2273,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/producePatient.yaml
+                type: object
+                properties:
+                  loginId:
+                    type: string
+                  password:
+                    type: string
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  policy_accepted:
+                    type: string
+                    format: date-time
+                  phone:
+                    type: string
+                  display:
+                    type: boolean
         '400':
           description: Bad Request
           headers:
@@ -1865,7 +2305,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -1881,7 +2326,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -1939,7 +2389,59 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Patient.yaml
+                type: object
+                properties:
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  policy_accepted:
+                    type: string
+                    format: date-time
+                  phone:
+                    type: string
+                  display:
+                    type: boolean
+                  statuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        statusId:
+                          type: string
+                        patientId:
+                          type: string
+                        centerId:
+                          type: string
+                        created:
+                          type: string
+                          format: date-time
+                        SpO2:
+                          type: integer
+                          format: int32
+                        body_temperature:
+                          type: number
+                          format: float
+                        pulse:
+                          type: integer
+                          format: int32
+                        symptom:
+                          type: object
+                          properties:
+                            symptomId:
+                              type: string
+                            couth:
+                              type: boolean
+                            phiegm:
+                              type: boolean
+                            suffocation:
+                              type: boolean
+                            headache:
+                              type: boolean
+                            sore_throat:
+                              type: boolean
+                            remarks:
+                              type: string
         '400':
           description: Bad Request
           headers:
@@ -1955,7 +2457,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -1971,7 +2478,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2017,7 +2529,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/consumePatient.yaml
+              type: object
+              properties:
+                phone:
+                  type: string
+                display:
+                  type: boolean
         required: true
       responses:
         '200':
@@ -2035,7 +2552,59 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Patient.yaml
+                type: object
+                properties:
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  policy_accepted:
+                    type: string
+                    format: date-time
+                  phone:
+                    type: string
+                  display:
+                    type: boolean
+                  statuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        statusId:
+                          type: string
+                        patientId:
+                          type: string
+                        centerId:
+                          type: string
+                        created:
+                          type: string
+                          format: date-time
+                        SpO2:
+                          type: integer
+                          format: int32
+                        body_temperature:
+                          type: number
+                          format: float
+                        pulse:
+                          type: integer
+                          format: int32
+                        symptom:
+                          type: object
+                          properties:
+                            symptomId:
+                              type: string
+                            couth:
+                              type: boolean
+                            phiegm:
+                              type: boolean
+                            suffocation:
+                              type: boolean
+                            headache:
+                              type: boolean
+                            sore_throat:
+                              type: boolean
+                            remarks:
+                              type: string
         '400':
           description: Bad Request
           headers:
@@ -2051,7 +2620,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -2067,7 +2641,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2170,7 +2749,59 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Patient.yaml
+                type: object
+                properties:
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  policy_accepted:
+                    type: string
+                    format: date-time
+                  phone:
+                    type: string
+                  display:
+                    type: boolean
+                  statuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        statusId:
+                          type: string
+                        patientId:
+                          type: string
+                        centerId:
+                          type: string
+                        created:
+                          type: string
+                          format: date-time
+                        SpO2:
+                          type: integer
+                          format: int32
+                        body_temperature:
+                          type: number
+                          format: float
+                        pulse:
+                          type: integer
+                          format: int32
+                        symptom:
+                          type: object
+                          properties:
+                            symptomId:
+                              type: string
+                            couth:
+                              type: boolean
+                            phiegm:
+                              type: boolean
+                            suffocation:
+                              type: boolean
+                            headache:
+                              type: boolean
+                            sore_throat:
+                              type: boolean
+                            remarks:
+                              type: string
         '400':
           description: Bad Request
           headers:
@@ -2186,7 +2817,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -2202,7 +2838,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2248,7 +2889,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/consumePatient.yaml
+              type: object
+              properties:
+                phone:
+                  type: string
+                display:
+                  type: boolean
         required: true
       responses:
         '200':
@@ -2266,7 +2912,59 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Patient.yaml
+                type: object
+                properties:
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  policy_accepted:
+                    type: string
+                    format: date-time
+                  phone:
+                    type: string
+                  display:
+                    type: boolean
+                  statuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        statusId:
+                          type: string
+                        patientId:
+                          type: string
+                        centerId:
+                          type: string
+                        created:
+                          type: string
+                          format: date-time
+                        SpO2:
+                          type: integer
+                          format: int32
+                        body_temperature:
+                          type: number
+                          format: float
+                        pulse:
+                          type: integer
+                          format: int32
+                        symptom:
+                          type: object
+                          properties:
+                            symptomId:
+                              type: string
+                            couth:
+                              type: boolean
+                            phiegm:
+                              type: boolean
+                            suffocation:
+                              type: boolean
+                            headache:
+                              type: boolean
+                            sore_throat:
+                              type: boolean
+                            remarks:
+                              type: string
         '400':
           description: Bad Request
           headers:
@@ -2282,7 +2980,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -2298,7 +3001,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2401,7 +3109,59 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Patient.yaml
+                type: object
+                properties:
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  policy_accepted:
+                    type: string
+                    format: date-time
+                  phone:
+                    type: string
+                  display:
+                    type: boolean
+                  statuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        statusId:
+                          type: string
+                        patientId:
+                          type: string
+                        centerId:
+                          type: string
+                        created:
+                          type: string
+                          format: date-time
+                        SpO2:
+                          type: integer
+                          format: int32
+                        body_temperature:
+                          type: number
+                          format: float
+                        pulse:
+                          type: integer
+                          format: int32
+                        symptom:
+                          type: object
+                          properties:
+                            symptomId:
+                              type: string
+                            couth:
+                              type: boolean
+                            phiegm:
+                              type: boolean
+                            suffocation:
+                              type: boolean
+                            headache:
+                              type: boolean
+                            sore_throat:
+                              type: boolean
+                            remarks:
+                              type: string
         '400':
           description: Bad Request
           headers:
@@ -2417,7 +3177,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -2433,7 +3198,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2519,8 +3289,18 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: ../parameters/limit.yaml
-        - $ref: ../parameters/offset.yaml
+        - name: limit
+          in: query
+          description: 取得件数
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: オフセット件数
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: OK
@@ -2537,7 +3317,45 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Statuses.yaml
+                type: array
+                items:
+                  type: object
+                  properties:
+                    statusId:
+                      type: string
+                    patientId:
+                      type: string
+                    centerId:
+                      type: string
+                    created:
+                      type: string
+                      format: date-time
+                    SpO2:
+                      type: integer
+                      format: int32
+                    body_temperature:
+                      type: number
+                      format: float
+                    pulse:
+                      type: integer
+                      format: int32
+                    symptom:
+                      type: object
+                      properties:
+                        symptomId:
+                          type: string
+                        couth:
+                          type: boolean
+                        phiegm:
+                          type: boolean
+                        suffocation:
+                          type: boolean
+                        headache:
+                          type: boolean
+                        sore_throat:
+                          type: boolean
+                        remarks:
+                          type: string
         '400':
           description: Bad Request
           headers:
@@ -2553,7 +3371,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -2569,7 +3392,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2660,7 +3488,32 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/consumeStatus.yaml
+              type: object
+              properties:
+                SpO2:
+                  type: integer
+                  format: int32
+                body_temperature:
+                  type: number
+                  format: float
+                pulse:
+                  type: integer
+                  format: int32
+                symptom:
+                  type: object
+                  properties:
+                    couth:
+                      type: boolean
+                    phiegm:
+                      type: boolean
+                    suffocation:
+                      type: boolean
+                    headache:
+                      type: boolean
+                    sore_throat:
+                      type: boolean
+                    remarks:
+                      type: string
         required: true
       responses:
         '201':
@@ -2678,7 +3531,43 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Status.yaml
+                type: object
+                properties:
+                  statusId:
+                    type: string
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  created:
+                    type: string
+                    format: date-time
+                  SpO2:
+                    type: integer
+                    format: int32
+                  body_temperature:
+                    type: number
+                    format: float
+                  pulse:
+                    type: integer
+                    format: int32
+                  symptom:
+                    type: object
+                    properties:
+                      symptomId:
+                        type: string
+                      couth:
+                        type: boolean
+                      phiegm:
+                        type: boolean
+                      suffocation:
+                        type: boolean
+                      headache:
+                        type: boolean
+                      sore_throat:
+                        type: boolean
+                      remarks:
+                        type: string
         '400':
           description: Bad Request
           headers:
@@ -2694,7 +3583,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -2710,7 +3604,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2752,8 +3651,18 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: ../parameters/limit.yaml
-        - $ref: ../parameters/offset.yaml
+        - name: limit
+          in: query
+          description: 取得件数
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: オフセット件数
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: OK
@@ -2770,7 +3679,45 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Statuses.yaml
+                type: array
+                items:
+                  type: object
+                  properties:
+                    statusId:
+                      type: string
+                    patientId:
+                      type: string
+                    centerId:
+                      type: string
+                    created:
+                      type: string
+                      format: date-time
+                    SpO2:
+                      type: integer
+                      format: int32
+                    body_temperature:
+                      type: number
+                      format: float
+                    pulse:
+                      type: integer
+                      format: int32
+                    symptom:
+                      type: object
+                      properties:
+                        symptomId:
+                          type: string
+                        couth:
+                          type: boolean
+                        phiegm:
+                          type: boolean
+                        suffocation:
+                          type: boolean
+                        headache:
+                          type: boolean
+                        sore_throat:
+                          type: boolean
+                        remarks:
+                          type: string
         '400':
           description: Bad Request
           headers:
@@ -2786,7 +3733,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -2802,7 +3754,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2893,7 +3850,32 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/consumeStatus.yaml
+              type: object
+              properties:
+                SpO2:
+                  type: integer
+                  format: int32
+                body_temperature:
+                  type: number
+                  format: float
+                pulse:
+                  type: integer
+                  format: int32
+                symptom:
+                  type: object
+                  properties:
+                    couth:
+                      type: boolean
+                    phiegm:
+                      type: boolean
+                    suffocation:
+                      type: boolean
+                    headache:
+                      type: boolean
+                    sore_throat:
+                      type: boolean
+                    remarks:
+                      type: string
         required: true
       responses:
         '201':
@@ -2911,7 +3893,43 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Status.yaml
+                type: object
+                properties:
+                  statusId:
+                    type: string
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  created:
+                    type: string
+                    format: date-time
+                  SpO2:
+                    type: integer
+                    format: int32
+                  body_temperature:
+                    type: number
+                    format: float
+                  pulse:
+                    type: integer
+                    format: int32
+                  symptom:
+                    type: object
+                    properties:
+                      symptomId:
+                        type: string
+                      couth:
+                        type: boolean
+                      phiegm:
+                        type: boolean
+                      suffocation:
+                        type: boolean
+                      headache:
+                        type: boolean
+                      sore_throat:
+                        type: boolean
+                      remarks:
+                        type: string
         '400':
           description: Bad Request
           headers:
@@ -2927,7 +3945,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -2943,7 +3966,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -2985,8 +4013,18 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: ../parameters/limit.yaml
-        - $ref: ../parameters/offset.yaml
+        - name: limit
+          in: query
+          description: 取得件数
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: オフセット件数
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: OK
@@ -3003,7 +4041,45 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Statuses.yaml
+                type: array
+                items:
+                  type: object
+                  properties:
+                    statusId:
+                      type: string
+                    patientId:
+                      type: string
+                    centerId:
+                      type: string
+                    created:
+                      type: string
+                      format: date-time
+                    SpO2:
+                      type: integer
+                      format: int32
+                    body_temperature:
+                      type: number
+                      format: float
+                    pulse:
+                      type: integer
+                      format: int32
+                    symptom:
+                      type: object
+                      properties:
+                        symptomId:
+                          type: string
+                        couth:
+                          type: boolean
+                        phiegm:
+                          type: boolean
+                        suffocation:
+                          type: boolean
+                        headache:
+                          type: boolean
+                        sore_throat:
+                          type: boolean
+                        remarks:
+                          type: string
         '400':
           description: Bad Request
           headers:
@@ -3019,7 +4095,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -3035,7 +4116,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -3126,7 +4212,32 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/consumeStatus.yaml
+              type: object
+              properties:
+                SpO2:
+                  type: integer
+                  format: int32
+                body_temperature:
+                  type: number
+                  format: float
+                pulse:
+                  type: integer
+                  format: int32
+                symptom:
+                  type: object
+                  properties:
+                    couth:
+                      type: boolean
+                    phiegm:
+                      type: boolean
+                    suffocation:
+                      type: boolean
+                    headache:
+                      type: boolean
+                    sore_throat:
+                      type: boolean
+                    remarks:
+                      type: string
         required: true
       responses:
         '201':
@@ -3144,7 +4255,43 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Status.yaml
+                type: object
+                properties:
+                  statusId:
+                    type: string
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  created:
+                    type: string
+                    format: date-time
+                  SpO2:
+                    type: integer
+                    format: int32
+                  body_temperature:
+                    type: number
+                    format: float
+                  pulse:
+                    type: integer
+                    format: int32
+                  symptom:
+                    type: object
+                    properties:
+                      symptomId:
+                        type: string
+                      couth:
+                        type: boolean
+                      phiegm:
+                        type: boolean
+                      suffocation:
+                        type: boolean
+                      headache:
+                        type: boolean
+                      sore_throat:
+                        type: boolean
+                      remarks:
+                        type: string
         '400':
           description: Bad Request
           headers:
@@ -3160,7 +4307,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -3176,7 +4328,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -3255,7 +4412,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -3271,7 +4433,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -3395,7 +4562,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -3411,7 +4583,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
@@ -3535,7 +4712,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
         '500':
           description: Internal error
           headers:
@@ -3551,7 +4733,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../schemas/Error.yaml
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
       x-amazon-apigateway-integration:
         type: aws_proxy
         responses:
