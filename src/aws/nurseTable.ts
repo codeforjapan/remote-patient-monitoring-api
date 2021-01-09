@@ -1,14 +1,16 @@
 "use strict";
-const uuid = require('uuid');
+import uuid from 'uuid';
+import { AWSError, DynamoDB } from 'aws-sdk'
 
-module.exports = class PatientTable {
+export default class NurseTable {
+  client:DynamoDB.DocumentClient;
   constructor(serviceClient) {
     this.client = serviceClient;
   }
 
-  getPatients() {
-    const params = {
-      TableName: process.env.PATIENT_TABLE_NAME
+  getNurses() {
+    const params:DynamoDB.ScanInput  = {
+      TableName: process.env.NURSE_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
       this.client.scan(params, (err, data) => {
@@ -16,18 +18,18 @@ module.exports = class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("getPatient Success!");
+          console.log("getNurse Success!");
           resolve(data);
         }
       });
     });
   }
 
-  getPatient(patientId) {
-    const params = {
-      TableName: process.env.PATIENT_TABLE_NAME,
+  getNurse(nurseId):Promise<DynamoDB.GetItemOutput | AWSError> {
+    const params:DynamoDB.GetItemInput = {
+      TableName: process.env.NURSE_TABLE_NAME!,
       Key: {
-        "patientId": patientId
+        "nurseId": nurseId
       }
     };
     return new Promise((resolve, reject) => {
@@ -36,21 +38,21 @@ module.exports = class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("getPatient Success!");
+          console.log("getNurse Success!");
           resolve(data);
         }
       });
     });
   }
 
-  postPatient(body) {
-    const patient = {
+  postNurse(body) {
+    const nurse = {
       ...body,
-      patientId: uuid.v4(),
+      nurseId: uuid.v4(),
     };
-    const params = {
-      TableName: process.env.PATIENT_TABLE_NAME,
-      Item: patient,
+    const params:DynamoDB.PutItemInput = {
+      TableName: process.env.NURSE_TABLE_NAME!,
+      Item: nurse,
     };
     console.log(params);
     return new Promise((resolve, reject) => {
@@ -59,30 +61,30 @@ module.exports = class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("postPatient Success!");
-          resolve(patient);
+          console.log("postNurse Success!");
+          resolve(nurse);
         }
       });
     });
   }
 
-  putPatient(patientId, body) {
-    const patient = {
+  putNurse(nurseId, body) {
+    const nurse = {
       ...body,
-      patientId: patientId,
+      nurseId: nurseId,
     };
-    console.log(patient);
-    const params = {
-      TableName: process.env.PATIENT_TABLE_NAME,
+    console.log(nurse);
+    const params:DynamoDB.UpdateItemInput = {
+      TableName: process.env.NURSE_TABLE_NAME!,
       Key: {
-        patientId: patient.patientId
+        nurseId: nurse.nurseId
       },
-      UpdateExpression: "set #patientName = :patientName",
+      UpdateExpression: "set #nurseName = :nurseName",
       ExpressionAttributeNames: {
-        "#patientName": "patientName"
+        "#nurseName": "nurseName"
       },
       ExpressionAttributeValues: {
-        ":patientName": patient.patientName
+        ":nurseName": nurse.nurseName
       },
     };
     console.log(params);
@@ -92,8 +94,8 @@ module.exports = class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("putPatient Success!");
-          resolve(patient);
+          console.log("putNurse Success!");
+          resolve(nurse);
         }
       });
     });

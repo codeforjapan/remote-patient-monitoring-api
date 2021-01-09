@@ -1,14 +1,16 @@
 "use strict";
-const uuid = require('uuid');
+import uuid from 'uuid';
+import { AWSError, DynamoDB } from 'aws-sdk'
 
-module.exports = class CenterTable {
-  constructor(serviceClient) {
+export default class CenterTable {
+  client:DynamoDB.DocumentClient;
+  constructor(serviceClient:DynamoDB.DocumentClient) {
     this.client = serviceClient;
   }
 
   getCenters() {
-    const params = {
-      TableName: process.env.CENTER_TABLE_NAME
+    const params:DynamoDB.ScanInput = {
+      TableName: process.env.CENTER_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
       this.client.scan(params, (err, data) => {
@@ -23,9 +25,9 @@ module.exports = class CenterTable {
     });
   }
 
-  getCenter(centerId) {
-    const params = {
-      TableName: process.env.CENTER_TABLE_NAME,
+  getCenter(centerId):Promise<DynamoDB.GetItemOutput | AWSError> {
+    const params:DynamoDB.GetItemInput = {
+      TableName: process.env.CENTER_TABLE_NAME!,
       Key: {
         "centerId": centerId
       }
@@ -48,8 +50,8 @@ module.exports = class CenterTable {
       ...body,
       centerId: uuid.v4(),
     };
-    const params = {
-      TableName: process.env.CENTER_TABLE_NAME,
+    const params:DynamoDB.PutItemInput = {
+      TableName: process.env.CENTER_TABLE_NAME!,
       Item: center,
     };
     console.log(params);
@@ -72,8 +74,8 @@ module.exports = class CenterTable {
       centerId: centerId,
     };
     console.log(center);
-    const params = {
-      TableName: process.env.CENTER_TABLE_NAME,
+    const params:DynamoDB.UpdateItemInput = {
+      TableName: process.env.CENTER_TABLE_NAME!,
       Key: {
         centerId: center.centerId
       },

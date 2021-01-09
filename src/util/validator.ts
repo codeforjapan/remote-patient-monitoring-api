@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = class Validator {
+export default class Validator {
   checkDynamoGetResultEmpty(res) {
     if (res == undefined) return true;
     if (Object.keys(res).length == 0) return true;
