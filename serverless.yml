@@ -80,6 +80,7 @@ plugins:
   - serverless-scriptable-plugin
   - serverless-cloudformation-sub-variables
   - serverless-s3-remover
+  - serverless-plugin-typescript
 custom:
   project: remote-patient-monitoring
   baseName: ${self:custom.project}-${self:provider.stage}
@@ -96,6 +97,7 @@ custom:
           - source: dist
             empty: true
             globs: "**/*"
+
   # empty the Swagger UI S3 bucket content when removing the service so the bucket can be removed
   remover:
     buckets:

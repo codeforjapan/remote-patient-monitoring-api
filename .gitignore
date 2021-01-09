@@ -4,6 +4,7 @@ jspm_packages
 
 # Serverless directories
 .serverless
+.build
 src/webpack/config.json
 src/swagger/_swagger.yaml
 util/config.json
@@ -11,3 +12,9 @@ util/.secret
 templates/swagger.yaml
 dist/**
 ./src/gh-swagger-ui/swagger.yaml
+./src/lambda/**/*.js
+./src/lambda/**/*.js.map
+./src/aws/**/*.js
+./src/aws/**/*.js.map
+./src/lambda/**/*.js
+./src/lambda/**/*.js.map

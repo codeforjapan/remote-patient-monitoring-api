@@ -1,12 +1,12 @@
 "use strict";
 
-module.exports = class Validator {
-  checkDynamoGetResultEmpty(res) {
+export default class Validator {
+  checkDynamoGetResultEmpty(res: any) {
     if (res == undefined) return true;
     if (Object.keys(res).length == 0) return true;
     return false;
   }
-  checkDyanmoQueryResultEmpty(res) {
+  checkDyanmoQueryResultEmpty(res: any) {
     console.log(res.Item);
     if (!Object.keys(res.Items).length) {
       return true;
@@ -15,7 +15,7 @@ module.exports = class Validator {
     }
   }
 
-  checkCenterBody(res) {
+  checkCenterBody(res: any) {
     if (
       res.hasOwnProperty("centerName")
     ) {
@@ -26,7 +26,7 @@ module.exports = class Validator {
       return false;
     }
   }
-  checkNurseBody(res) {
+  checkNurseBody(res: any) {
     if (
       res.hasOwnProperty("nurseName")
     ) {
@@ -37,7 +37,7 @@ module.exports = class Validator {
       return false;
     }
   }
-  checkPatientBody(res) {
+  checkPatientBody(res: any) {
     if (
       res.hasOwnProperty("patientName")
     ) {

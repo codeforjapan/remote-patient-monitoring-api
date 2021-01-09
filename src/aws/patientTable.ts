@@ -1,14 +1,16 @@
 "use strict";
-const uuid = require('uuid');
+import { v4 as uuid } from 'uuid';
+import { AWSError, DynamoDB } from 'aws-sdk'
 
-module.exports = class PatientTable {
-  constructor(serviceClient) {
+export default class PatientTable {
+  client: DynamoDB.DocumentClient;
+  constructor(serviceClient: DynamoDB.DocumentClient) {
     this.client = serviceClient;
   }
 
   getPatients() {
-    const params = {
-      TableName: process.env.PATIENT_TABLE_NAME
+    const params: DynamoDB.DocumentClient.ScanInput = {
+      TableName: process.env.PATIENT_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
       this.client.scan(params, (err, data) => {
@@ -23,9 +25,9 @@ module.exports = class PatientTable {
     });
   }
 
-  getPatient(patientId) {
-    const params = {
-      TableName: process.env.PATIENT_TABLE_NAME,
+  getPatient(patientId: string): Promise<DynamoDB.GetItemOutput | AWSError> {
+    const params: DynamoDB.DocumentClient.GetItemInput = {
+      TableName: process.env.PATIENT_TABLE_NAME!,
       Key: {
         "patientId": patientId
       }
@@ -43,13 +45,13 @@ module.exports = class PatientTable {
     });
   }
 
-  postPatient(body) {
+  postPatient(body: { patientName: string }) {
     const patient = {
       ...body,
-      patientId: uuid.v4(),
+      patientId: uuid(),
     };
-    const params = {
-      TableName: process.env.PATIENT_TABLE_NAME,
+    const params: DynamoDB.DocumentClient.PutItemInput = {
+      TableName: process.env.PATIENT_TABLE_NAME!,
       Item: patient,
     };
     console.log(params);
@@ -66,14 +68,14 @@ module.exports = class PatientTable {
     });
   }
 
-  putPatient(patientId, body) {
+  putPatient(patientId: string, body: { patientName: string }) {
     const patient = {
       ...body,
       patientId: patientId,
     };
     console.log(patient);
-    const params = {
-      TableName: process.env.PATIENT_TABLE_NAME,
+    const params: DynamoDB.DocumentClient.UpdateItemInput = {
+      TableName: process.env.PATIENT_TABLE_NAME!,
       Key: {
         patientId: patient.patientId
       },

@@ -1,14 +1,16 @@
 "use strict";
-const uuid = require('uuid');
+import { v4 as uuid } from 'uuid'
+import { AWSError, DynamoDB } from 'aws-sdk'
 
-module.exports = class CenterTable {
-  constructor(serviceClient) {
+export default class CenterTable {
+  client: DynamoDB.DocumentClient;
+  constructor(serviceClient: DynamoDB.DocumentClient) {
     this.client = serviceClient;
   }
 
   getCenters() {
-    const params = {
-      TableName: process.env.CENTER_TABLE_NAME
+    const params: DynamoDB.ScanInput = {
+      TableName: process.env.CENTER_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
       this.client.scan(params, (err, data) => {
@@ -23,9 +25,9 @@ module.exports = class CenterTable {
     });
   }
 
-  getCenter(centerId) {
-    const params = {
-      TableName: process.env.CENTER_TABLE_NAME,
+  getCenter(centerId: string): Promise<DynamoDB.DocumentClient.GetItemOutput | AWSError> {
+    const params: DynamoDB.DocumentClient.GetItemInput = {
+      TableName: process.env.CENTER_TABLE_NAME!,
       Key: {
         "centerId": centerId
       }
@@ -43,13 +45,13 @@ module.exports = class CenterTable {
     });
   }
 
-  postCenter(body) {
+  postCenter(body: { centerName: string }) {
     const center = {
       ...body,
-      centerId: uuid.v4(),
+      centerId: uuid(),
     };
-    const params = {
-      TableName: process.env.CENTER_TABLE_NAME,
+    const params: DynamoDB.DocumentClient.PutItemInput = {
+      TableName: process.env.CENTER_TABLE_NAME!,
       Item: center,
     };
     console.log(params);
@@ -66,14 +68,14 @@ module.exports = class CenterTable {
     });
   }
 
-  putCenter(centerId, body) {
+  putCenter(centerId: string, body: { centerName: string }) {
     const center = {
       ...body,
       centerId: centerId,
     };
     console.log(center);
-    const params = {
-      TableName: process.env.CENTER_TABLE_NAME,
+    const params: DynamoDB.DocumentClient.UpdateItemInput = {
+      TableName: process.env.CENTER_TABLE_NAME!,
       Key: {
         centerId: center.centerId
       },

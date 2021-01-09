@@ -1,14 +1,16 @@
 "use strict";
-const uuid = require('uuid');
+import { v4 as uuid } from 'uuid';
+import { AWSError, DynamoDB } from 'aws-sdk'
 
-module.exports = class NurseTable {
-  constructor(serviceClient) {
+export default class NurseTable {
+  client: DynamoDB.DocumentClient;
+  constructor(serviceClient: DynamoDB.DocumentClient) {
     this.client = serviceClient;
   }
 
   getNurses() {
-    const params = {
-      TableName: process.env.NURSE_TABLE_NAME
+    const params: DynamoDB.ScanInput = {
+      TableName: process.env.NURSE_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
       this.client.scan(params, (err, data) => {
@@ -23,9 +25,9 @@ module.exports = class NurseTable {
     });
   }
 
-  getNurse(nurseId) {
-    const params = {
-      TableName: process.env.NURSE_TABLE_NAME,
+  getNurse(nurseId: string): Promise<DynamoDB.DocumentClient.GetItemOutput | AWSError> {
+    const params: DynamoDB.DocumentClient.GetItemInput = {
+      TableName: process.env.NURSE_TABLE_NAME!,
       Key: {
         "nurseId": nurseId
       }
@@ -43,13 +45,13 @@ module.exports = class NurseTable {
     });
   }
 
-  postNurse(body) {
+  postNurse(body: { nurseName: string }) {
     const nurse = {
       ...body,
-      nurseId: uuid.v4(),
+      nurseId: uuid(),
     };
-    const params = {
-      TableName: process.env.NURSE_TABLE_NAME,
+    const params: DynamoDB.DocumentClient.PutItemInput = {
+      TableName: process.env.NURSE_TABLE_NAME!,
       Item: nurse,
     };
     console.log(params);
@@ -66,14 +68,14 @@ module.exports = class NurseTable {
     });
   }
 
-  putNurse(nurseId, body) {
+  putNurse(nurseId: string, body: { nurseName: string }) {
     const nurse = {
       ...body,
       nurseId: nurseId,
     };
     console.log(nurse);
-    const params = {
-      TableName: process.env.NURSE_TABLE_NAME,
+    const params: DynamoDB.DocumentClient.UpdateItemInput = {
+      TableName: process.env.NURSE_TABLE_NAME!,
       Key: {
         nurseId: nurse.nurseId
       },

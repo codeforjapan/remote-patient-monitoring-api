@@ -10,7 +10,12 @@ module.exports = {
   module: {
     rules: [{
         test: /\.ts$/,
-        use: ['ts-loader'],
+        use: [{
+          loader: 'ts-loader',
+          options: {
+            configFile: "tsconfig-swagger.json",
+          }
+        }],
         exclude: /node_modules/,
       },
       {

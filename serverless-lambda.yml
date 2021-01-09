@@ -69,6 +69,7 @@ plugins:
   - serverless-s3-deploy
   - serverless-scriptable-plugin
   - serverless-cloudformation-sub-variables
+  - serverless-plugin-typescript
 custom:
   project: remote-patient-monitoring
   baseName: ${self:custom.project}-${self:provider.stage}-${self:service}
