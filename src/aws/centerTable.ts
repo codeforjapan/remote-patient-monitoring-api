@@ -18,7 +18,7 @@ export default class CenterTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("getCenter Success!");
+          console.log("getCenters Success!");
           resolve(data);
         }
       });
@@ -50,6 +50,7 @@ export default class CenterTable {
       ...body,
       centerId: uuid(),
     };
+    console.log(center);
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.CENTER_TABLE_NAME!,
       Item: center,
@@ -57,6 +58,7 @@ export default class CenterTable {
     console.log(params);
     return new Promise((resolve, reject) => {
       this.client.put(params, (err, data) => {
+        console.log(data);
         if (err) {
           console.log(err);
           reject(err);
@@ -73,7 +75,6 @@ export default class CenterTable {
       ...body,
       centerId: centerId,
     };
-    console.log(center);
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.CENTER_TABLE_NAME!,
       Key: {
@@ -90,6 +91,7 @@ export default class CenterTable {
     console.log(params);
     return new Promise((resolve, reject) => {
       this.client.update(params, (err, data) => {
+        console.log(data);
         if (err) {
           console.log(err);
           reject(err);

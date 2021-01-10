@@ -9,13 +9,12 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 });
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
-import Formatter from "../util/formatter";
 
 export namespace Patient {
+  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
   export async function getPatients(event: any, context: any, callback: Function) {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
-    const formatter = new Formatter();
     try {
       const res = await patientTable.getPatients();
       if (validator.checkDyanmoQueryResultEmpty(res)) {
@@ -45,12 +44,14 @@ export namespace Patient {
     }
   }
 
+  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
   export async function postPatient(event: any, context: any, callback: Function) {
     console.log('called postPatient');
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
+    const bodyData = validator.jsonBody(event.body);
     try {
-      if (!validator.checkPatientBody(JSON.parse(event.body))) {
+      if (!validator.checkPatientBody(bodyData)) {
         const errorModel = {
           errorCode: "RPM00002",
           errorMessage: "Invalid Body",
@@ -62,7 +63,7 @@ export namespace Patient {
           }),
         });
       }
-      const res = await patientTable.postPatient(JSON.parse(event.body));
+      const res = await patientTable.postPatient(bodyData);
       callback(null, {
         statusCode: 200,
         body: JSON.stringify(res),
@@ -78,10 +79,10 @@ export namespace Patient {
     }
   }
 
+  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
   export async function getPatient(event: any, context: any, callback: Function) {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
-    const formatter = new Formatter();
     console.log('call getPatient with ' + event.pathParameters.patientId);
     try {
       const res = await patientTable.getPatient(event.pathParameters.patientId);
@@ -115,11 +116,13 @@ export namespace Patient {
     }
   }
 
+  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
   export async function putPatient(event: any, context: any, callback: Function) {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
+    const bodyData = validator.jsonBody(event.body);
     try {
-      if (!validator.checkPatientBody(JSON.parse(event.body))) {
+      if (!validator.checkPatientBody(bodyData)) {
         const errorModel = {
           errorCode: "RPM00002",
           errorMessage: "Invalid Body",

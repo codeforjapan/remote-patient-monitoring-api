@@ -102,7 +102,9 @@ Authorize が必要なAPIにアクセスする場合、`Authorize` ボタンか�
 
 ## 開発用情報
 
-### ローカル環境での DynamoDB のインストール
+### local development
+
+#### ローカル環境での DynamoDB のインストール
 
 Dynamo DB をインストールする
 
@@ -110,17 +112,30 @@ Dynamo DB をインストールする
 sls dynamodb install
 ```
 
-### DynamoDB のローカルインスタンスを開始
+#### DynamoDB のローカルインスタンスを開始
 
 ```bash
 npm dynamodb:start
 ```
 
-### API や serverless.yml を修正後、再デプロイする
+#### function を実行する
+
+```bash
+# getCenters の実行
+serverless invoke local --function getCenters
+# path parameter を渡す
+serverless invoke local --function getCenter --data '{ "pathParameters": {"centerId":"c2c43259-2708-4f4f-98d4-d57f72ecac70"}}'
+```
+
+### deploy
+
+#### API や serverless.yml を修正後、再デプロイする
 
 ```bash
 npm run deploy:gateway
 ```
+
+## アンインストール
 
 ### APIを削除する
 

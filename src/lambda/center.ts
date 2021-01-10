@@ -9,13 +9,12 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 });
 import CenterTable from "../aws/centerTable";
 import Validator from "../util/validator";
-import Formatter from "../util/formatter";
 
 export namespace Center {
+  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
   export async function getCenters(event: any, context: any, callback: Function) {
     const centerTable = new CenterTable(docClient);
     const validator = new Validator();
-    const formatter = new Formatter();
     try {
       const res = await centerTable.getCenters();
       if (validator.checkDyanmoQueryResultEmpty(res)) {
@@ -45,12 +44,15 @@ export namespace Center {
     }
   }
 
+  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
   export async function postCenter(event: any, context: any, callback: Function) {
     console.log('called postCenter');
     const centerTable = new CenterTable(docClient);
     const validator = new Validator();
+    console.log(event.body);
+    const bodyData = validator.jsonBody(event.body);
     try {
-      if (!validator.checkCenterBody(JSON.parse(event.body))) {
+      if (!validator.checkCenterBody(bodyData)) {
         const errorModel = {
           errorCode: "RPM00002",
           errorMessage: "Invalid Body",
@@ -62,7 +64,7 @@ export namespace Center {
           }),
         });
       }
-      const res = await centerTable.postCenter(JSON.parse(event.body));
+      const res = await centerTable.postCenter(bodyData);
       callback(null, {
         statusCode: 200,
         body: JSON.stringify(res),
@@ -78,10 +80,10 @@ export namespace Center {
     }
   }
 
+  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
   export async function getCenter(event: any, context: any, callback: Function) {
     const centerTable = new CenterTable(docClient);
     const validator = new Validator();
-    const formatter = new Formatter();
     console.log('call getCenter with ' + event.pathParameters.centerId);
     try {
       const res = await centerTable.getCenter(event.pathParameters.centerId);
@@ -115,11 +117,13 @@ export namespace Center {
     }
   }
 
+  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
   export async function putCenter(event: any, context: any, callback: Function) {
     const centerTable = new CenterTable(docClient);
     const validator = new Validator();
+    const bodyData = validator.jsonBody(event.body);
     try {
-      if (!validator.checkCenterBody(JSON.parse(event.body))) {
+      if (!validator.checkCenterBody(bodyData)) {
         const errorModel = {
           errorCode: "RPM00002",
           errorMessage: "Invalid Body",
@@ -133,7 +137,7 @@ export namespace Center {
       }
       const res = await centerTable.putCenter(
         event.pathParameters.centerId,
-        JSON.parse(event.body)
+        bodyData
       );
       callback(null, {
         statusCode: 200,
