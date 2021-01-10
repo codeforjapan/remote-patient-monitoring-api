@@ -82,6 +82,7 @@ plugins:
   - serverless-s3-remover
   - serverless-plugin-typescript
   - serverless-offline
+  - serverless-dynamodb-local
 custom:
   project: remote-patient-monitoring
   baseName: ${self:custom.project}-${self:provider.stage}
