@@ -26,6 +26,7 @@
   },
   "name": "remote-patient-monitoring",
   "devDependencies": {
+    "@shelf/jest-dynamodb": "^1.7.0",
     "@types/swagger-ui-dist": "^3.30.0",
     "@types/uuid": "^8.3.0",
     "clean-webpack-plugin": "^3.0.0",
