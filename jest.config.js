@@ -1,13 +1,8 @@
 module.exports = {
-  setupFiles: ['./tests/setup/setEnvironment.js'],
+  roots: ['<rootDir>/test', '<rootDir>/src'],
   transform: {
     '^.+\\.ts?$': 'babel-jest',
   },
-  moduleNameMapper: {
-    '^@repositories/(.*)$': '<rootDir>/src/repositories/$1',
-    '^@clients/(.*)$': '<rootDir>/src/clients/$1',
-    '^@transformers/(.*)$': '<rootDir>/src/transformers/$1',
-    '^@src/(.*)$': '<rootDir>/src/$1',
-    '^@tests/(.*)$': '<rootDir>/tests/$1',
-  },
+  testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };

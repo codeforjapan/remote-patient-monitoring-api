@@ -1,28 +1,44 @@
 "use strict";
-import AWS from 'aws-sdk';
-const Dynamo = new AWS.DynamoDB();
+import AWS, { DynamoDB } from 'aws-sdk';
+
+const getDynamoDBInstance = (event: any) => {
+  if (event == '' || ("isOffline" in event && event.isOffline)) {
+    return new AWS.DynamoDB({
+      region: "localhost",
+      endpoint: "http://localhost:8000"
+    })
+  } else {
+    return new AWS.DynamoDB();
+  }
+}
 
 export namespace DB {
   export async function initDb(event: any) {
-    const tables = await listTables();
+    const dbInstance = getDynamoDBInstance(event);
+    const alltables = await listTables(dbInstance);
+    const tables = alltables.TableNames!.filter(table => table.startsWith(process.env.DBPrefix!))
+    for (let table in tables) {
+      await initializeDynamoDBTable(dbInstance, table);
+    }
     console.log(tables)
     const response = {
       statusCode: 200,
       body: tables
     };
+    return response;
   }
-  async function deleteDynamoDBTable(tableName: string) {
+  async function initializeDynamoDBTable(dbInstance: DynamoDB, tableName: string) {
     const params = {
       TableName: tableName
     };
     try {
       // テーブル情報を取得する
-      const tableInfo = await getTableInfo(params);
+      const tableInfo = await getTableInfo(dbInstance, params);
       // delete実行
-      await deleteTable(params);
+      await deleteTable(dbInstance, params);
 
       // deleteが完了したのを確認する
-      await waitForDeleted(params);
+      await waitForDeleted(dbInstance, params);
 
       // 取得したテーブル情報を用いて、テーブル作成用パラメータを生成
       const createParams = {
@@ -36,7 +52,7 @@ export namespace DB {
       };
 
       // create実行
-      await createTable(createParams);
+      await createTable(dbInstance, createParams);
 
       const response = {
         statusCode: 200,
@@ -52,8 +68,8 @@ export namespace DB {
       return response;
     }
   }
-  const listTables = () => {
-    return Dynamo.listTables({}, (err, data) => {
+  const listTables = (dbInstance: DynamoDB) => {
+    return dbInstance.listTables({}, (err, data) => {
       if (err) err;
       else data;
     }).promise();
@@ -62,8 +78,8 @@ export namespace DB {
    * DynamoDBの情報を取得する
    * @param {*} params 
    */
-  const getTableInfo = (params: any) => {
-    return Dynamo.describeTable(params, (err, data) => {
+  const getTableInfo = (dbInstance: DynamoDB, params: any) => {
+    return dbInstance.describeTable(params, (err, data) => {
       if (err) err;
       else data;
     }).promise();
@@ -73,8 +89,8 @@ export namespace DB {
    * DynamoDBを削除する
    * @param {*} params 
    */
-  const deleteTable = (params: any) => {
-    return Dynamo.deleteTable(params, (err, data) => {
+  const deleteTable = (dbInstance: DynamoDB, params: any) => {
+    return dbInstance.deleteTable(params, (err, data) => {
       if (err) err;
       else data;
     }).promise();
@@ -84,8 +100,8 @@ export namespace DB {
    * テーブルの削除が完了されるまで待つ
    * @param {*} params 
    */
-  const waitForDeleted = (params: any) => {
-    return Dynamo.waitFor('tableNotExists', params, (err, data) => {
+  const waitForDeleted = (dbInstance: DynamoDB, params: any) => {
+    return dbInstance.waitFor('tableNotExists', params, (err, data) => {
       if (err) err;
       else data;
     }).promise();
@@ -95,8 +111,8 @@ export namespace DB {
    * DynamoDBを作成する
    * @param {*} params 
    */
-  const createTable = (params: any) => {
-    return Dynamo.createTable(params, (err, data) => {
+  const createTable = (dbInstance: DynamoDB, params: any) => {
+    return dbInstance.createTable(params, (err, data) => {
       if (err) err;
       else data;
     }).promise();

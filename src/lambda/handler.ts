@@ -67,5 +67,4 @@ export var getNurse = cors(cors_get)(Nurse.getNurse);
 export var putNurse = cors(cors_put)(Nurse.putNurse);
 export var postNurse = cors(cors_post)(Nurse.postNurse);
 
-// db
 export var initDb = DB.initDb;

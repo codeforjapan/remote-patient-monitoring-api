@@ -1,12 +1,11 @@
 "use strict";
 import AWS from "aws-sdk";
+var dynamodb = require('serverless-dynamodb-client');
 
 AWS.config.update({
   region: process.env.region
 });
-var docClient = new AWS.DynamoDB.DocumentClient({
-  apiVersion: "2012-08-10"
-});
+var docClient = dynamodb.doc;
 import CenterTable from "../aws/centerTable";
 import Validator from "../util/validator";
 

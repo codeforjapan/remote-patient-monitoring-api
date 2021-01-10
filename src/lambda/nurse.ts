@@ -1,11 +1,10 @@
 "use strict";
 import AWS from "aws-sdk";
+var dynamodb = require('serverless-dynamodb-client');
+var docClient = dynamodb.doc;
 
 AWS.config.update({
   region: process.env.region
-});
-var docClient = new AWS.DynamoDB.DocumentClient({
-  apiVersion: "2012-08-10"
 });
 import NurseTable from "../aws/nurseTable";
 import Validator from "../util/validator";

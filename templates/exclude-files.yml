@@ -3,6 +3,7 @@ exclude:
   - "!node_modules/@aws-amplify/**"
   - "!node_modules/uuid/**"
   - "!node_modules/aws-lambda-cors/**"
+  - "!node_modules/serverless-dynamodb-client/**"
   - docs/**
   - templates/**
   - .eslintrc.json
