@@ -6,6 +6,7 @@
     "crypto": "^1.0.1",
     "serverless": "^2.16.1",
     "serverless-cloudformation-sub-variables": "^0.2.1",
+    "serverless-dynamodb-client": "0.0.2",
     "serverless-pseudo-parameters": "^2.5.0",
     "swagger-ui-dist": "^3.38.0",
     "uuid": "^8.3.2"
