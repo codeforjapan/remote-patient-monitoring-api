@@ -118,13 +118,17 @@ sls dynamodb install
 npm dynamodb:start
 ```
 
-#### function を実行する
+#### function をローカルで実行する
 
 ```bash
 # getCenters の実行
 serverless invoke local --function getCenters
 # path parameter を渡す
 serverless invoke local --function getCenter --data '{ "pathParameters": {"centerId":"c2c43259-2708-4f4f-98d4-d57f72ecac70"}}'
+# body データを渡す
+serverless invoke local --function postCenter --data '{ "body":{"centerName":"test4"}}'
+# 両方渡す場合
+serverless invoke local --function putCenter --data '{ "pathParameters": {"centerId":"ccbcebd7-3186-43c2-9cc0-ff6e83ed9dd8"}, "body":{"centerName":"mycenter1"}}'
 ```
 
 ### deploy
