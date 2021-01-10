@@ -3,6 +3,7 @@ import { cors } from 'aws-lambda-cors';
 import { Center } from './center';
 import { Patient } from './patient';
 import { Nurse } from './nurse';
+import { DB } from './initdb';
 
 const cors_get = {
   allowCredentials: true,
@@ -65,3 +66,6 @@ export var getNurses = cors(cors_get)(Nurse.getNurses);
 export var getNurse = cors(cors_get)(Nurse.getNurse);
 export var putNurse = cors(cors_put)(Nurse.putNurse);
 export var postNurse = cors(cors_post)(Nurse.postNurse);
+
+// db
+export var initDb = DB.initDb;

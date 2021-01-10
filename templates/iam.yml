@@ -1,8 +1,8 @@
 Resources:
-  GetCentersRole:
+  RPMGetCentersRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "GetCentersRole-${self:provider.stage}"
+      RoleName: "RPMGetCentersRole-${self:provider.stage}"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -24,10 +24,10 @@ Resources:
                 Resource:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}"
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}/index/*"
-  GetCenterRole:
+  RPMGetCenterRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "GetCenterRole-${self:provider.stage}"
+      RoleName: "RPMGetCenterRole-${self:provider.stage}"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -50,10 +50,10 @@ Resources:
                 Resource:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}"
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}/index/*"
-  PostCenterRole:
+  RPMPostCenterRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "PostCenterRole-${self:provider.stage}"
+      RoleName: "RPMPostCenterRole-${self:provider.stage}"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -74,10 +74,10 @@ Resources:
                   - dynamodb:PutItem
                 Resource:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}"
-  PutCenterRole:
+  RPMPutCenterRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "PutCenterRole-${self:provider.stage}"
+      RoleName: "RPMPutCenterRole-${self:provider.stage}"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -98,10 +98,10 @@ Resources:
                   - dynamodb:UpdateItem
                 Resource:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}"
-  NurseTableRole:
+  RPMNurseTableRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "NurseTableRole-${self:provider.stage}"
+      RoleName: "RPMNurseTableRole-${self:provider.stage}"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -126,10 +126,10 @@ Resources:
                   - dynamodb:UpdateItem
                 Resource:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}"
-  PatientTableRole:
+  RPMPatientTableRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "PatientTableRole-${self:provider.stage}"
+      RoleName: "RPMPatientTableRole-${self:provider.stage}"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -154,3 +154,29 @@ Resources:
                   - dynamodb:UpdateItem
                 Resource:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}"
+  RPMInitTableRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "RPMInitTableRole-${self:provider.stage}"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: "/"
+      Policies:
+        - PolicyName: "RPMInitDBPolicy-${self:provider.stage}"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - dynamodb:CreateTable
+                  - dynamodb:DeleteTable
+                  - dynamodb:ListTables
+                  - dynamodb:DescribeTable
+                Resource: "*"
