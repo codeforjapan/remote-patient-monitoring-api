@@ -82,10 +82,3 @@ putPatient:
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
   environment:
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
-initDB:
-  handler: src/lambda/handler.initDb
-  name: "remote-patient-monitoring-initDb-${self:provider.stage}"
-  description: "init All Table"
-  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMInitTableRole-${self:provider.stage}"
-  environment:
-    STAGE: ${self:provider.stage}
