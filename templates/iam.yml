@@ -175,8 +175,9 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action:
-                  - dynamodb:CreateTable
-                  - dynamodb:DeleteTable
-                  - dynamodb:ListTables
-                  - dynamodb:DescribeTable
-                Resource: "*"
+                  - dynamodb:Scan
+                  - dynamodb:BatchWriteItem
+                Resource:
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}"

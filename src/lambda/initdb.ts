@@ -14,7 +14,10 @@ const getDynamoDBInstance = (event: any) => {
 
 export namespace DB {
   export async function initDb(event: any) {
+    console.log(event);
     const dbInstance = getDynamoDBInstance(event);
+    console.log(dbInstance);
+    return;
     const alltables = await listTables(dbInstance);
     const tables = alltables.TableNames!.filter(table => table.startsWith(process.env.DBPrefix!))
     for (let table in tables) {
