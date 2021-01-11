@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "lib": ["esnext"],
+    "lib": ["es2019"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noUnusedLocals": true,
@@ -10,7 +10,7 @@
     "strictNullChecks": true,
     "outDir": "lib",
     "sourceMap": true,
-    "target": "esnext"
+    "target": "es2019"
   },
   "exclude": ["src/swagger", "src/gh-swagger-ui", "src/webpack"]
 }
