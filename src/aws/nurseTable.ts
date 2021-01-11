@@ -57,6 +57,7 @@ export default class NurseTable {
     console.log(params);
     return new Promise((resolve, reject) => {
       this.client.put(params, (err, data) => {
+        console.log(data);
         if (err) {
           console.log(err);
           reject(err);
@@ -90,6 +91,7 @@ export default class NurseTable {
     console.log(params);
     return new Promise((resolve, reject) => {
       this.client.update(params, (err, data) => {
+        console.log(data);
         if (err) {
           console.log(err);
           reject(err);

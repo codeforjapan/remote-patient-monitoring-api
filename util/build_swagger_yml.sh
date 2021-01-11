@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 PATH_DIR_SCRIPT=$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)
 cd "$PATH_DIR_SCRIPT"
 

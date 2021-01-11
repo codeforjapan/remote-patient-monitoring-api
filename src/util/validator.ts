@@ -1,6 +1,13 @@
 "use strict";
 
 export default class Validator {
+  jsonBody(bodyData: any) {
+    if (typeof bodyData === 'string') {
+      return JSON.parse(bodyData);
+    } else {
+      return bodyData;
+    }
+  }
   checkDynamoGetResultEmpty(res: any) {
     if (res == undefined) return true;
     if (Object.keys(res).length == 0) return true;

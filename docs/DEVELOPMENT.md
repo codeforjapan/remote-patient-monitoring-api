@@ -71,7 +71,7 @@ npm run deploy && npm run deploy:gateway
 
 ### 5. Confirm admin user
 
-`util/.secret` というファイルを作り、以下の内容を設定してください。
+`util/.secret.json` というファイルを作り、以下の内容を設定してください。
 
 ```json
 {
@@ -87,7 +87,7 @@ config/dev.json にセットしたメールアドレスに、仮パスワード�
 npm run confirmAdmin -- -c '仮パスワード' 
 ```
 
-`.secret` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
+`.secret.json` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
 
 ### 6. Swagger UI にアクセスする
 
@@ -102,11 +102,44 @@ Authorize が必要なAPIにアクセスする場合、`Authorize` ボタンか�
 
 ## 開発用情報
 
-### API や serverless.yml を修正後、再デプロイする
+### local development
+
+#### ローカル環境での DynamoDB のインストール
+
+Dynamo DB をインストールする
+
+```bash
+sls dynamodb install
+```
+
+#### DynamoDB のローカルインスタンスを開始
+
+```bash
+npm dynamodb:start
+```
+
+#### function をローカルで実行する
+
+```bash
+# getCenters の実行
+serverless invoke local --function getCenters
+# path parameter を渡す
+serverless invoke local --function getCenter --data '{ "pathParameters": {"centerId":"c2c43259-2708-4f4f-98d4-d57f72ecac70"}}'
+# body データを渡す
+serverless invoke local --function postCenter --data '{ "body":{"centerName":"test4"}}'
+# 両方渡す場合
+serverless invoke local --function putCenter --data '{ "pathParameters": {"centerId":"ccbcebd7-3186-43c2-9cc0-ff6e83ed9dd8"}, "body":{"centerName":"mycenter1"}}'
+```
+
+### deploy
+
+#### API や serverless.yml を修正後、再デプロイする
 
 ```bash
 npm run deploy:gateway
 ```
+
+## アンインストール
 
 ### APIを削除する
 
