@@ -14,6 +14,7 @@ usage_exit() {
 
 # オプション取得（デフォルトは dev 環境）
 ENV=dev
+LOCAL=""
 while getopts e:lh OPT
 do
     case $OPT in
