@@ -1773,9 +1773,9 @@ paths:
                             properties:
                               symptomId:
                                 type: string
-                              couth:
+                              cough:
                                 type: boolean
-                              phiegm:
+                              phlegm:
                                 type: boolean
                               suffocation:
                                 type: boolean
@@ -2106,9 +2106,9 @@ paths:
                             properties:
                               symptomId:
                                 type: string
-                              couth:
+                              cough:
                                 type: boolean
-                              phiegm:
+                              phlegm:
                                 type: boolean
                               suffocation:
                                 type: boolean
@@ -2430,9 +2430,9 @@ paths:
                           properties:
                             symptomId:
                               type: string
-                            couth:
+                            cough:
                               type: boolean
-                            phiegm:
+                            phlegm:
                               type: boolean
                             suffocation:
                               type: boolean
@@ -2593,9 +2593,9 @@ paths:
                           properties:
                             symptomId:
                               type: string
-                            couth:
+                            cough:
                               type: boolean
-                            phiegm:
+                            phlegm:
                               type: boolean
                             suffocation:
                               type: boolean
@@ -2790,9 +2790,9 @@ paths:
                           properties:
                             symptomId:
                               type: string
-                            couth:
+                            cough:
                               type: boolean
-                            phiegm:
+                            phlegm:
                               type: boolean
                             suffocation:
                               type: boolean
@@ -2953,9 +2953,9 @@ paths:
                           properties:
                             symptomId:
                               type: string
-                            couth:
+                            cough:
                               type: boolean
-                            phiegm:
+                            phlegm:
                               type: boolean
                             suffocation:
                               type: boolean
@@ -3150,9 +3150,9 @@ paths:
                           properties:
                             symptomId:
                               type: string
-                            couth:
+                            cough:
                               type: boolean
-                            phiegm:
+                            phlegm:
                               type: boolean
                             suffocation:
                               type: boolean
@@ -3344,9 +3344,9 @@ paths:
                       properties:
                         symptomId:
                           type: string
-                        couth:
+                        cough:
                           type: boolean
-                        phiegm:
+                        phlegm:
                           type: boolean
                         suffocation:
                           type: boolean
@@ -3502,9 +3502,9 @@ paths:
                 symptom:
                   type: object
                   properties:
-                    couth:
+                    cough:
                       type: boolean
-                    phiegm:
+                    phlegm:
                       type: boolean
                     suffocation:
                       type: boolean
@@ -3556,9 +3556,9 @@ paths:
                     properties:
                       symptomId:
                         type: string
-                      couth:
+                      cough:
                         type: boolean
-                      phiegm:
+                      phlegm:
                         type: boolean
                       suffocation:
                         type: boolean
@@ -3706,9 +3706,9 @@ paths:
                       properties:
                         symptomId:
                           type: string
-                        couth:
+                        cough:
                           type: boolean
-                        phiegm:
+                        phlegm:
                           type: boolean
                         suffocation:
                           type: boolean
@@ -3864,9 +3864,9 @@ paths:
                 symptom:
                   type: object
                   properties:
-                    couth:
+                    cough:
                       type: boolean
-                    phiegm:
+                    phlegm:
                       type: boolean
                     suffocation:
                       type: boolean
@@ -3918,9 +3918,9 @@ paths:
                     properties:
                       symptomId:
                         type: string
-                      couth:
+                      cough:
                         type: boolean
-                      phiegm:
+                      phlegm:
                         type: boolean
                       suffocation:
                         type: boolean
@@ -4068,9 +4068,9 @@ paths:
                       properties:
                         symptomId:
                           type: string
-                        couth:
+                        cough:
                           type: boolean
-                        phiegm:
+                        phlegm:
                           type: boolean
                         suffocation:
                           type: boolean
@@ -4226,9 +4226,9 @@ paths:
                 symptom:
                   type: object
                   properties:
-                    couth:
+                    cough:
                       type: boolean
-                    phiegm:
+                    phlegm:
                       type: boolean
                     suffocation:
                       type: boolean
@@ -4280,9 +4280,9 @@ paths:
                     properties:
                       symptomId:
                         type: string
-                      couth:
+                      cough:
                         type: boolean
-                      phiegm:
+                      phlegm:
                         type: boolean
                       suffocation:
                         type: boolean
@@ -4909,9 +4909,9 @@ components:
                 properties:
                   symptomId:
                     type: string
-                  couth:
+                  cough:
                     type: boolean
-                  phiegm:
+                  phlegm:
                     type: boolean
                   suffocation:
                     type: boolean
@@ -4972,9 +4972,9 @@ components:
                   properties:
                     symptomId:
                       type: string
-                    couth:
+                    cough:
                       type: boolean
-                    phiegm:
+                    phlegm:
                       type: boolean
                     suffocation:
                       type: boolean
@@ -5012,9 +5012,9 @@ components:
             properties:
               symptomId:
                 type: string
-              couth:
+              cough:
                 type: boolean
-              phiegm:
+              phlegm:
                 type: boolean
               suffocation:
                 type: boolean
@@ -5050,9 +5050,9 @@ components:
           properties:
             symptomId:
               type: string
-            couth:
+            cough:
               type: boolean
-            phiegm:
+            phlegm:
               type: boolean
             suffocation:
               type: boolean
@@ -5072,7 +5072,7 @@ components:
         type: cognito_user_pools
         providerARNs:
           - >-
-            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_rKAEAAngS
+            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Qylk1rKci
         identityValidationExpression: .*
 tags:
   - name: Center

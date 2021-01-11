@@ -2,9 +2,9 @@ type: object
 properties:
   symptomId:
     type: string
-  couth:
+  cough:
     type: boolean
-  phiegm:
+  phlegm:
     type: boolean
   suffocation:
     type: boolean

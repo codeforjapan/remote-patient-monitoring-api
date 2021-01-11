@@ -1,8 +1,8 @@
 type: object
 properties:
-  couth:
+  cough:
     type: boolean
-  phiegm:
+  phlegm:
     type: boolean
   suffocation:
     type: boolean
