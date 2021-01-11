@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -eu
-
 usage_exit() {
         echo "Usage: $0 [-c confirmation code]" 1>&2
         exit 1

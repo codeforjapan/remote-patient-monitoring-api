@@ -24,7 +24,7 @@
     "dynamodb:start": "sls -c serverless-dynamodb.yml dynamodb start",
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
-    "test": "jest"
+    "test": "jest --silent=false --runInBand"
   },
   "name": "remote-patient-monitoring",
   "devDependencies": {
