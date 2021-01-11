@@ -23,7 +23,6 @@ frameworkVersion: "2"
 provider:
   name: aws
   runtime: nodejs12.x
-
   # you can overwrite defaults here
   stage: dev
   region: ap-northeast-1
@@ -56,6 +55,7 @@ provider:
     DBPrefix: ${file(config/${self:provider.stage}.json):DBPrefix}
     AdminUserEmail: ${file(config/${self:provider.stage}.json):AdminUserEmail}
     AdminUserName: ${file(config/${self:provider.stage}.json):AdminUserName}
+    SERVICE: local
 
 # you can add packaging information here
 package:
@@ -64,7 +64,7 @@ package:
   #    - include-me-dir/**
   ${file(./templates/exclude-files.yml)}
 
-functions: ${file(./templates/functions.yml)}
+functions: ${file(./templates/functions-${self:provider.environment.SERVICE}.yml)}
 
 # you can add CloudFormation resource templates here
 resources:
@@ -83,6 +83,7 @@ plugins:
   - serverless-plugin-typescript
   - serverless-offline
   - serverless-dynamodb-local
+  - serverless-plugin-ifelse
 custom:
   project: remote-patient-monitoring
   baseName: ${self:custom.project}-${self:provider.stage}
@@ -104,3 +105,11 @@ custom:
   remover:
     buckets:
       - ${cf:${self:custom.baseName}.SwaggerBucketName, ''}
+  serverless-offline:
+    resourceRoutes: true
+  serverlessIfElse:
+    - If: '"${process.env.IS_OFFLINE}" !== "true"'
+      Set:
+        provider.environment.SERVICE: "aws"
+      ElseSet:
+        provider.environment.SERVICE: "local"
