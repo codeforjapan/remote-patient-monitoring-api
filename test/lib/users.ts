@@ -2,7 +2,7 @@
 
 import AWS, { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { config } from '../../src/webpack/config';
-import secret from '../../util/.secret.json';
+import { secret } from './secret';
 
 //import { CognitoUserPool, CognitoUserAttribute, CognitoUser } from 'amazon-cognito-identity-js';
 
