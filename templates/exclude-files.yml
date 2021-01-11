@@ -4,6 +4,7 @@ exclude:
   - "!node_modules/uuid/**"
   - "!node_modules/aws-lambda-cors/**"
   - "!node_modules/serverless-dynamodb-client/**"
+  - "!node_modules/amazon-cognito-identity-js/**"
   - docs/**
   - templates/**
   - .eslintrc.json

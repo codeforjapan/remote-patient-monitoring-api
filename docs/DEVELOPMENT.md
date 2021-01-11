@@ -71,7 +71,7 @@ npm run deploy && npm run deploy:gateway
 
 ### 5. Confirm admin user
 
-`util/.secret` というファイルを作り、以下の内容を設定してください。
+`util/.secret.json` というファイルを作り、以下の内容を設定してください。
 
 ```json
 {
@@ -87,7 +87,7 @@ config/dev.json にセットしたメールアドレスに、仮パスワード�
 npm run confirmAdmin -- -c '仮パスワード' 
 ```
 
-`.secret` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
+`.secret.json` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
 
 ### 6. Swagger UI にアクセスする
 

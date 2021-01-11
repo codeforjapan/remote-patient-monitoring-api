@@ -9,7 +9,7 @@ jspm_packages
 src/webpack/config.json
 src/swagger/_swagger.yaml
 util/config.json
-util/.secret
+util/.secret.json
 templates/swagger.yaml
 dist/**
 ./src/gh-swagger-ui/swagger.yaml

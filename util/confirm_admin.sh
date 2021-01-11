@@ -23,8 +23,8 @@ PATH_DIR_SCRIPT=$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)
 cd "$PATH_DIR_SCRIPT"
 
 # check .secret
-if [ ! -e .secret ]; then
-  echo -e -n ".secret file does not exist. Please create .secret file with below\n\
+if [ ! -e .secret.json ]; then
+  echo -e -n ".secret.json file does not exist. Please create .secret.json file with below\n\
 {
   \"auth_user\":\"admin\",\n\
   \"auth_pass\":\"new_password\"\n\
@@ -32,8 +32,8 @@ if [ ! -e .secret ]; then
   usage_exit
 fi
 
-USERNAME=`cat .secret | jq -r '.auth_user'`
-PASSWORD=`cat .secret | jq -r '.auth_pass'`
+USERNAME=`cat .secret.json | jq -r '.auth_user'`
+PASSWORD=`cat .secret.json | jq -r '.auth_pass'`
 POOL_ID=`cat config.json | jq -r '.cognito.userPoolId'`
 CLIENT_ID=`cat config.json | jq -r '.cognito.userPoolWebClientId'`
 

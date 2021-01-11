@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@aws-amplify/auth": "^3.4.16",
+    "amazon-cognito-identity-js": "^4.5.7",
     "aws-lambda-cors": "0.0.2",
     "aws-sdk": "^2.824.0",
     "crypto": "^1.0.1",

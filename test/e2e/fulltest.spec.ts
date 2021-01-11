@@ -1,5 +1,7 @@
+"use strict"
 import { config } from '../../src/webpack/config';
 import { TruncateDB } from '../../util/truncatedb';
+import { AdminUser } from '../lib/users';
 
 const axios = require('axios')
 let entry_point;
@@ -24,5 +26,16 @@ describe('get Centers', () => {
       return ret;
     }
     await expect(t).rejects.toThrow(/*404*/);
+  })
+})
+
+describe('admin user', () => {
+  beforeAll(async () => {
+    const admin = new AdminUser();
+    await admin.signIn();
+    console.log(admin.getKey());
+  })
+  it('get Authkey', () => {
+
   })
 })
