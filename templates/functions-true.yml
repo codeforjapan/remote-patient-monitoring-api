@@ -1,3 +1,14 @@
+postAdminLogin:
+  handler: src/lambda/handler.postAdminLogin
+  name: "remote-patient-monitoring-postAdminLogin-${self:provider.stage}"
+  description: "post Admin login"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPostAdminLoginRole-${self:provider.stage}"
+  environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+  events:
+    - http:
+        path: api/admin/login
+        method: post
 getCenters:
   handler: src/lambda/handler.getCenters
   description: "get Centers"
