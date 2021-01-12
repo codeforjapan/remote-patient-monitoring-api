@@ -25,7 +25,8 @@
     "dynamodb:start": "sls -c serverless-dynamodb.yml dynamodb start",
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
-    "test": "jest --silent=false --runInBand"
+    "test": "jest --silent=false --runInBand",
+    "local": "sls offline --offline true"
   },
   "name": "remote-patient-monitoring",
   "devDependencies": {
@@ -45,7 +46,6 @@
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-layers": "^2.3.3",
     "serverless-offline": "^6.8.0",
-    "serverless-plugin-ifelse": "^1.0.6",
     "serverless-plugin-typescript": "^1.1.9",
     "serverless-s3-deploy": "^0.9.0",
     "serverless-s3-remover": "^0.6.0",
