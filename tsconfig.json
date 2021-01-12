@@ -10,7 +10,8 @@
     "strictNullChecks": true,
     "sourceMap": true,
     "target": "es2019",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "outDir": ".lib"
   },
   "exclude": ["src/swagger", "src/gh-swagger-ui", "src/webpack"]
 }

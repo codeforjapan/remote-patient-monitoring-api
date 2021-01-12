@@ -1,4 +1,18 @@
 Resources:
+  RPMPostAdminLoginRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "RPMPostAdminLoginRole-${self:provider.stage}"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: "/"
   RPMGetCentersRole:
     Type: AWS::IAM::Role
     Properties:

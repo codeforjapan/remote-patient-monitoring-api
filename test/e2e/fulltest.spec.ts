@@ -1,10 +1,10 @@
 "use strict"
 import { config } from '../../src/webpack/config';
 import { TruncateDB } from '../../util/truncatedb';
-import { AdminUser } from '../lib/users';
+//import { AdminUser } from '../lib/users';
 
 const axios = require('axios')
-let entry_point;
+let entry_point: string;
 beforeAll(async () => {
   entry_point = `https://${config.apiGateway.restApiId}.execute-api.${config.region}.amazonaws.com/dev`;
   await TruncateDB.truncate()
@@ -29,13 +29,13 @@ describe('get Centers', () => {
   })
 })
 
-describe('admin user', () => {
-  beforeAll(async () => {
-    const admin = new AdminUser();
-    await admin.signIn();
-    console.log(admin.getKey());
-  })
-  it('get Authkey', () => {
+// describe('admin user', () => {
+//   beforeAll(async () => {
+//     const admin = new AdminUser();
+//     await admin.signIn();
+//     console.log(admin.getKey());
+//   })
+//   it('get Authkey', () => {
 
-  })
-})
+//   })
+// })

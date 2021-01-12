@@ -14,6 +14,10 @@ AWS.config.update({ region: config.region });
 AWS.config.credentials = credentials;
 const db = new DynamoDB({ apiVersion: '2012-08-10' })
 
+interface StringKeyObject {
+  // 今回はstring
+  [key: string]: any;
+}
 export namespace TruncateDB {
   export async function truncate() {
     const tables = await db.listTables({ Limit: 100 }).promise()
@@ -37,7 +41,7 @@ export namespace TruncateDB {
       // 削除対象がなくなるまで繰り返す
       let records = await db.scan(scanparams).promise()
       while (records.Count! > 0) {
-        let items = {}
+        let items: StringKeyObject = {}
         // delete scanned data
         items[table] = records.Items?.map(item => { return { DeleteRequest: { Key: item } } })
         const deleterecords: DynamoDB.BatchWriteItemInput = {

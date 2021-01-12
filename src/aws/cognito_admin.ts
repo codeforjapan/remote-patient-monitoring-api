@@ -2,7 +2,6 @@
 
 import AWS, { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { config } from '../../src/webpack/config';
-import { secret } from './secret';
 
 //import { CognitoUserPool, CognitoUserAttribute, CognitoUser } from 'amazon-cognito-identity-js';
 
@@ -15,20 +14,18 @@ AWS.config.update({
 });
 
 
-export class AdminUser {
+export class CognitoAdmin {
   cognito: CognitoIdentityServiceProvider
-  user: CognitoIdentityServiceProvider.AdminInitiateAuthResponse
+  user: CognitoIdentityServiceProvider.AdminInitiateAuthResponse | undefined
   constructor() {
     this.cognito = new AWS.CognitoIdentityServiceProvider({
       apiVersion: '2016-04-18'
     });
-
+    this.user = undefined;
   }
-  async signIn() {
+  async signIn(username: string, password: string) {
     const userPoolId = config.cognito.userPoolId;
     const clientId = config.cognito.userPoolWebClientId;
-    const username = secret.auth_user;
-    const password = secret.auth_pass;
     try {
       // サインイン
       this.user = await this.cognito.adminInitiateAuth({
@@ -52,8 +49,6 @@ export class AdminUser {
         // その他のエラー
       }
     }
-  }
-  getKey() {
-    return this.user.AuthenticationResult?.IdToken!;
+    return this.user;
   }
 }

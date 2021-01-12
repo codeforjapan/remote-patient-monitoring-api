@@ -12,6 +12,8 @@ info:
 servers:
   - url: /
 paths:
+  /api/admin/login:
+    $ref: ./paths/admin/login.yaml
   /api/admin/center/:
     $ref: ./paths/admin/center.yaml
   /api/nurse/center/:
