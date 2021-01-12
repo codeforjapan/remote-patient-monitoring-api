@@ -1,5 +1,6 @@
 "use strict";
 import { cors } from 'aws-lambda-cors';
+import { Admin } from './admin';
 import { Center } from './center';
 import { Patient } from './patient';
 import { Nurse } from './nurse';
@@ -44,6 +45,8 @@ const cors_post = {
     'Content-Type',
   ]
 };
+// login
+export var postAdminLogin = cors(cors_post)(Admin.postAdminLogin);
 
 // centers
 export var getCenters = cors(cors_get)(Center.getCenters);
