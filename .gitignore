@@ -6,6 +6,7 @@ jspm_packages
 .serverless
 .build
 .dynamodb
+.lib
 src/webpack/config.js
 src/webpack/config.js.map
 src/webpack/config.json
@@ -15,15 +16,3 @@ util/.secret.json
 templates/swagger.yaml
 dist/**
 src/gh-swagger-ui/swagger.yaml
-src/lambda/**/*.js
-src/lambda/**/*.js.map
-src/aws/**/*.js
-src/aws/**/*.js.map
-src/lambda/**/*.js
-src/lambda/**/*.js.map
-src/util/**/*.js
-src/util/**/*.js.map
-test/**/*.js
-test/**/*.js.map
-util/*.js
-util/*.js.map
