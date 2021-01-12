@@ -27,6 +27,8 @@ provider:
   # you can overwrite defaults here
   stage: dev
   region: ap-northeast-1
+  apiGateway:
+    shouldStartNameWithService: true
 
   # you can add statements to the Lambda function's IAM Role here
   #  iamRoleStatements:
@@ -57,7 +59,7 @@ package:
   #    - include-me-dir/**
   ${file(./templates/exclude-files.yml)}
 
-functions: ${file(./templates/functions.yml)}
+functions: ${file(./templates/functions-aws.yml)}
 
 # you can add CloudFormation resource templates here
 resources:
