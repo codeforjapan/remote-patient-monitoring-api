@@ -26,29 +26,17 @@ export class CognitoAdmin {
   async signIn(username: string, password: string) {
     const userPoolId = config.cognito.userPoolId;
     const clientId = config.cognito.userPoolWebClientId;
-    try {
-      // サインイン
-      this.user = await this.cognito.adminInitiateAuth({
-        UserPoolId: userPoolId,
-        ClientId: clientId,
-        AuthFlow: 'ADMIN_NO_SRP_AUTH',
-        AuthParameters: {
-          USERNAME: username,
-          PASSWORD: password
-        }
-      }).promise();
-      console.log('サインイン完了', JSON.stringify(this.user, null, 4));
-    }
-    catch (err) {
-      console.log(err);
-      if (err.code == 'UserNotFoundException') {
-        // ユーザーが存在しない場合
-      } else if (err.code == 'NotAuthorizedException') {
-        // パスワードが間違ってる場合
-      } else {
-        // その他のエラー
+    // サインイン
+    this.user = await this.cognito.adminInitiateAuth({
+      UserPoolId: userPoolId,
+      ClientId: clientId,
+      AuthFlow: 'ADMIN_NO_SRP_AUTH',
+      AuthParameters: {
+        USERNAME: username,
+        PASSWORD: password
       }
-    }
+    }).promise();
+    console.log('サインイン完了', JSON.stringify(this.user, null, 4));
     return this.user;
   }
 }

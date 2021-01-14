@@ -19,8 +19,6 @@ paths:
         - Login
       summary: Admin でログインする
       description: Admin ユーザでログインする
-      security:
-        - APIGatewayAuthorizer: []
       requestBody:
         description: center model which you want to create.
         content:
