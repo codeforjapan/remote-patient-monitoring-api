@@ -67,7 +67,7 @@ npm run deploy:all-gateway
 npm run deploy && npm run deploy:gateway
 ```
 
-認証がうまく行かないばあい、AWS の AWS Gateway Console から該当APIを選び、 `Deploy API` を行って下さい。
+エラーが出る場合、AWS の AWS Gateway Console から該当APIを選び、 `Deploy API` を行って下さい。（なぜか新しいバージョンが自動でdeployされない場合がある。誰かわかる人がいたら調べて欲しいです。）
 
 ### 5. Confirm admin user
 
@@ -80,7 +80,7 @@ npm run deploy && npm run deploy:gateway
 }
 ```
 
-config/dev.json にセットしたメールアドレスに、仮パスワードを届いていると思います。
+`config/dev.json` にセットしたメールアドレスに、仮パスワードを届いていると思います。
 それを使って、下記コマンドでユーザを有効にしてください。
 
 ```bash
@@ -88,6 +88,8 @@ npm run confirmAdmin -- -c '仮パスワード'
 ```
 
 `.secret.json` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
+
+最後に IdToken が表示されますので、コピーしておいてください。（ステップ6で使います）
 
 ### 6. Swagger UI にアクセスする
 
@@ -97,10 +99,31 @@ npm run confirmAdmin -- -c '仮パスワード'
 npm run openSwaggerUI
 ```
 
-Authorize が必要なAPIにアクセスする場合、`Authorize` ボタンから、ステップ6で取得した、`IdToken` の内容を入力する必要があります。
+Authorize が必要なAPIにアクセスする場合、`Authorize` ボタンから、ステップ5で取得した、`IdToken` の内容を入力する必要があります。
 （入力してもうまく行かない場合、 AWS Gateway Console から `Deploy API` を行ってみて下さい。）
 
+SwaggerUIからAPIを叩いてもうまくいかない場合があります。その場合、AWS の console から、Lambda にSwagger通りのパラメータを渡して直接実行してみてください。それでもエラーになる場合は、認証情報がおかしくなっているケースが多いです。
+その場合、AWS KMS Key の設定を一度適当なKeyに変えてから、`default` に戻してください。
+![Key setting](images/key-change.png)
+（1月17日現在では、そもそも center 系のAPIしか実装されていませんのでお気をつけください。）
+
 ## 開発用情報
+
+### E2E テストを実行する
+
+以下のコマンドを叩くと、`/test/e2e/fullspec.test.ts` が実行されます。
+まだ実装されていないテストは、`skip` してあります。
+
+```bash
+npm run test
+```
+
+ファイルの変更をウォッチしたい場合
+
+```bash
+npm run test:watch
+```
+
 
 ### local development
 
@@ -141,14 +164,26 @@ npm run deploy:gateway
 
 ## アンインストール
 
-### APIを削除する
+### 全て削除
 
 ```bash
-sls remove
+npm run remove:all
 ```
 
-### DynamoDB を削除する
+### 全て削除して再インストール
 
 ```bash
-sls remove -c serverless-dynamodb.yml
+npm run redeploy-all
+```
+
+### APIのみ削除する
+
+```bash
+npm run remove:gateway
+```
+
+### DynamoDB のみ削除する
+
+```bash
+npm run remove:dynamodb
 ```

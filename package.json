@@ -13,6 +13,7 @@
     "uuid": "^8.3.2"
   },
   "scripts": {
+    "redeploy-all": "run-s remove:all deploy deploy:gateway",
     "deploy": "run-s deploy:dynamodb deploy:all-gateway",
     "deploy:all-gateway": "run-s build:functions-yaml deploy:lambda deploy:gateway",
     "deploy:dynamodb": "sls deploy -v -c serverless-dynamodb.yml",
@@ -27,7 +28,11 @@
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
     "test": "jest --silent=false --runInBand",
-    "local": "run-s build:functions-yaml; sls offline --offline true"
+    "test:watch": "jest --watch --silent=false --runInBand",
+    "local": "run-s build:functions-yaml; sls offline --offline true",
+    "remove:all": "run-s remove:gateway remove:dynamodb",
+    "remove:gateway": "sls remove",
+    "remove:dynamodb": "sls remove -c serverless-dynamodb.yml"
   },
   "name": "remote-patient-monitoring",
   "devDependencies": {
