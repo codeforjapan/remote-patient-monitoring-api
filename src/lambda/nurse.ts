@@ -1,5 +1,6 @@
 "use strict";
 import AWS from "aws-sdk";
+import { APIGatewayProxyHandler } from 'aws-lambda'
 var dynamodb = require('serverless-dynamodb-client');
 var docClient = dynamodb.doc;
 
@@ -11,8 +12,7 @@ import Validator from "../util/validator";
 
 export namespace Nurse {
 
-  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
-  export async function getNurses(event: any, context: any, callback: Function) {
+  export const getNurses: APIGatewayProxyHandler = async () => {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
     try {
@@ -22,30 +22,29 @@ export namespace Nurse {
           errorCode: "RPM00001",
           errorMessage: "Not Found",
         };
-        callback(null, {
+        return {
           statusCode: 404,
           body: JSON.stringify({
             errorModel,
           }),
-        });
+        };
       }
-      callback(null, {
+      return {
         statusCode: 200,
         body: JSON.stringify(res),
-      });
+      };
     } catch (err) {
       console.log("getNurseTable-index error");
-      callback(null, {
+      return {
         statusCode: 500,
         body: JSON.stringify({
           error: err
         }),
-      });
+      };
     }
   }
 
-  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
-  export async function postNurse(event: any, context: any, callback: Function) {
+  export const postNurse: APIGatewayProxyHandler = async (event) => {
     console.log('called postNurse');
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
@@ -56,33 +55,41 @@ export namespace Nurse {
           errorCode: "RPM00002",
           errorMessage: "Invalid Body",
         };
-        callback(null, {
+        return {
           statusCode: 400,
           body: JSON.stringify({
             errorModel,
           }),
-        });
+        };
       }
       const res = await nurseTable.postNurse(bodyData);
-      callback(null, {
+      return {
         statusCode: 200,
         body: JSON.stringify(res),
-      });
+      };
     } catch (err) {
       console.log("postNurseTable-index error");
-      callback(null, {
+      return {
         statusCode: 500,
         body: JSON.stringify({
           error: err
         }),
-      });
+      };
     }
   }
 
-  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
-  export async function getNurse(event: any, context: any, callback: Function) {
+  export const getNurse: APIGatewayProxyHandler = async (event) => {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
+    if (!event.pathParameters || !event.pathParameters.nurseId) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorCode: "RPM00001",
+          errorMessage: 'Not Found'
+        })
+      }
+    }
     console.log('call getNurse with ' + event.pathParameters.nurseId);
     try {
       const res = await nurseTable.getNurse(event.pathParameters.nurseId);
@@ -92,32 +99,31 @@ export namespace Nurse {
           errorCode: "RPM00001",
           errorMessage: "Not Found",
         };
-        callback(null, {
+        return {
           statusCode: 404,
           body: JSON.stringify({
             errorModel,
           }),
-        });
+        };
       }
       console.log(res);
       console.log(JSON.stringify(res));
-      callback(null, {
+      return {
         statusCode: 200,
         body: JSON.stringify(res),
-      });
+      };
     } catch (err) {
       console.log("getNurseTable-index error");
-      callback(null, {
+      return {
         statusCode: 500,
         body: JSON.stringify({
           error: err
         }),
-      });
+      };
     }
   }
 
-  //@ts-ignore TS6133: 'event, context' is declared but its value is never read.
-  export async function putNurse(event: any, context: any, callback: Function) {
+  export const putNurse: APIGatewayProxyHandler = async (event) => {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
     const bodyData = validator.jsonBody(event.body);
@@ -127,29 +133,38 @@ export namespace Nurse {
           errorCode: "RPM00002",
           errorMessage: "Invalid Body",
         };
-        callback(null, {
+        return {
           statusCode: 400,
           body: JSON.stringify({
             errorModel,
           }),
-        });
+        };
+      }
+      if (!event.pathParameters || !event.pathParameters.nurseId) {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({
+            errorCode: "RPM00001",
+            errorMessage: 'Not Found'
+          })
+        }
       }
       const res = await nurseTable.putNurse(
         event.pathParameters.nurseId,
         bodyData
       );
-      callback(null, {
+      return {
         statusCode: 200,
         body: JSON.stringify(res),
-      });
+      };
     } catch (err) {
       console.log("putNurseTable-index error");
-      callback(null, {
+      return {
         statusCode: 500,
         body: JSON.stringify({
           error: err
         }),
-      });
+      };
     }
   }
 }
