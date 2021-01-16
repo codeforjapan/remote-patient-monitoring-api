@@ -1,8 +1,11 @@
 'use strict'
 
 import AWS, { CognitoIdentityServiceProvider } from 'aws-sdk';
-import { config } from '../../src/webpack/config';
 
+export interface Config {
+  userPoolId: string;
+  userPoolClientId: string;
+}
 //import { CognitoUserPool, CognitoUserAttribute, CognitoUser } from 'amazon-cognito-identity-js';
 
 // import Auth from '@aws-amplify/auth';
@@ -17,15 +20,17 @@ AWS.config.update({
 export class CognitoAdmin {
   cognito: CognitoIdentityServiceProvider
   user: CognitoIdentityServiceProvider.AdminInitiateAuthResponse | undefined
-  constructor() {
+  config: Config
+  constructor(config: Config) {
     this.cognito = new AWS.CognitoIdentityServiceProvider({
       apiVersion: '2016-04-18'
     });
+    this.config = config;
     this.user = undefined;
   }
   async signIn(username: string, password: string) {
-    const userPoolId = config.cognito.userPoolId;
-    const clientId = config.cognito.userPoolWebClientId;
+    const userPoolId = this.config.userPoolId;
+    const clientId = this.config.userPoolClientId;
     // サインイン
     this.user = await this.cognito.adminInitiateAuth({
       UserPoolId: userPoolId,

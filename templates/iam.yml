@@ -13,6 +13,16 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: "/"
+      Policies:
+        - PolicyName: "PostAdminLoginPolicy-${self:provider.stage}"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - cognito-idp:*
+                Resource:
+                  - "*"
   RPMGetCentersRole:
     Type: AWS::IAM::Role
     Properties:

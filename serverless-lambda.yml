@@ -59,7 +59,7 @@ package:
   #    - include-me-dir/**
   ${file(./templates/exclude-files.yml)}
 
-functions: ${file(./templates/functions-.yml)}
+functions: ${file(./templates/functions-lambda.yml)}
 
 # you can add CloudFormation resource templates here
 resources:

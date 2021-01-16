@@ -1,5 +1,5 @@
 "use strict";
-import { CognitoAdmin } from '../aws/cognito_admin'
+import { CognitoAdmin, Config } from '../aws/cognito_admin'
 
 import Validator from "../util/validator";
 
@@ -10,8 +10,11 @@ export namespace Admin {
       console.log(event)
       const validator = new Validator();
       const bodyData = validator.jsonBody(event.body);
-
-      const admin = new CognitoAdmin()
+      const config: Config = {
+        userPoolId: process.env.USER_POOL_ID!,
+        userPoolClientId: process.env.USER_POOL_CLIENT_ID!
+      }
+      const admin = new CognitoAdmin(config)
       const res = await admin.signIn(bodyData.username, bodyData.password);
       callback(null, {
         statusCode: 200,

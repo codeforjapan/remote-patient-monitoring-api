@@ -5,8 +5,6 @@ postAdminLogin:
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPostAdminLoginRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
-    USER_POOL_ID: !Ref RPMAdminUserPool
-    USER_POOL_CLIENT_ID: !Ref RPMAdminAppClient
 getCenters:
   handler: src/lambda/handler.getCenters
   name: "remote-patient-monitoring-getCenters-${self:provider.stage}"
