@@ -17,5 +17,5 @@ templates/swagger.yaml
 dist/**
 src/gh-swagger-ui/swagger.yaml
 templates/functions-.yml
-tempaltes/functions-true.yml
+templates/functions-true.yml
 templates/functions-lambda.yml
