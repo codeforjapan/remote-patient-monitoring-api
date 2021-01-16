@@ -27,6 +27,7 @@
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
     "test": "jest --silent=false --runInBand",
+    "test:watch": "jest --watch --silent=false --runInBand",
     "local": "run-s build:functions-yaml; sls offline --offline true"
   },
   "name": "remote-patient-monitoring",
