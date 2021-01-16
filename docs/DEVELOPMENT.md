@@ -164,14 +164,26 @@ npm run deploy:gateway
 
 ## アンインストール
 
-### APIを削除する
+### 全て削除
 
 ```bash
-sls remove
+npm run remove:all
 ```
 
-### DynamoDB を削除する
+### 全て削除して再インストール
 
 ```bash
-sls remove -c serverless-dynamodb.yml
+npm run redeploy-all
+```
+
+### APIのみ削除する
+
+```bash
+npm run remove:gateway
+```
+
+### DynamoDB のみ削除する
+
+```bash
+npm run remove:dynamodb
 ```
