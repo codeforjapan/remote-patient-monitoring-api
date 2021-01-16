@@ -32,12 +32,13 @@ describe('admin user login', () => {
   })
 })
 
+let nurse_id: string;
+let nurse_password: string
 
 describe('admin user', () => {
   let axios_admin: any;
   let center_id: string;
   let center_id2: string;
-  let nurse_id: string;
   let nurse_item: any;
   beforeAll(async () => {
     console.log('login as an admin')
@@ -81,8 +82,10 @@ describe('admin user', () => {
   it.skip('create new nurse to the center', async () => {
     const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}`, { nurseId: 'nurseA' });
     expect(ret.data).toHaveProperty('nurseId')
+    expect(ret.data).toHaveProperty('password')
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining(expect.objectContaining({ centerId: center_id })))
     nurse_id = 'nurseA'
+    nurse_password = ret.data.password
   })
 
   it.skip('read new nurse id', async () => {
