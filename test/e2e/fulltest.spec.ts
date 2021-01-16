@@ -86,13 +86,11 @@ describe('admin user', () => {
   })
 
   it.skip('read new nurse id', async () => {
-    pending
     const ret = await axios_admin.get(entry_point + `/api/admin/nurse/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining(expect.objectContaining({ centerId: center_id })))
   })
 
   it.skip('create another nurse', async () => {
-    pending
     const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}`, { nurseId: 'nurseB' });
     expect(ret.data).toHaveProperty('nurseId')
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining(expect.objectContaining({ centerId: center_id })))
@@ -100,7 +98,6 @@ describe('admin user', () => {
   })
 
   it.skip('get two nurses', async () => {
-    pending
     const ret = await axios_admin.get(entry_point + `/api/admin/center/${center_id}/nurse`);
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
