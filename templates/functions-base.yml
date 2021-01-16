@@ -5,15 +5,22 @@ postAdminLogin:
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPostAdminLoginRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+    USER_POOL_ID: !Ref RPMAdminUserPool #! ONLY:GATEWAY
+    USER_POOL_CLIENT_ID: !Ref RPMAdminAppClient #! ONLY:GATEWAY
+  #! BEGIN ONLY:LOCAL
   events:
     - http:
         path: api/admin/login
         method: post
+  #! END ONLY:LOCAL
 getCenters:
   handler: src/lambda/handler.getCenters
+  name: "remote-patient-monitoring-getCenters-${self:provider.stage}"
   description: "get Centers"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMGetCentersRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+  #! BEGIN ONLY:LOCAL
   events:
     - http:
         path: api/admin/centers
@@ -24,11 +31,15 @@ getCenters:
     - http:
         path: api/patient/centers
         method: get
+  #! END ONLY:LOCAL
 getCenter:
   handler: src/lambda/handler.getCenter
+  name: "remote-patient-monitoring-getCenter-${self:provider.stage}"
   description: "get Center"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMGetCenterRole-${self:provider.stage}"
   environment:
     CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+  #! BEGIN ONLY:LOCAL
   events:
     - http:
         path: api/admin/center/{centerId}
@@ -44,6 +55,7 @@ getCenter:
           parameters:
             paths:
               centerId: true
+  #! END ONLY:LOCAL
 postCenter:
   handler: src/lambda/handler.postCenter
   name: "remote-patient-monitoring-postCenter-${self:provider.stage}"
