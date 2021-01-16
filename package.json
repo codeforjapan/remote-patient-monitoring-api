@@ -31,10 +31,10 @@
   "name": "remote-patient-monitoring",
   "devDependencies": {
     "@shelf/jest-dynamodb": "^1.7.0",
+    "@types/aws-lambda": "^8.10.70",
     "@types/jest": "^26.0.20",
     "@types/swagger-ui-dist": "^3.30.0",
     "@types/uuid": "^8.3.0",
-    "aws-lambda": "^1.0.6",
     "axios": "^0.21.1",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.0.1",
