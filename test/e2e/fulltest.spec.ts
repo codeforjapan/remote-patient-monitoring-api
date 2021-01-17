@@ -79,7 +79,7 @@ describe('admin user', () => {
     expect(ret.data.Items).toHaveLength(2)
   })
 
-  it.skip('create new nurse to the center', async () => {
+  it('create new nurse to the center', async () => {
     const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}`, { nurseId: 'nurseA' });
     expect(ret.data).toHaveProperty('nurseId')
     expect(ret.data).toHaveProperty('password')

@@ -35,12 +35,12 @@ export default class Validator {
   }
   checkNurseBody(res: any) {
     if (
-      res.hasOwnProperty("nurseName")
+      res.hasOwnProperty("nurseId")
     ) {
-      console.log("checkNurseBody True");
+      console.log("checkNurseId True");
       return true;
     } else {
-      console.log("checkNurseBody Flase");
+      console.log("checkNurseId Flase");
       return false;
     }
   }

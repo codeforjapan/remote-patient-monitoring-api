@@ -1,6 +1,6 @@
 type: object
 properties:
-  nurseName:
+  nurseId:
     type: string
   manageCenters:
     type: array
