@@ -116,15 +116,16 @@ describe('admin user', () => {
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))
   })
 
-  it.skip('create another nurse', async () => {
-    const ret = await axios_admin.post(entry_point + `/ api / admin / center / ${center_id}`, { nurseId: 'nurseB' });
+  it('create new nurse to the center', async () => {
+    const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}/nurse`, { nurseId: uuid() });
     expect(ret.data).toHaveProperty('nurseId')
-    expect(ret.data.manageCenters).toEqual(expect.arrayContaining(expect.objectContaining({ centerId: center_id })))
-    nurse_item = ret.data
+    expect(ret.data).toHaveProperty('password')
+    expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))
+    nurse_password = ret.data.password
   })
 
-  it.skip('get two nurses', async () => {
-    const ret = await axios_admin.get(entry_point + `/ api / admin / center / ${center_id} / nurse`);
+  it('get two nurses from the center', async () => {
+    const ret = await axios_admin.get(entry_point + `/api/admin/center/${center_id}/nurse`);
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
   })
