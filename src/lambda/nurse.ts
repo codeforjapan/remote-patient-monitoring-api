@@ -14,11 +14,20 @@ import Formatter from "../util/formatter";
 
 export namespace Nurse {
 
-  export const getNurses: APIGatewayProxyHandler = async () => {
+  export const getNurses: APIGatewayProxyHandler = async (event) => {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
     try {
-      const res = await nurseTable.getNurses();
+      if (!event.pathParameters || !event.pathParameters.centerId) {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({
+            errorCode: "RPM00001",
+            errorMessage: 'Center Not Found'
+          })
+        }
+      }
+      const res = await nurseTable.getNurses(event.pathParameters.centerId);
       if (validator.checkDyanmoQueryResultEmpty(res)) {
         const errorModel = {
           errorCode: "RPM00001",

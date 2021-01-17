@@ -1,6 +1,7 @@
 "use strict";
 import { AWSError, DynamoDB } from 'aws-sdk'
 import { NurseParam } from '../lambda/definitions/types'
+import { Center } from '../lambda/definitions/types'
 
 export default class NurseTable {
   client: DynamoDB.DocumentClient;
@@ -8,7 +9,7 @@ export default class NurseTable {
     this.client = serviceClient;
   }
 
-  getNurses() {
+  getNurses(centerId: string) {
     const params: DynamoDB.ScanInput = {
       TableName: process.env.NURSE_TABLE_NAME!
     };
@@ -19,7 +20,10 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("getNurse Success!");
-          resolve(data);
+          console.log(JSON.stringify(data))
+          const filtered = data.Items!.filter((item) => item.manageCenters.find((center: Center) => center.centerId === centerId));
+          console.log(JSON.stringify(filtered))
+          resolve(filtered);
         }
       });
     });
@@ -40,6 +44,7 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("getNurse Success!");
+          console.log(data.Item)
           resolve(data.Item!);
         }
       });

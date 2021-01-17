@@ -50,4 +50,8 @@ custom:
       development:
         sources:
           - table: RemotePatientMonitoring-CenterTable-dev
-            sources: [./migrations/centers.json]
+            sources:
+              - ./migrations/centers.json
+          - table: RemotePatientMonitoring-NurseTable-dev
+            sources:
+              - ./migrations/nurses.json

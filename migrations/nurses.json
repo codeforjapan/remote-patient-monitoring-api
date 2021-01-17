@@ -1,0 +1,26 @@
+[
+    {
+        "nurseId": "76ac82d7-6714-4c65-a703-ff6ba17e350c",
+        "manageCenters": [
+            {
+                "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269"
+            }
+        ]
+    },
+    {
+        "nurseId": "020bdf69-ecd7-43ea-ace0-0e95c8ab2489",
+        "manageCenters": [
+            {
+                "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269"
+            }
+        ]
+    },
+    {
+        "nurseId": "hoge",
+        "manageCenters": [
+            {
+                "centerId": "huga"
+            }
+        ]
+    }
+]

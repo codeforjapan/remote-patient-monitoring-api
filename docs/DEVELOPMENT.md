@@ -162,7 +162,7 @@ sls dynamodb install
 npm dynamodb:start
 ```
 
-#### function をローカルで実行する
+#### function をコマンドラインから実行する
 
 ```bash
 # getCenters の実行

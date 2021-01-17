@@ -9,3 +9,8 @@ export interface NurseParam {
     centerId: string
   }[]
 }
+
+export interface Center {
+  centerId: string,
+  centerName: string
+}
