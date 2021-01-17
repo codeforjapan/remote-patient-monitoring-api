@@ -111,25 +111,26 @@ describe('admin user', () => {
   })
 
   it('read new nurse id', async () => {
+    console.log(entry_point + `/api/admin/nurse/${nurse_id}`)
     const ret = await axios_admin.get(entry_point + `/api/admin/nurse/${nurse_id}`);
-    expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id, centerName: center_name })]))
+    expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))
   })
 
   it.skip('create another nurse', async () => {
-    const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}`, { nurseId: 'nurseB' });
+    const ret = await axios_admin.post(entry_point + `/ api / admin / center / ${center_id}`, { nurseId: 'nurseB' });
     expect(ret.data).toHaveProperty('nurseId')
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining(expect.objectContaining({ centerId: center_id })))
     nurse_item = ret.data
   })
 
   it.skip('get two nurses', async () => {
-    const ret = await axios_admin.get(entry_point + `/api/admin/center/${center_id}/nurse`);
+    const ret = await axios_admin.get(entry_point + `/ api / admin / center / ${center_id} / nurse`);
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
   })
   it.skip('update existing nurse', async () => {
     nurse_item.manageCenters[0].centerId = center_id2
-    const ret = await axios_admin.put(entry_point + `/api/admin/center/${center_id}`, nurse_item);
+    const ret = await axios_admin.put(entry_point + `/ api / admin / center / ${center_id}`, nurse_item);
     expect(ret.data.manageCenters[0].centerName).toBe('B保健所')
   })
 

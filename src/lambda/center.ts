@@ -110,7 +110,7 @@ export namespace Center {
       console.log(JSON.stringify(res));
       return {
         statusCode: 200,
-        body: JSON.stringify((res as AWS.DynamoDB.GetItemOutput).Item),
+        body: JSON.stringify(res),
       };
     } catch (err) {
       console.log("getCenterTable-index error");

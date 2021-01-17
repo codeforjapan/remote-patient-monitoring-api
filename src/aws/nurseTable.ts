@@ -32,6 +32,7 @@ export default class NurseTable {
         "nurseId": nurseId
       }
     };
+    console.log(params)
     return new Promise((resolve, reject) => {
       this.client.get(params, (err, data) => {
         if (err) {
@@ -39,7 +40,7 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("getNurse Success!");
-          resolve(data);
+          resolve(data.Item!);
         }
       });
     });
