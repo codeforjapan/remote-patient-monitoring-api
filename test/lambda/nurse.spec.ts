@@ -4,7 +4,8 @@ describe('unit test', () => {
   it('return Nurse', async () => {
     process.env.NURSE_TABLE_NAME = 'RemotePatientMonitoring-NurseTable-dev'
     const ret = await handler.getNurse({ pathParameters: { nurseId: "76ac82d7-6714-4c65-a703-ff6ba17e350c" } })
-    expect(ret).toBe({
+    console.log(ret)
+    expect(JSON.parse(ret.body)).toStrictEqual({
       "nurseId": "76ac82d7-6714-4c65-a703-ff6ba17e350c",
       "manageCenters": [
         {

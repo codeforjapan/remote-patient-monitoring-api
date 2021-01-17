@@ -8,13 +8,16 @@ export default class NurseTable {
   constructor(serviceClient: DynamoDB.DocumentClient) {
     this.client = serviceClient;
   }
-
+  getDocClient() {
+    console.log(this.client);
+    return this.client
+  }
   getNurses(centerId: string) {
     const params: DynamoDB.ScanInput = {
       TableName: process.env.NURSE_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
-      this.client.scan(params, (err, data) => {
+      this.getDocClient().scan(params, (err, data) => {
         if (err) {
           console.log(err);
           reject(err);
@@ -38,7 +41,7 @@ export default class NurseTable {
     };
     console.log(params)
     return new Promise((resolve, reject) => {
-      this.client.get(params, (err, data) => {
+      this.getDocClient().get(params, (err, data) => {
         if (err) {
           console.log(err);
           reject(err);
@@ -58,7 +61,7 @@ export default class NurseTable {
     };
     console.log(params);
     return new Promise((resolve, reject) => {
-      this.client.put(params, (err, data) => {
+      this.getDocClient().put(params, (err, data) => {
         console.log(data);
         if (err) {
           console.log(err);
@@ -92,7 +95,7 @@ export default class NurseTable {
     };
     console.log(params);
     return new Promise((resolve, reject) => {
-      this.client.update(params, (err, data) => {
+      this.getDocClient().update(params, (err, data) => {
         console.log(data);
         if (err) {
           console.log(err);

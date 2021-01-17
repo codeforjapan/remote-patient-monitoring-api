@@ -2,8 +2,8 @@
 import AWS from "aws-sdk";
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import { CognitoAdmin, Config } from '../aws/cognito_admin'
-var dynamodb = require('serverless-dynamodb-client');
-var docClient = dynamodb.doc;
+import { loadDynamoDBClient } from '../util/dynamodbclient'
+var docClient = loadDynamoDBClient()
 
 AWS.config.update({
   region: process.env.region
