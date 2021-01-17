@@ -110,6 +110,16 @@ describe('admin user', () => {
     nurse_password = ret.data.password
   })
 
+  it('raise error if existing id is going to be created', async () => {
+    expect.assertions(1);
+    console.log(entry_point + `/api/admin/center/${center_id}/nurse`, { nurseId: nurse_id })
+    const t = async () => {
+      const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}/nurse`, { nurseId: nurse_id });
+      return ret;
+    }
+    await expect(t).rejects.toThrow()
+  })
+
   it('read new nurse id', async () => {
     console.log(entry_point + `/api/admin/nurse/${nurse_id}`)
     const ret = await axios_admin.get(entry_point + `/api/admin/nurse/${nurse_id}`);
@@ -134,8 +144,6 @@ describe('admin user', () => {
 
   it('update existing nurse', async () => {
     nurse_item.manageCenters.push({ centerId: center_id2 })
-    console.log(entry_point + `/api/admin/nurse/${nurse_id}`, nurse_item)
-    console.log(nurse_item)
     const ret = await axios_admin.put(entry_point + `/api/admin/nurse/${nurse_id}`, nurse_item);
     expect(ret.data.manageCenters.length).toBe(2)
   })
