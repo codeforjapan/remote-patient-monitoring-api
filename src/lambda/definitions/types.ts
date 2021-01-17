@@ -1,6 +1,6 @@
 export interface Center {
   centerId: string
-  centerName: string
+  centerName?: string
 }
 export interface NurseParam {
   nurseId: string
@@ -8,9 +8,4 @@ export interface NurseParam {
   {
     centerId: string
   }[]
-}
-
-export interface Center {
-  centerId: string,
-  centerName: string
 }

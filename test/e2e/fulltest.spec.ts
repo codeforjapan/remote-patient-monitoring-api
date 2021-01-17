@@ -114,6 +114,7 @@ describe('admin user', () => {
     console.log(entry_point + `/api/admin/nurse/${nurse_id}`)
     const ret = await axios_admin.get(entry_point + `/api/admin/nurse/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))
+    nurse_item = ret.data
   })
 
   it('create new nurse to the center', async () => {
@@ -130,10 +131,13 @@ describe('admin user', () => {
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
   })
-  it.skip('update existing nurse', async () => {
-    nurse_item.manageCenters[0].centerId = center_id2
-    const ret = await axios_admin.put(entry_point + `/ api / admin / center / ${center_id}`, nurse_item);
-    expect(ret.data.manageCenters[0].centerName).toBe('B保健所')
+
+  it('update existing nurse', async () => {
+    nurse_item.manageCenters.push({ centerId: center_id2 })
+    console.log(entry_point + `/api/admin/nurse/${nurse_id}`, nurse_item)
+    console.log(nurse_item)
+    const ret = await axios_admin.put(entry_point + `/api/admin/nurse/${nurse_id}`, nurse_item);
+    expect(ret.data.manageCenters.length).toBe(2)
   })
 
 })

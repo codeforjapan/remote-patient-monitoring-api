@@ -68,23 +68,15 @@ export default class NurseTable {
     });
   }
 
-  putNurse(nurseId: string, body: { nurseName: string }) {
-    const nurse = {
-      ...body,
-      nurseId: nurseId,
-    };
-    console.log(nurse);
+  putNurse(nurseId: string, body: { manageCenters: Center[] }) {
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.NURSE_TABLE_NAME!,
       Key: {
-        nurseId: nurse.nurseId
+        nurseId: nurseId
       },
-      UpdateExpression: "set #nurseName = :nurseName",
-      ExpressionAttributeNames: {
-        "#nurseName": "nurseName"
-      },
+      UpdateExpression: "set manageCenters = :c",
       ExpressionAttributeValues: {
-        ":nurseName": nurse.nurseName
+        ":c": body.manageCenters
       },
     };
     console.log(params);
@@ -96,7 +88,7 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("putNurse Success!");
-          resolve(nurse);
+          resolve({ nurseId: nurseId, manageCenters: body.manageCenters });
         }
       });
     });

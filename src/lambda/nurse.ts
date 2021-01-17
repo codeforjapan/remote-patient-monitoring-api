@@ -160,19 +160,9 @@ export namespace Nurse {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
     const bodyData = validator.jsonBody(event.body);
+    console.log('!----')
+    console.log(bodyData)
     try {
-      if (!validator.checkNurseBody(bodyData)) {
-        const errorModel = {
-          errorCode: "RPM00002",
-          errorMessage: "Invalid Body",
-        };
-        return {
-          statusCode: 400,
-          body: JSON.stringify({
-            errorModel,
-          }),
-        };
-      }
       if (!event.pathParameters || !event.pathParameters.nurseId) {
         return {
           statusCode: 404,

@@ -29,7 +29,7 @@ export default class Validator {
       console.log("checkCenterBody True");
       return true;
     } else {
-      console.log("checkCenterBody Flase");
+      console.log("checkCenterBody False");
       return false;
     }
   }
@@ -40,7 +40,7 @@ export default class Validator {
       console.log("checkNurseId True");
       return true;
     } else {
-      console.log("checkNurseId Flase");
+      console.log("checkNurseId False");
       return false;
     }
   }
@@ -51,7 +51,7 @@ export default class Validator {
       console.log("checkPatientBody True");
       return true;
     } else {
-      console.log("checkPatientBody Flase");
+      console.log("checkPatientBody False");
       return false;
     }
   }
