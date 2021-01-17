@@ -2,6 +2,7 @@
 import { config } from '../../src/webpack/config';
 import { TruncateDB } from '../../util/truncatedb';
 import { secret } from '../lib/secret';
+import { v4 as uuid } from 'uuid'
 
 const axios = require('axios')
 let entry_point: string;
@@ -32,7 +33,7 @@ describe('admin user login', () => {
   })
 })
 
-let nurse_id: string;
+const nurse_id: string = uuid();
 let nurse_password: string
 
 describe('admin user', () => {
@@ -93,18 +94,17 @@ describe('admin user', () => {
     expect.assertions(1);
     const t = async () => {
       console.log(entry_point + '/api/admin/center/no-id/nurse');
-      const ret = await axios.post(entry_point + '/api/admin/center/no-id/nurse', { nurseId: 'nurseA' });
+      const ret = await axios_admin.post(entry_point + '/api/admin/center/no-id/nurse', { nurseId: 'nurseA' });
       return ret;
     }
     await expect(t).rejects.toThrow(/*404*/);
   })
 
   it('create new nurse to the center', async () => {
-    const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}/nurse`, { nurseId: 'nurseA' });
+    const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}/nurse`, { nurseId: nurse_id });
     expect(ret.data).toHaveProperty('nurseId')
     expect(ret.data).toHaveProperty('password')
-    expect(ret.data.manageCenters).toEqual(expect.arrayContaining(expect.objectContaining({ centerId: center_id })))
-    nurse_id = 'nurseA'
+    expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))
     nurse_password = ret.data.password
   })
 

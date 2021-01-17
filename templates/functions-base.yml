@@ -84,13 +84,15 @@ getNurse:
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMNurseTableRole-${self:provider.stage}"
   environment:
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
-posNurse:
+postNurse:
   handler: src/lambda/handler.postNurse
   name: "remote-patient-monitoring-postNurse-${self:provider.stage}"
   description: "post Nurse"
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMNurseTableRole-${self:provider.stage}"
   environment:
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    NURSE_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
+    NURSE_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY
 putNurse:
   handler: src/lambda/handler.putNurse
   name: "remote-patient-monitoring-putNurse-${self:provider.stage}"
@@ -98,6 +100,8 @@ putNurse:
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMNurseTableRole-${self:provider.stage}"
   environment:
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    NURSE_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
+    NURSE_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY
 getPatients:
   handler: src/lambda/handler.getPatients
   name: "remote-patient-monitoring-getPatients-${self:provider.stage}"

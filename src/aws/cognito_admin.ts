@@ -28,6 +28,38 @@ export class CognitoAdmin {
     this.config = config;
     this.user = undefined;
   }
+  /**
+   * Signup 
+   * @param username user name
+   */
+  async signUp(username: string, password?: string): Promise<{ username: string, password: string, user: CognitoIdentityServiceProvider.AdminSetUserPasswordResponse }> {
+    const userPoolId = this.config.userPoolId;
+    // サインイン
+    const user = await this.cognito.adminCreateUser({
+      UserPoolId: userPoolId,
+      Username: username,
+    }).promise();
+    console.log('登録完了', JSON.stringify(user, null, 4));
+    // if password is not specified, create random password
+    if (password == undefined) {
+      password = this.makePassword();
+    }
+    // 作成したばかりのユーザーはステータス FORCE_CHANGE_PASSWORD なのでパスワード変更
+    // べつに一時パスワードと同じパスワードでもエラーにはならない
+    await this.cognito.adminSetUserPassword({
+      UserPoolId: userPoolId,
+      Username: username,
+      Password: password,
+      Permanent: true
+    }).promise();
+    console.log('パスワード変更完了');
+    return { username: username, password: password, user: user }
+  }
+  /**
+   *  サインイン
+   *  @param username user name
+   *  @param password password
+   */
   async signIn(username: string, password: string) {
     const userPoolId = this.config.userPoolId;
     const clientId = this.config.userPoolClientId;
@@ -43,5 +75,17 @@ export class CognitoAdmin {
     }).promise();
     console.log('サインイン完了', JSON.stringify(this.user, null, 4));
     return this.user;
+  }
+  // パスワードを生成する
+  makePassword() {
+    let pwd = Math.random().toString(36).substr(2, 8)
+    let count = 0;
+    // 数字とアルファベット両方入っているかチェックする
+    while ((pwd.match(/[a-zA-Z]/) && pwd.match(/\d/)) == null) {
+      if (count > 100) break
+      pwd = Math.random().toString(36).substr(2, 8)
+      count = count + 1;
+    }
+    return pwd
   }
 }

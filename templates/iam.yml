@@ -150,6 +150,11 @@ Resources:
                   - dynamodb:UpdateItem
                 Resource:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}"
+              - Effect: "Allow"
+                Action:
+                  - cognito-idp:*
+                Resource:
+                  - "*"
   RPMPatientTableRole:
     Type: AWS::IAM::Role
     Properties:

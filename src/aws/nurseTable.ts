@@ -45,7 +45,7 @@ export default class NurseTable {
     });
   }
 
-  postNurse(nurse: NurseParam) {
+  postNurse(nurse: NurseParam): Promise<NurseParam> {
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.NURSE_TABLE_NAME!,
       Item: nurse,

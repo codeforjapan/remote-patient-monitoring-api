@@ -1,7 +1,7 @@
 "use strict";
 import AWS from "aws-sdk";
 import { APIGatewayProxyHandler } from 'aws-lambda'
-import { NurseParam } from './definitions/types'
+import { CognitoAdmin, Config } from '../aws/cognito_admin'
 var dynamodb = require('serverless-dynamodb-client');
 var docClient = dynamodb.doc;
 
@@ -76,11 +76,19 @@ export namespace Nurse {
           }),
         };
       }
+      // create new Nurse User
+      const config: Config = {
+        userPoolId: process.env.NURSE_POOL_ID!,
+        userPoolClientId: process.env.NURSE_POOL_CLIENT_ID!
+      }
+      const admin = new CognitoAdmin(config)
+      const newuser = await admin.signUp(bodyData.nurseId)
+      console.log(newuser);
       const param = formatter.buildNurseParam(bodyData.nurseId, [event.pathParameters.centerId])
       const res = await nurseTable.postNurse(param);
       return {
         statusCode: 201,
-        body: JSON.stringify(res),
+        body: JSON.stringify({ nurseId: newuser.username, password: newuser.password, manageCenters: res.manageCenters })
       };
     } catch (err) {
       console.log("postNurseTable-index error");
