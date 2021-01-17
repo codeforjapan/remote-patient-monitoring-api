@@ -125,6 +125,7 @@ describe('admin user', () => {
   })
 
   it('get two nurses from the center', async () => {
+    console.log(entry_point + `/api/admin/center/${center_id}/nurse`);
     const ret = await axios_admin.get(entry_point + `/api/admin/center/${center_id}/nurse`);
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)

@@ -14,7 +14,7 @@ export default class Validator {
     return false;
   }
   checkDyanmoQueryResultEmpty(res: any) {
-    console.log(res.Item);
+    console.log(res.Items);
     if (!Object.keys(res.Items).length) {
       return true;
     } else {

@@ -28,6 +28,7 @@ export namespace Nurse {
         }
       }
       const res = await nurseTable.getNurses(event.pathParameters.centerId);
+      console.log(res)
       if (validator.checkDyanmoQueryResultEmpty(res)) {
         const errorModel = {
           errorCode: "RPM00001",

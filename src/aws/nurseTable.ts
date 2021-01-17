@@ -8,25 +8,19 @@ export default class NurseTable {
   constructor(serviceClient: DynamoDB.DocumentClient) {
     this.client = serviceClient;
   }
-  getDocClient() {
-    console.log(this.client);
-    return this.client
-  }
   getNurses(centerId: string) {
     const params: DynamoDB.ScanInput = {
       TableName: process.env.NURSE_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
-      this.getDocClient().scan(params, (err, data) => {
+      this.client.scan(params, (err, data) => {
         if (err) {
           console.log(err);
           reject(err);
         } else {
           console.log("getNurse Success!");
-          console.log(JSON.stringify(data))
-          const filtered = data.Items!.filter((item) => item.manageCenters.find((center: Center) => center.centerId === centerId));
-          console.log(JSON.stringify(filtered))
-          resolve(filtered);
+          const filtered = data.Items!.filter(item => item.manageCenters.findIndex((center: Center) => center.centerId === centerId) > -1);
+          resolve({ Count: filtered.length, Items: filtered });
         }
       });
     });
@@ -41,7 +35,7 @@ export default class NurseTable {
     };
     console.log(params)
     return new Promise((resolve, reject) => {
-      this.getDocClient().get(params, (err, data) => {
+      this.client.get(params, (err, data) => {
         if (err) {
           console.log(err);
           reject(err);
@@ -61,7 +55,7 @@ export default class NurseTable {
     };
     console.log(params);
     return new Promise((resolve, reject) => {
-      this.getDocClient().put(params, (err, data) => {
+      this.client.put(params, (err, data) => {
         console.log(data);
         if (err) {
           console.log(err);
@@ -95,7 +89,7 @@ export default class NurseTable {
     };
     console.log(params);
     return new Promise((resolve, reject) => {
-      this.getDocClient().update(params, (err, data) => {
+      this.client.update(params, (err, data) => {
         console.log(data);
         if (err) {
           console.log(err);
