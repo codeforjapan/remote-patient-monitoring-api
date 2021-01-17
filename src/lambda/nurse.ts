@@ -1,22 +1,34 @@
 "use strict";
 import AWS from "aws-sdk";
 import { APIGatewayProxyHandler } from 'aws-lambda'
-var dynamodb = require('serverless-dynamodb-client');
-var docClient = dynamodb.doc;
+import { CognitoAdmin, Config } from '../aws/cognito_admin'
+import { loadDynamoDBClient } from '../util/dynamodbclient'
+var docClient = loadDynamoDBClient()
 
 AWS.config.update({
   region: process.env.region
 });
 import NurseTable from "../aws/nurseTable";
 import Validator from "../util/validator";
+import Formatter from "../util/formatter";
 
 export namespace Nurse {
 
-  export const getNurses: APIGatewayProxyHandler = async () => {
+  export const getNurses: APIGatewayProxyHandler = async (event) => {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
     try {
-      const res = await nurseTable.getNurses();
+      if (!event.pathParameters || !event.pathParameters.centerId) {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({
+            errorCode: "RPM00001",
+            errorMessage: 'Center Not Found'
+          })
+        }
+      }
+      const res = await nurseTable.getNurses(event.pathParameters.centerId);
+      console.log(res)
       if (validator.checkDyanmoQueryResultEmpty(res)) {
         const errorModel = {
           errorCode: "RPM00001",
@@ -48,7 +60,19 @@ export namespace Nurse {
     console.log('called postNurse');
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
+    const formatter = new Formatter();
     const bodyData = validator.jsonBody(event.body);
+
+    if (!event.pathParameters || !event.pathParameters.centerId) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorCode: "RPM00001",
+          errorMessage: 'Center Not Found'
+        })
+      }
+    }
+
     try {
       if (!validator.checkNurseBody(bodyData)) {
         const errorModel = {
@@ -62,10 +86,19 @@ export namespace Nurse {
           }),
         };
       }
-      const res = await nurseTable.postNurse(bodyData);
+      // create new Nurse User
+      const config: Config = {
+        userPoolId: process.env.NURSE_POOL_ID!,
+        userPoolClientId: process.env.NURSE_POOL_CLIENT_ID!
+      }
+      const admin = new CognitoAdmin(config)
+      const newuser = await admin.signUp(bodyData.nurseId)
+      console.log(newuser);
+      const param = formatter.buildNurseParam(bodyData.nurseId, [event.pathParameters.centerId])
+      const res = await nurseTable.postNurse(param);
       return {
-        statusCode: 200,
-        body: JSON.stringify(res),
+        statusCode: 201,
+        body: JSON.stringify({ nurseId: newuser.username, password: newuser.password, manageCenters: res.manageCenters })
       };
     } catch (err) {
       console.log("postNurseTable-index error");
@@ -127,19 +160,9 @@ export namespace Nurse {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
     const bodyData = validator.jsonBody(event.body);
+    console.log('!----')
+    console.log(bodyData)
     try {
-      if (!validator.checkNurseBody(bodyData)) {
-        const errorModel = {
-          errorCode: "RPM00002",
-          errorMessage: "Invalid Body",
-        };
-        return {
-          statusCode: 400,
-          body: JSON.stringify({
-            errorModel,
-          }),
-        };
-      }
       if (!event.pathParameters || !event.pathParameters.nurseId) {
         return {
           statusCode: 404,

@@ -23,16 +23,11 @@ class Center {
 
 class Nurse {
     String nurseId
-    String loginId
-    String password
-    String nurseName
     Center[] Centers
 }
 
 class Patient {
     String patientId
-    String loginId
-    String password
     String phone
     Boolean display
     DateTime policy_accepted

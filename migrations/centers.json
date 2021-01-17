@@ -1,4 +1,10 @@
-[{
+[
+    {
         "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269",
         "centerName": "A保健所"
-    }]
+    },
+    {
+        "centerId": "942f71cf-5f19-45d2-846a-4e6609f48269",
+        "centerName": "B保健所"
+    }
+]

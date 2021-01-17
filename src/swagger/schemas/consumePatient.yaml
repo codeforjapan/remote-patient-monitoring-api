@@ -1,6 +1,6 @@
 type: object
 properties:
+  patientId:
+    type: string
   phone:
     type: string
-  display:
-    type: boolean

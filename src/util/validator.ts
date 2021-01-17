@@ -14,7 +14,7 @@ export default class Validator {
     return false;
   }
   checkDyanmoQueryResultEmpty(res: any) {
-    console.log(res.Item);
+    console.log(res.Items);
     if (!Object.keys(res.Items).length) {
       return true;
     } else {
@@ -29,18 +29,18 @@ export default class Validator {
       console.log("checkCenterBody True");
       return true;
     } else {
-      console.log("checkCenterBody Flase");
+      console.log("checkCenterBody False");
       return false;
     }
   }
   checkNurseBody(res: any) {
     if (
-      res.hasOwnProperty("nurseName")
+      res.hasOwnProperty("nurseId")
     ) {
-      console.log("checkNurseBody True");
+      console.log("checkNurseId True");
       return true;
     } else {
-      console.log("checkNurseBody Flase");
+      console.log("checkNurseId False");
       return false;
     }
   }
@@ -51,7 +51,7 @@ export default class Validator {
       console.log("checkPatientBody True");
       return true;
     } else {
-      console.log("checkPatientBody Flase");
+      console.log("checkPatientBody False");
       return false;
     }
   }

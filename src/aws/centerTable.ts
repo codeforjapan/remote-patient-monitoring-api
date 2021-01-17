@@ -39,7 +39,7 @@ export default class CenterTable {
           reject(err);
         } else {
           console.log("getCenter Success!");
-          resolve(data);
+          resolve(data.Item!);
         }
       });
     });

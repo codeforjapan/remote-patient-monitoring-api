@@ -1,14 +1,14 @@
 "use strict";
-import { v4 as uuid } from 'uuid';
 import { AWSError, DynamoDB } from 'aws-sdk'
+import { NurseParam } from '../lambda/definitions/types'
+import { Center } from '../lambda/definitions/types'
 
 export default class NurseTable {
   client: DynamoDB.DocumentClient;
   constructor(serviceClient: DynamoDB.DocumentClient) {
     this.client = serviceClient;
   }
-
-  getNurses() {
+  getNurses(centerId: string) {
     const params: DynamoDB.ScanInput = {
       TableName: process.env.NURSE_TABLE_NAME!
     };
@@ -19,7 +19,8 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("getNurse Success!");
-          resolve(data);
+          const filtered = data.Items!.filter(item => item.manageCenters.findIndex((center: Center) => center.centerId === centerId) > -1);
+          resolve({ Count: filtered.length, Items: filtered });
         }
       });
     });
@@ -32,6 +33,7 @@ export default class NurseTable {
         "nurseId": nurseId
       }
     };
+    console.log(params)
     return new Promise((resolve, reject) => {
       this.client.get(params, (err, data) => {
         if (err) {
@@ -39,17 +41,14 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("getNurse Success!");
-          resolve(data);
+          console.log(data.Item)
+          resolve(data.Item!);
         }
       });
     });
   }
 
-  postNurse(body: { nurseName: string }) {
-    const nurse = {
-      ...body,
-      nurseId: uuid(),
-    };
+  postNurse(nurse: NurseParam): Promise<NurseParam> {
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.NURSE_TABLE_NAME!,
       Item: nurse,
@@ -69,23 +68,15 @@ export default class NurseTable {
     });
   }
 
-  putNurse(nurseId: string, body: { nurseName: string }) {
-    const nurse = {
-      ...body,
-      nurseId: nurseId,
-    };
-    console.log(nurse);
+  putNurse(nurseId: string, body: { manageCenters: Center[] }) {
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.NURSE_TABLE_NAME!,
       Key: {
-        nurseId: nurse.nurseId
+        nurseId: nurseId
       },
-      UpdateExpression: "set #nurseName = :nurseName",
-      ExpressionAttributeNames: {
-        "#nurseName": "nurseName"
-      },
+      UpdateExpression: "set manageCenters = :c",
       ExpressionAttributeValues: {
-        ":nurseName": nurse.nurseName
+        ":c": body.manageCenters
       },
     };
     console.log(params);
@@ -97,7 +88,7 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("putNurse Success!");
-          resolve(nurse);
+          resolve({ nurseId: nurseId, manageCenters: body.manageCenters });
         }
       });
     });

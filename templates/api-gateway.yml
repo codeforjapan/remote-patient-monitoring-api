@@ -3,6 +3,12 @@ Resources:
     Type: "AWS::ApiGateway::RestApi"
     Properties:
       Body: ${file(./templates/swagger.yaml)}
+  PostAdminLoginApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-postAdminLogin-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
   GetCentersApiPermission:
     Type: "AWS::Lambda::Permission"
     Properties:
@@ -25,6 +31,54 @@ Resources:
     Type: "AWS::Lambda::Permission"
     Properties:
       FunctionName: "remote-patient-monitoring-putCenter-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  GetNursesApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-getNurses-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  GettNurseApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-getNurse-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  PostNurseApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-postNurse-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  PutNurseApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-putNurse-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  GetPatientsApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-getPatients-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  GettPatientApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-getPatient-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  PostPatientApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-postPatient-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  PutPatientApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-putPatient-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "apigateway.amazonaws.com"
   ApiGatewayDeployment:

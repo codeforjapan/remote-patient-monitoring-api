@@ -1,8 +1,9 @@
 type: object
 properties:
-  nurseName:
-    type: string
   manageCenters:
     type: array
     items:
-      $ref: "./Center.yaml"
+      type: object
+      properties:
+        centerId:
+          type: string
