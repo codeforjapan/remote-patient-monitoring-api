@@ -67,8 +67,6 @@ npm run deploy:all-gateway
 npm run deploy && npm run deploy:gateway
 ```
 
-エラーが出る場合、AWS の AWS Gateway Console から該当APIを選び、 `Deploy API` を行って下さい。（なぜか新しいバージョンが自動でdeployされない場合がある。誰かわかる人がいたら調べて欲しいです。）
-
 ### 5. Confirm admin user
 
 `util/.secret.json` というファイルを作り、以下の内容を設定してください。
@@ -91,7 +89,32 @@ npm run confirmAdmin -- -c '仮パスワード'
 
 最後に IdToken が表示されますので、コピーしておいてください。（ステップ6で使います）
 
-### 6. Swagger UI にアクセスする
+
+### 6, run Test
+
+
+以下のコマンドを叩くと、E2E テスト(`/test/e2e/fullspec.test.ts`) が実行されます。
+まだ実装されていないテストは、`skip` してあります。
+
+```bash
+npm run test
+```
+
+Network Error が出る場合、以下を試してみてください。
+get Authkey(`/api/admin/login`) が失敗するとその後のテスト全て失敗するので、そこから最初にチェックするのが良いと思います。
+
+API を deploy する
+
+![deploy API](images/deployAPI.png)
+
+上記でも Network Error が出る場合、該当APIの lambda の管理画面で `Environment variables` を選び、AWS KMS Key の設定を一度適当なKeyに変えてから、`default` に戻してください。
+![Key setting](images/key-change.png)
+
+lambda はうまくいくけれと Network Error が出る場合、API Gateway から該当の API を選び、Test を行ってみてください。 `Invalid permissions on Lambda function` で失敗する場合、`Integration Request` の設定で、再度 lambda function をチェックし直してみてください。
+
+![set lambda function](images/set-lambda-function.png)
+
+### 7. Swagger UI にアクセスする
 
 以下のコマンドで、Swagger UI が開きます。step5 で作ったユーザ名/パスワードでログインできます。
 
@@ -100,12 +123,10 @@ npm run openSwaggerUI
 ```
 
 Authorize が必要なAPIにアクセスする場合、`Authorize` ボタンから、ステップ5で取得した、`IdToken` の内容を入力する必要があります。
-（入力してもうまく行かない場合、 AWS Gateway Console から `Deploy API` を行ってみて下さい。）
 
-SwaggerUIからAPIを叩いてもうまくいかない場合があります。その場合、AWS の console から、Lambda にSwagger通りのパラメータを渡して直接実行してみてください。それでもエラーになる場合は、認証情報がおかしくなっているケースが多いです。
-その場合、AWS KMS Key の設定を一度適当なKeyに変えてから、`default` に戻してください。
-![Key setting](images/key-change.png)
-（1月17日現在では、そもそも center 系のAPIしか実装されていませんのでお気をつけください。）
+SwaggerUIからAPIを叩いてもうまくいかない場合があります。その場合、AWS の console から、Lambda に Swagger にあるパラメータを渡してtestを直接実行してみてください。それでもエラーになる場合は、Lambda 実行時の認証情報がおかしくなっているケースが多いです。Step 6 の方法を試してみてください。
+
+![test lambda](images/test-lambda.png)
 
 ## 開発用情報
 
