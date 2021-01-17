@@ -79,8 +79,28 @@ describe('admin user', () => {
     expect(ret.data.Items).toHaveLength(2)
   })
 
+  it('raise 404 error when there is no center id', async () => {
+    expect.assertions(1);
+    const t = async () => {
+      console.log(entry_point + '/api/admin/center/no-id');
+      const ret = await axios.get(entry_point + '/api/admin/center/no-id');
+      return ret;
+    }
+    await expect(t).rejects.toThrow(/*404*/);
+  })
+
+  it('raise error to post non-existing center', async () => {
+    expect.assertions(1);
+    const t = async () => {
+      console.log(entry_point + '/api/admin/center/no-id/nurse');
+      const ret = await axios.post(entry_point + '/api/admin/center/no-id/nurse', { nurseId: 'nurseA' });
+      return ret;
+    }
+    await expect(t).rejects.toThrow(/*404*/);
+  })
+
   it('create new nurse to the center', async () => {
-    const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}`, { nurseId: 'nurseA' });
+    const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}/nurse`, { nurseId: 'nurseA' });
     expect(ret.data).toHaveProperty('nurseId')
     expect(ret.data).toHaveProperty('password')
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining(expect.objectContaining({ centerId: center_id })))

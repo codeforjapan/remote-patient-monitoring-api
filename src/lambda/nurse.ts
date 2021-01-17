@@ -1,6 +1,7 @@
 "use strict";
 import AWS from "aws-sdk";
 import { APIGatewayProxyHandler } from 'aws-lambda'
+import { NurseParam } from './definitions/types'
 var dynamodb = require('serverless-dynamodb-client');
 var docClient = dynamodb.doc;
 
@@ -9,6 +10,7 @@ AWS.config.update({
 });
 import NurseTable from "../aws/nurseTable";
 import Validator from "../util/validator";
+import Formatter from "../util/formatter";
 
 export namespace Nurse {
 
@@ -48,7 +50,19 @@ export namespace Nurse {
     console.log('called postNurse');
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
+    const formatter = new Formatter();
     const bodyData = validator.jsonBody(event.body);
+
+    if (!event.pathParameters || !event.pathParameters.centerId) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorCode: "RPM00001",
+          errorMessage: 'Center Not Found'
+        })
+      }
+    }
+
     try {
       if (!validator.checkNurseBody(bodyData)) {
         const errorModel = {
@@ -62,9 +76,10 @@ export namespace Nurse {
           }),
         };
       }
-      const res = await nurseTable.postNurse(bodyData);
+      const param = formatter.buildNurseParam(bodyData.nurseId, [event.pathParameters.centerId])
+      const res = await nurseTable.postNurse(param);
       return {
-        statusCode: 200,
+        statusCode: 201,
         body: JSON.stringify(res),
       };
     } catch (err) {

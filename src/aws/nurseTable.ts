@@ -1,6 +1,6 @@
 "use strict";
-import { v4 as uuid } from 'uuid';
 import { AWSError, DynamoDB } from 'aws-sdk'
+import { NurseParam } from '../lambda/definitions/types'
 
 export default class NurseTable {
   client: DynamoDB.DocumentClient;
@@ -45,11 +45,7 @@ export default class NurseTable {
     });
   }
 
-  postNurse(body: { nurseName: string }) {
-    const nurse = {
-      ...body,
-      nurseId: uuid(),
-    };
+  postNurse(nurse: NurseParam) {
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.NURSE_TABLE_NAME!,
       Item: nurse,

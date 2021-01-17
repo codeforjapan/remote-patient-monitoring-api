@@ -5,4 +5,7 @@ properties:
   manageCenters:
     type: array
     items:
-      $ref: "./Center.yaml"
+      type: object
+      properties:
+        centerId:
+          type: string
