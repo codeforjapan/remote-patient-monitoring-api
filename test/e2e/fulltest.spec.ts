@@ -39,6 +39,7 @@ let nurse_password: string
 describe('admin user', () => {
   let axios_admin: any;
   let center_id: string;
+  let center_name: string;
   let center_id2: string;
   let nurse_item: any;
   beforeAll(async () => {
@@ -64,8 +65,9 @@ describe('admin user', () => {
   })
 
   it('update existing center', async () => {
-    const ret = await axios_admin.put(entry_point + `/api/admin/center/${center_id}`, { centerName: 'C保健所' });
-    expect(ret.data.centerName).toBe('C保健所')
+    center_name = 'C保健所'
+    const ret = await axios_admin.put(entry_point + `/api/admin/center/${center_id}`, { centerName: center_name });
+    expect(ret.data.centerName).toBe(center_name)
   })
 
   it('create another center', async () => {
@@ -108,9 +110,9 @@ describe('admin user', () => {
     nurse_password = ret.data.password
   })
 
-  it.skip('read new nurse id', async () => {
+  it('read new nurse id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/nurse/${nurse_id}`);
-    expect(ret.data.manageCenters).toEqual(expect.arrayContaining(expect.objectContaining({ centerId: center_id })))
+    expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id, centerName: center_name })]))
   })
 
   it.skip('create another nurse', async () => {
