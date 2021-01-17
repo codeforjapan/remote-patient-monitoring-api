@@ -36,6 +36,10 @@ describe('admin user login', () => {
 const nurse_id: string = uuid();
 let nurse_password: string
 
+const patient_id: string = uuid();
+let patient_password: string
+const phone: string = '090-3333-3333'
+
 describe('admin user', () => {
   let axios_admin: any;
   let center_id: string;
@@ -146,6 +150,15 @@ describe('admin user', () => {
     nurse_item.manageCenters.push({ centerId: center_id2 })
     const ret = await axios_admin.put(entry_point + `/api/admin/nurse/${nurse_id}`, nurse_item);
     expect(ret.data.manageCenters.length).toBe(2)
+  })
+
+  it.skip('create new patient to the center', async () => {
+    const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}/patient`, { patientId: patient_id, phone: phone });
+    expect(ret.data.patientId).toBe(patient_id)
+    expect(ret.data.centerId).toBe(center_id)
+    expect(ret.data.phone).toBe(phone)
+    expect(ret.data).toHaveProperty('password')
+    patient_password = ret.data.password
   })
 
 })
