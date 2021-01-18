@@ -7,8 +7,8 @@ export default class PatientTable {
     this.client = serviceClient;
   }
 
-  getPatients() {
-    const params: DynamoDB.DocumentClient.ScanInput = {
+  getPatients(centerId: string) {
+    const params: DynamoDB.ScanInput = {
       TableName: process.env.PATIENT_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
@@ -18,7 +18,8 @@ export default class PatientTable {
           reject(err);
         } else {
           console.log("getPatient Success!");
-          resolve(data);
+          const filtered = data.Items!.filter(item => item.centerId === centerId);
+          resolve({ Count: filtered.length, Items: filtered });
         }
       });
     });
@@ -64,23 +65,19 @@ export default class PatientTable {
     });
   }
 
-  putPatient(patientId: string, body: { patientName: string }) {
-    const patient = {
-      ...body,
-      patientId: patientId,
-    };
+  putPatient(patientId: string, patient: PatientParam) {
     console.log(patient);
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Key: {
-        patientId: patient.patientId
+        patientId: patientId
       },
-      UpdateExpression: "set #patientName = :patientName",
-      ExpressionAttributeNames: {
-        "#patientName": "patientName"
-      },
+      UpdateExpression: "set display = :display, policy_accepted = :policy_accepted, Statuses = :Statuses, centerId = :centerId",
       ExpressionAttributeValues: {
-        ":patientName": patient.patientName
+        ":display": patient.display,
+        ":policy_accepted": patient.policy_accepted,
+        ":Statuses": patient.Statuses,
+        ":centerId": patient.centerId
       },
     };
     console.log(params);
