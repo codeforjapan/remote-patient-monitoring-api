@@ -175,7 +175,12 @@ describe('admin user', () => {
     expect(ret.data.phone).toBe('090-1111-1111')
   })
 
-  it.skip('get two patients from the center', async () => {
+  it('create new patient to another center', async () => {
+    const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id2}/patient`, { patientId: uuid(), phone: "090-2222-2222" });
+    expect(ret.data.phone).toBe('090-2222-2222')
+  })
+
+  it('get two patients from the center', async () => {
     console.log(entry_point + `/api/admin/center/${center_id}/patient`);
     const ret = await axios_admin.get(entry_point + `/api/admin/center/${center_id}/patient`);
     expect(ret.data.Count).toBe(2)

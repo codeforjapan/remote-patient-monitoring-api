@@ -7,8 +7,8 @@ export default class PatientTable {
     this.client = serviceClient;
   }
 
-  getPatients() {
-    const params: DynamoDB.DocumentClient.ScanInput = {
+  getPatients(centerId: string) {
+    const params: DynamoDB.ScanInput = {
       TableName: process.env.PATIENT_TABLE_NAME!
     };
     return new Promise((resolve, reject) => {
@@ -18,7 +18,8 @@ export default class PatientTable {
           reject(err);
         } else {
           console.log("getPatient Success!");
-          resolve(data);
+          const filtered = data.Items!.filter(item => item.centerId === centerId);
+          resolve({ Count: filtered.length, Items: filtered });
         }
       });
     });

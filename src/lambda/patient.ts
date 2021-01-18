@@ -13,11 +13,21 @@ import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 
 export namespace Patient {
-  export const getPatients: APIGatewayProxyHandler = async () => {
+  export const getPatients: APIGatewayProxyHandler = async (event) => {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
     try {
-      const res = await patientTable.getPatients();
+      if (!event.pathParameters || !event.pathParameters.centerId) {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({
+            errorCode: "RPM00001",
+            errorMessage: 'Center Not Found'
+          })
+        }
+      }
+      const res = await patientTable.getPatients(event.pathParameters.centerId);
+      console.log(res)
       if (validator.checkDyanmoQueryResultEmpty(res)) {
         const errorModel = {
           errorCode: "RPM00001",
