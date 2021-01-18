@@ -46,6 +46,7 @@ describe('admin user', () => {
   let center_name: string;
   let center_id2: string;
   let nurse_item: any;
+  let patient_item: any;
   beforeAll(async () => {
     console.log('login as an admin')
     const ret = await axios.post(entry_point + '/api/admin/login', { username: secret.auth_user, password: secret.auth_pass });
@@ -152,13 +153,39 @@ describe('admin user', () => {
     expect(ret.data.manageCenters.length).toBe(2)
   })
 
-  it.skip('create new patient to the center', async () => {
+  it('create new patient to the center', async () => {
+    console.log(`patient_id is ${patient_id}`)
     const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}/patient`, { patientId: patient_id, phone: phone });
     expect(ret.data.patientId).toBe(patient_id)
-    expect(ret.data.centerId).toBe(center_id)
     expect(ret.data.phone).toBe(phone)
+    expect(ret.data.centerId).toBe(center_id)
     expect(ret.data).toHaveProperty('password')
     patient_password = ret.data.password
   })
 
+  it('read new patient id', async () => {
+    console.log(entry_point + `/api/admin/patient/${patient_id}`)
+    const ret = await axios_admin.get(entry_point + `/api/admin/patient/${patient_id}`);
+    patient_item = ret.data;
+    expect(ret.data.phone).toBe(phone)
+  })
+
+  it('create new patient to the center', async () => {
+    const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}/patient`, { patientId: uuid(), phone: "090-1111-1111" });
+    expect(ret.data.phone).toBe('090-1111-1111')
+  })
+
+  it.skip('get two patients from the center', async () => {
+    console.log(entry_point + `/api/admin/center/${center_id}/patient`);
+    const ret = await axios_admin.get(entry_point + `/api/admin/center/${center_id}/patient`);
+    expect(ret.data.Count).toBe(2)
+    expect(ret.data.Items).toHaveLength(2)
+  })
+
+  it.skip('update existing patient', async () => {
+    const datetime = new Date().toISOString()
+    patient_item.policy_accepted = datetime
+    const ret = await axios_admin.put(entry_point + `/api/admin/patient/${patient_id}`, patient_item);
+    expect(ret.data.policy_accepted).toBe(datetime)
+  })
 })

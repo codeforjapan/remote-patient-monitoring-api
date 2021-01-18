@@ -9,3 +9,13 @@ export interface NurseParam {
     centerId: string
   }[]
 }
+
+export interface Status { }
+export interface PatientParam {
+  patientId: string
+  phone: string
+  display: boolean
+  policy_accepted?: string
+  Statuses: Status[]
+  centerId: string
+}

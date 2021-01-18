@@ -1,7 +1,9 @@
 "use strict";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import AWS from "aws-sdk";
+import { PatientParam } from '../lambda/definitions/types'
 var dynamodb = require('serverless-dynamodb-client');
+import { CognitoAdmin, Config } from '../aws/cognito_admin'
 var docClient = dynamodb.doc;
 
 AWS.config.update({
@@ -48,6 +50,17 @@ export namespace Patient {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
     const bodyData = validator.jsonBody(event.body);
+
+    if (!event.pathParameters || !event.pathParameters.centerId) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorCode: "RPM00001",
+          errorMessage: 'Center Not Found'
+        })
+      }
+    }
+
     try {
       if (!validator.checkPatientBody(bodyData)) {
         const errorModel = {
@@ -61,10 +74,26 @@ export namespace Patient {
           }),
         };
       }
-      const res = await patientTable.postPatient(bodyData);
+      // create new Patient User
+      const config: Config = {
+        userPoolId: process.env.PATIENT_POOL_ID!,
+        userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!
+      }
+      const admin = new CognitoAdmin(config)
+      const newuser = await admin.signUp(bodyData.patientId)
+      console.log(newuser);
+      const param: PatientParam = {
+        ...bodyData,
+        display: true,
+        policy_accepted: null,
+        Statuses: [],
+        centerId: event.pathParameters.centerId
+      }
+      const res = await patientTable.postPatient(param);
+      console.log(res)
       return {
-        statusCode: 200,
-        body: JSON.stringify(res),
+        statusCode: 201,
+        body: JSON.stringify({ ...param, password: newuser.password })
       };
     } catch (err) {
       console.log("postPatientTable-index error");
