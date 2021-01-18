@@ -152,10 +152,9 @@ describe('admin user', () => {
     expect(ret.data.manageCenters.length).toBe(2)
   })
 
-  it.skip('create new patient to the center', async () => {
+  it('create new patient to the center', async () => {
     const ret = await axios_admin.post(entry_point + `/api/admin/center/${center_id}/patient`, { patientId: patient_id, phone: phone });
     expect(ret.data.patientId).toBe(patient_id)
-    expect(ret.data.centerId).toBe(center_id)
     expect(ret.data.phone).toBe(phone)
     expect(ret.data).toHaveProperty('password')
     patient_password = ret.data.password

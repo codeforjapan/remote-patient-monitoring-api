@@ -46,7 +46,8 @@ export default class Validator {
   }
   checkPatientBody(res: any) {
     if (
-      res.hasOwnProperty("patientName")
+      res.hasOwnProperty("patientId")
+      && res.hasOwnProperty("phone")
     ) {
       console.log("checkPatientBody True");
       return true;

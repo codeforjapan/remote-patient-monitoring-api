@@ -183,3 +183,8 @@ Resources:
                   - dynamodb:UpdateItem
                 Resource:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}"
+              - Effect: "Allow"
+                Action:
+                  - cognito-idp:*
+                Resource:
+                  - "*"

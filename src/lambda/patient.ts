@@ -2,6 +2,7 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
 import AWS from "aws-sdk";
 var dynamodb = require('serverless-dynamodb-client');
+import { CognitoAdmin, Config } from '../aws/cognito_admin'
 var docClient = dynamodb.doc;
 
 AWS.config.update({
@@ -9,6 +10,7 @@ AWS.config.update({
 });
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
+import Formatter from "../util/formatter";
 
 export namespace Patient {
   export const getPatients: APIGatewayProxyHandler = async () => {
@@ -47,7 +49,19 @@ export namespace Patient {
     console.log('called postPatient');
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
+    const formatter = new Formatter();
     const bodyData = validator.jsonBody(event.body);
+
+    if (!event.pathParameters || !event.pathParameters.centerId) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorCode: "RPM00001",
+          errorMessage: 'Center Not Found'
+        })
+      }
+    }
+
     try {
       if (!validator.checkPatientBody(bodyData)) {
         const errorModel = {
@@ -61,10 +75,24 @@ export namespace Patient {
           }),
         };
       }
-      const res = await patientTable.postPatient(bodyData);
+      // create new Patient User
+      const config: Config = {
+        userPoolId: process.env.PATIENT_POOL_ID!,
+        userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!
+      }
+      const admin = new CognitoAdmin(config)
+      const newuser = await admin.signUp(bodyData.patientId)
+      console.log(newuser);
+      const param = {
+        ...bodyData,
+        display: true,
+        policy_accepted: null,
+        Statuses: [],
+      }
+      const res = await patientTable.postPatient(param);
       return {
-        statusCode: 200,
-        body: JSON.stringify(res),
+        statusCode: 201,
+        body: JSON.stringify({ ...param, password: newuser.password })
       };
     } catch (err) {
       console.log("postPatientTable-index error");
