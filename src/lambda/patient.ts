@@ -95,8 +95,7 @@ export namespace Patient {
       const param: PatientParam = {
         ...bodyData,
         display: true,
-        policy_accepted: null,
-        Statuses: [],
+        policy_accepted: undefined,
         centerId: event.pathParameters.centerId
       }
       const res = await patientTable.postPatient(param);

@@ -65,23 +65,19 @@ export default class PatientTable {
     });
   }
 
-  putPatient(patientId: string, body: { patientName: string }) {
-    const patient = {
-      ...body,
-      patientId: patientId,
-    };
+  putPatient(patientId: string, patient: PatientParam) {
     console.log(patient);
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Key: {
-        patientId: patient.patientId
+        patientId: patientId
       },
-      UpdateExpression: "set #patientName = :patientName",
-      ExpressionAttributeNames: {
-        "#patientName": "patientName"
-      },
+      UpdateExpression: "set display = :display, policy_accepted = :policy_accepted, Statuses = :Statuses, centerId = :centerId",
       ExpressionAttributeValues: {
-        ":patientName": patient.patientName
+        ":display": patient.display,
+        ":policy_accepted": patient.policy_accepted,
+        ":Statuses": patient.Statuses,
+        ":centerId": patient.centerId
       },
     };
     console.log(params);

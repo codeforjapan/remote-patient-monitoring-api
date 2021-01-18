@@ -187,7 +187,7 @@ describe('admin user', () => {
     expect(ret.data.Items).toHaveLength(2)
   })
 
-  it.skip('update existing patient', async () => {
+  it('update existing patient', async () => {
     const datetime = new Date().toISOString()
     patient_item.policy_accepted = datetime
     const ret = await axios_admin.put(entry_point + `/api/admin/patient/${patient_id}`, patient_item);
