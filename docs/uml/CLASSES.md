@@ -32,6 +32,7 @@ class Patient {
     Boolean display
     DateTime policy_accepted
     Status[] Statuses
+    String centerId
 }
 
 class Status {

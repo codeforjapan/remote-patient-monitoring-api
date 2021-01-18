@@ -1,6 +1,7 @@
 "use strict";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import AWS from "aws-sdk";
+import { PatientParam } from '../lambda/definitions/types'
 var dynamodb = require('serverless-dynamodb-client');
 import { CognitoAdmin, Config } from '../aws/cognito_admin'
 var docClient = dynamodb.doc;
@@ -10,7 +11,6 @@ AWS.config.update({
 });
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
-import Formatter from "../util/formatter";
 
 export namespace Patient {
   export const getPatients: APIGatewayProxyHandler = async () => {
@@ -49,7 +49,6 @@ export namespace Patient {
     console.log('called postPatient');
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
-    const formatter = new Formatter();
     const bodyData = validator.jsonBody(event.body);
 
     if (!event.pathParameters || !event.pathParameters.centerId) {
@@ -83,13 +82,15 @@ export namespace Patient {
       const admin = new CognitoAdmin(config)
       const newuser = await admin.signUp(bodyData.patientId)
       console.log(newuser);
-      const param = {
+      const param: PatientParam = {
         ...bodyData,
         display: true,
         policy_accepted: null,
         Statuses: [],
+        centerId: event.pathParameters.centerId
       }
       const res = await patientTable.postPatient(param);
+      console.log(res)
       return {
         statusCode: 201,
         body: JSON.stringify({ ...param, password: newuser.password })

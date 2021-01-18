@@ -1,7 +1,6 @@
 "use strict";
-import { v4 as uuid } from 'uuid';
 import { AWSError, DynamoDB } from 'aws-sdk'
-
+import { PatientParam } from '../lambda/definitions/types'
 export default class PatientTable {
   client: DynamoDB.DocumentClient;
   constructor(serviceClient: DynamoDB.DocumentClient) {
@@ -39,17 +38,13 @@ export default class PatientTable {
           reject(err);
         } else {
           console.log("getPatient Success!");
-          resolve(data);
+          resolve(data.Item!);
         }
       });
     });
   }
 
-  postPatient(body: { patientName: string }) {
-    const patient = {
-      ...body,
-      patientId: uuid(),
-    };
+  postPatient(patient: PatientParam) {
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Item: patient,
