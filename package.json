@@ -31,6 +31,7 @@
     "test:e2e": "jest --silent=false --runInBand test/e2e",
     "test:e2e:watch": "jest --watch --silent=false --runInBand test/e2e",
     "test:local": "jest --silent=false test/lambda",
+    "test:local:watch": "jest --watch --silent=false test/lambda",
     "local": "run-s build:functions-yaml; sls offline --offline true",
     "remove:all": "run-s remove:gateway remove:dynamodb",
     "remove:gateway": "sls remove",

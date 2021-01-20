@@ -1,6 +1,6 @@
-const handler = require('../../src/lambda/handler')
 
 describe('nurse test', () => {
+  const handler = require('../../src/lambda/handler')
   process.env.NURSE_TABLE_NAME = 'RemotePatientMonitoring-NurseTable-dev'
   it('return Nurse', async () => {
     const ret = await handler.getNurse({ pathParameters: { nurseId: "76ac82d7-6714-4c65-a703-ff6ba17e350c" } })

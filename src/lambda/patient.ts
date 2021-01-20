@@ -2,9 +2,9 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
 import AWS from "aws-sdk";
 import { PatientParam } from '../lambda/definitions/types'
-var dynamodb = require('serverless-dynamodb-client');
 import { CognitoAdmin, Config } from '../aws/cognito_admin'
-var docClient = dynamodb.doc;
+import { loadDynamoDBClient } from '../util/dynamodbclient'
+var docClient = loadDynamoDBClient()
 
 AWS.config.update({
   region: process.env.region
@@ -165,7 +165,7 @@ export namespace Patient {
     const validator = new Validator();
     const bodyData = validator.jsonBody(event.body);
     try {
-      if (!event.body || !validator.checkPatientBody(bodyData)) {
+      if (!event.body || !validator.checkPatientPutBody(bodyData)) {
         const errorModel = {
           errorCode: "RPM00002",
           errorMessage: "Invalid Body",
@@ -188,7 +188,7 @@ export namespace Patient {
       }
       const res = await patientTable.putPatient(
         event.pathParameters.patientId,
-        JSON.parse(event.body)
+        bodyData
       );
       return {
         statusCode: 200,
@@ -196,6 +196,7 @@ export namespace Patient {
       };
     } catch (err) {
       console.log("putPatientTable-index error");
+      console.log(err)
       return {
         statusCode: 500,
         body: JSON.stringify({
