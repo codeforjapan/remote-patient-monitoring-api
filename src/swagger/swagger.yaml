@@ -14,6 +14,10 @@ servers:
 paths:
   /api/admin/login:
     $ref: ./paths/admin/login.yaml
+  /api/nurse/login:
+    $ref: ./paths/nurse/login.yaml
+  /api/patient/login:
+    $ref: ./paths/patient/login.yaml
   /api/admin/center/:
     $ref: ./paths/admin/center.yaml
   /api/nurse/center/:

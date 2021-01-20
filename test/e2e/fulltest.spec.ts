@@ -194,3 +194,12 @@ describe('admin user', () => {
     expect(ret.data.policy_accepted).toBe(datetime)
   })
 })
+
+describe('nurse user login', () => {
+  it('get authKey', async () => {
+    expect.assertions(1);
+    console.log(entry_point + '/api/nurse/login')
+    const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
+    expect(ret.data).toHaveProperty('idToken')
+  })
+})

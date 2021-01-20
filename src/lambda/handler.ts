@@ -47,6 +47,8 @@ const cors_post = {
 };
 // login
 export var postAdminLogin = cors(cors_post)(Admin.postAdminLogin);
+export var postNurseLogin = cors(cors_post)(Admin.postNurseLogin);
+export var postPatientLogin = cors(cors_post)(Admin.postPatientLogin);
 
 // centers
 export var getCenters = cors(cors_get)(Center.getCenters);
