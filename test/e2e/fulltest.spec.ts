@@ -137,7 +137,6 @@ describe('admin user', () => {
     expect(ret.data).toHaveProperty('nurseId')
     expect(ret.data).toHaveProperty('password')
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))
-    nurse_password = ret.data.password
   })
 
   it('get two nurses from the center', async () => {
@@ -199,7 +198,17 @@ describe('nurse user login', () => {
   it('get authKey', async () => {
     expect.assertions(1);
     console.log(entry_point + '/api/nurse/login')
+    console.log({ username: nurse_id, password: nurse_password })
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
+    expect(ret.data).toHaveProperty('idToken')
+  })
+})
+describe('patient user login', () => {
+  it('get authKey', async () => {
+    expect.assertions(1);
+    console.log(entry_point + '/api/patient/login')
+    console.log({ username: patient_id, password: patient_password })
+    const ret = await axios.post(entry_point + '/api/patient/login', { username: patient_id, password: patient_password });
     expect(ret.data).toHaveProperty('idToken')
   })
 })
