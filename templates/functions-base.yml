@@ -72,14 +72,14 @@ getCenter:
   #! BEGIN ONLY:LOCAL
   events:
     - http:
-        path: api/admin/center/{centerId}
+        path: api/admin/centers/{centerId}
         method: get
         request:
           parameters:
             paths:
               centerId: true
     - http:
-        path: api/nurse/center/{centerId}
+        path: api/nurse/centers/{centerId}
         method: get
         request:
           parameters:
