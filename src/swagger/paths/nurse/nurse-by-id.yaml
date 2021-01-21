@@ -4,7 +4,7 @@ get:
   summary: 観察者(保健師)の取得(保健師用)
   description: 指定された{nurseId}を持つ観察者情報を返します。
   security:
-    - APIGatewayAdminAuthorizer: []
+    - APIGatewayNurseAuthorizer: []
   parameters:
     - name: nurseId
       in: path

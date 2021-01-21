@@ -4,7 +4,7 @@ delete:
   summary: 病状報告の削除
   description: (自分が所属する保健所のみ操作可能)指定されたstatusIdの症状報告情報を削除します。成功したら、responseCode 0 を返します。
   security:
-    - APIGatewayAdminAuthorizer: []
+    - APIGatewayNurseAuthorizer: []
   parameters:
     - name: statusId
       in: path

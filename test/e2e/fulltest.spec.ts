@@ -271,7 +271,7 @@ describe('Nurse user', () => {
     expect(ret.data.Items).toHaveLength(3)
   })
 
-  it.skip('read nurse id', async () => {
+  it('read nurse id', async () => {
     console.log(entry_point + `/api/nurse/nurse/${nurse_id}`)
     const ret = await axios_nurse.get(entry_point + `/api/nurse/nurse/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))

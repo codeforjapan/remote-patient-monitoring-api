@@ -4,7 +4,7 @@ get:
   summary: 療養者の取得(療養者用)
   description: (自分のみ操作可能)指定された{PatientId}を持つ療養者情報を返します
   security:
-    - APIGatewayAdminAuthorizer: []
+    - APIGatewayPatientAuthorizer: []
   parameters:
     - name: patientId
       in: path
