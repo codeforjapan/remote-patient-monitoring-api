@@ -16,8 +16,8 @@ describe('get Centers', () => {
   it('raise 404 error when there is no data', async () => {
     expect.assertions(1);
     const t = async () => {
-      console.log(entry_point + '/api/admin/center');
-      const ret = await axios.get(entry_point + '/api/admin/center');
+      console.log(entry_point + '/api/admin/centers');
+      const ret = await axios.get(entry_point + '/api/admin/centers');
       return ret;
     }
     await expect(t).rejects.toThrow(/*404*/);
@@ -84,7 +84,7 @@ describe('admin user', () => {
   })
 
   it('get two centers', async () => {
-    const ret = await axios_admin.get(entry_point + '/api/admin/center');
+    const ret = await axios_admin.get(entry_point + '/api/admin/centers');
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
   })
@@ -142,7 +142,7 @@ describe('admin user', () => {
   })
 
   it('get two nurses from the center', async () => {
-    console.log(entry_point + `/api/admin/center/${center_id}/nurse`);
+    console.log(entry_point + `/api/admin/center/${center_id}/nurses`);
     const ret = await axios_admin.get(entry_point + `/api/admin/center/${center_id}/nurse`);
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
@@ -190,7 +190,7 @@ describe('admin user', () => {
 
   it('get two patients from the center', async () => {
     console.log(entry_point + `/api/admin/center/${center_id}/patient`);
-    const ret = await axios_admin.get(entry_point + `/api/admin/center/${center_id}/patient`);
+    const ret = await axios_admin.get(entry_point + `/api/admin/center/${center_id}/patients`);
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
   })
@@ -264,7 +264,7 @@ describe('Nurse user', () => {
   })
 
   it('get all centers', async () => {
-    const ret = await axios_nurse.get(entry_point + '/api/nurse/center');
+    const ret = await axios_nurse.get(entry_point + '/api/nurse/centers');
     expect(ret.data.Count).toBe(3)
     expect(ret.data.Items).toHaveLength(3)
   })
@@ -295,7 +295,7 @@ describe('Nurse user', () => {
 
   it.skip('get two nurses from the center', async () => {
     console.log(entry_point + `/api/nurse/center/${center_id}/nurse`);
-    const ret = await axios_nurse.get(entry_point + `/api/nurse/center/${center_id}/nurse`);
+    const ret = await axios_nurse.get(entry_point + `/api/nurse/center/${center_id}/nurses`);
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
   })
