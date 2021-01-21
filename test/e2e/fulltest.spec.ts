@@ -232,7 +232,9 @@ let idToken: string;
 describe('Nurse user', () => {
   let axios_nurse: any;
   let nurse_item: any;
+  let patient_item: any;
   const patient_id = uuid();
+  const phone = '090-4444-4444'
   beforeAll(async () => {
     console.log('login as a nurse')
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
@@ -302,18 +304,22 @@ describe('Nurse user', () => {
   })
 
   it('create new patient to the center', async () => {
-    const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, { patientId: patient_id, phone: "090-4444-4444" });
+    const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, { patientId: patient_id, phone: phone });
     expect(ret.data).toHaveProperty('password')
-    expect(ret.data.phone).toBe('090-4444-4444')
+    expect(ret.data.phone).toBe(phone)
   })
 
-  it.skip('read new patient id', async () => {
+  it('read new patient id', async () => {
+    console.log(entry_point + `/api/nurse/patients/${patient_id}`)
+    const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id}`);
+    patient_item = ret.data;
+    expect(ret.data.phone).toBe(phone)
   })
 
   it.skip('create new patient to the center', async () => {
   })
 
-  it('fails to create new patient to the center that is not under my managemenet', async () => {
+  it.skip('fails to create new patient to the center that is not under my managemenet', async () => {
   })
 
   it.skip('get ? patients from the center', async () => {
