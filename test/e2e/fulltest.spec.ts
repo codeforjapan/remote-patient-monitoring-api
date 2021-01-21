@@ -232,6 +232,7 @@ let idToken: string;
 describe('Nurse user', () => {
   let axios_nurse: any;
   let nurse_item: any;
+  let patient_id: string;
   beforeAll(async () => {
     console.log('login as a nurse')
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
@@ -300,7 +301,10 @@ describe('Nurse user', () => {
     expect(ret.data.Items).toHaveLength(2)
   })
 
-  it.skip('create new patient to the center', async () => {
+  it('create new patient to the center', async () => {
+    const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, { patientId: patient_id, phone: "090-4444-4444" });
+    expect(ret.data).toHaveProperty('password')
+    expect(ret.data.phone).toBe('090-4444-4444')
   })
 
   it.skip('read new patient id', async () => {
