@@ -34,12 +34,15 @@ describe('admin user login', () => {
 })
 
 let center_id: string;
+let center_id3: string;
 
 const nurse_id: string = uuid();
 const nurse_id2: string = uuid();
+let center_id_with_no_nurse: string
 let nurse_password: string
 
 const patient_id: string = uuid();
+const patient_id_in_another_center: string = uuid()
 let patient_password: string
 const phone: string = '090-3333-3333'
 
@@ -205,6 +208,15 @@ describe('admin user', () => {
   it('create another center for the next test', async () => {
     const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'X保健所' });
     expect(ret.data).toHaveProperty('centerId')
+    center_id_with_no_nurse = ret.data.centerid
+  })
+
+  it('create another center and patient for the next test', async () => {
+    const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'Y保健所' });
+    expect(ret.data).toHaveProperty('centerId')
+    center_id3 = ret.data.centerid
+    const ret2 = await axios_admin.post(entry_point + `/api/admin/centers/${center_id3}/patients`, { patientId: patient_id_in_another_center, phone: "090-3899-2222" });
+    expect(ret2.data.phone).toBe("090-3899-2222")
   })
 
 })
@@ -290,6 +302,7 @@ describe('Nurse user', () => {
   })
 
   it('fails to create new nurse to the center', async () => {
+    expect.assertions(1)
     const t = async () => {
       await axios_nurse.post(entry_point + `/api/admin/centers/${center_id}/nurses`, { nurseId: uuid() });
     }
@@ -309,6 +322,14 @@ describe('Nurse user', () => {
     expect(ret.data.phone).toBe(phone)
   })
 
+  it('fails to create new patient to the center that is not under my managemenet', async () => {
+    expect.assertions(1)
+    const t = async () => {
+      await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id_with_no_nurse}/patients`, { patientId: uuid(), phone: '090-9999-3238' });
+    }
+    await expect(t).rejects.toThrowError()
+  })
+
   it('read new patient id', async () => {
     console.log(entry_point + `/api/nurse/patients/${patient_id}`)
     const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id}`);
@@ -316,10 +337,16 @@ describe('Nurse user', () => {
     expect(ret.data.phone).toBe(phone)
   })
 
-  it.skip('create new patient to the center', async () => {
+  it('can\'t read patient which is not related to a managing center', async () => {
+    expect.assertions(1)
+    console.log(entry_point + `/api/nurse/patients/${patient_id_in_another_center}`)
+    const t = async () => {
+      await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id_in_another_center}`);
+    }
+    await expect(t).rejects.toThrowError()
   })
 
-  it.skip('fails to create new patient to the center that is not under my managemenet', async () => {
+  it.skip('create new patient to the center', async () => {
   })
 
   it.skip('get ? patients from the center', async () => {
