@@ -88,4 +88,14 @@ export class CognitoAdmin {
     }
     return pwd
   }
+  /**
+   * return UserID from Authorization header striing
+   * @param authHeader Authorization: header
+   */
+  getUserId(authHeader: string) {
+    const payload = Buffer.from(authHeader.split(".")[1], 'base64').toString('ascii')
+    console.log(payload)
+    return JSON.parse(payload)['cognito:username']
+  }
+
 }

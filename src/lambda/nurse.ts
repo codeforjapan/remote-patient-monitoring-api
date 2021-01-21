@@ -114,6 +114,7 @@ export namespace Nurse {
   export const getNurse: APIGatewayProxyHandler = async (event) => {
     const nurseTable = new NurseTable(docClient);
     const validator = new Validator();
+
     if (!event.pathParameters || !event.pathParameters.nurseId) {
       return {
         statusCode: 404,
@@ -121,6 +122,27 @@ export namespace Nurse {
           errorCode: "RPM00001",
           errorMessage: 'Not Found'
         })
+      }
+    }
+    const config: Config = {
+      userPoolId: process.env.NURSE_POOL_ID!,
+      userPoolClientId: process.env.NURSE_POOL_CLIENT_ID!
+    }
+    console.log(config)
+    console.log(event.headers['Authorization'])
+    const cognito = new CognitoAdmin(config);
+    // check permission
+    if (event.path.startsWith('/api/nurse/')) {
+      const userid = cognito.getUserId(event.headers['Authorization']!);
+      console.log(`user id is ${userid}`)
+      if (userid !== event.pathParameters.nurseId) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: 'Forbidden'
+          })
+        }
       }
     }
     console.log('call getNurse with ' + event.pathParameters.nurseId);

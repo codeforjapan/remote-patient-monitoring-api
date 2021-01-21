@@ -213,7 +213,6 @@ describe('nurse user login', () => {
   it('get authKey', async () => {
     expect.assertions(1);
     console.log(entry_point + '/api/nurse/login')
-    console.log({ username: nurse_id, password: nurse_password })
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     expect(ret.data).toHaveProperty('idToken')
   })
@@ -221,7 +220,6 @@ describe('nurse user login', () => {
 describe('patient user login', () => {
   it('get authKey', async () => {
     console.log(entry_point + '/api/patient/login')
-    console.log({ username: patient_id, password: patient_password })
     const ret = await axios.post(entry_point + '/api/patient/login', { username: patient_id, password: patient_password });
     expect(ret.data).toHaveProperty('idToken')
   })
@@ -230,14 +228,14 @@ describe('patient user login', () => {
 /*
  * Nurse methods
  */
-
+let idToken: string;
 describe('Nurse user', () => {
   let axios_nurse: any;
   let nurse_item: any;
   beforeAll(async () => {
     console.log('login as a nurse')
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
-    const idToken = ret.data.idToken;
+    idToken = ret.data.idToken;
     axios_nurse = axios.create({
       headers: {
         Authorization: idToken
@@ -273,12 +271,14 @@ describe('Nurse user', () => {
 
   it('read nurse id', async () => {
     console.log(entry_point + `/api/nurse/nurse/${nurse_id}`)
+    console.log(idToken)
     const ret = await axios_nurse.get(entry_point + `/api/nurse/nurse/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))
     nurse_item = ret.data
   })
 
-  it.skip('fails to read nurse id that is not mine', async () => {
+  it('fails to read nurse id that is not mine', async () => {
+    expect.assertions(1);
     console.log(entry_point + `/api/nurse/nurse/${nurse_id2}`)
     const t = async () => {
       await axios_nurse.get(entry_point + `/api/nurse/nurse/${nurse_id2}`);
