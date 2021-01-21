@@ -232,7 +232,7 @@ let idToken: string;
 describe('Nurse user', () => {
   let axios_nurse: any;
   let nurse_item: any;
-  let patient_id: string;
+  const patient_id = uuid();
   beforeAll(async () => {
     console.log('login as a nurse')
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
