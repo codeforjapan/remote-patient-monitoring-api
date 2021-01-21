@@ -280,13 +280,12 @@ describe('Nurse user', () => {
 
   it('get all centers', async () => {
     const ret = await axios_nurse.get(entry_point + '/api/nurse/centers');
-    expect(ret.data.Count).toBe(3)
-    expect(ret.data.Items).toHaveLength(3)
+    expect(ret.data.Count).toBe(4)
+    expect(ret.data.Items).toHaveLength(4)
   })
 
   it('read nurse id', async () => {
     console.log(entry_point + `/api/nurse/nurses/${nurse_id}`)
-    console.log(idToken)
     const ret = await axios_nurse.get(entry_point + `/api/nurse/nurses/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))
     nurse_item = ret.data
