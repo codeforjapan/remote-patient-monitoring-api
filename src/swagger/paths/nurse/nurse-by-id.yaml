@@ -4,7 +4,7 @@ get:
   summary: 観察者(保健師)の取得(保健師用)
   description: 指定された{nurseId}を持つ観察者情報を返します。
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayAdminAuthorizer: []
   parameters:
     - name: nurseId
       in: path
@@ -82,7 +82,7 @@ get:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-by-id-dev/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-dev/invocations
     passthroughBehavior: when_no_match
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT

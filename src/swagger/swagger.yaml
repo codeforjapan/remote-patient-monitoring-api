@@ -12,13 +12,13 @@ info:
 servers:
   - url: /
 paths:
-  /api/admin/login:
+  /api/admin/login: # implemented
     $ref: ./paths/admin/login.yaml
-  /api/nurse/login:
+  /api/nurse/login: # implemented
     $ref: ./paths/nurse/login.yaml
-  /api/patient/login:
+  /api/patient/login: # implemented
     $ref: ./paths/patient/login.yaml
-  /api/admin/center/:
+  /api/admin/center/: # implemented
     $ref: ./paths/admin/center.yaml
   /api/nurse/center/:
     $ref: ./paths/nurse/center.yaml
@@ -60,7 +60,7 @@ components:
   schemas:
     $ref: "./schemas/index.yaml"
   securitySchemes:
-    APIGatewayAuthorizer:
+    APIGatewayAdminAuthorizer:
       type: "apiKey"
       name: "Authorization"
       in: "header"
@@ -68,7 +68,27 @@ components:
       x-amazon-apigateway-authorizer:
         type: cognito_user_pools
         providerARNs:
-          - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_USER_POOL_ID_TO_BE_REPLACED"
+          - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_ADMIN_USER_POOL_ID_TO_BE_REPLACED"
+        identityValidationExpression: ".*"
+    APIGatewayNurseAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_NURSE_USER_POOL_ID_TO_BE_REPLACED"
+        identityValidationExpression: ".*"
+    APIGatewayPatientAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_PATIENT_USER_POOL_ID_TO_BE_REPLACED"
         identityValidationExpression: ".*"
 tags:
   - name: Center

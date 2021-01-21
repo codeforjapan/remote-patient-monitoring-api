@@ -4,7 +4,7 @@ get:
   summary: 指定の保健所に所属する観察者(保健師)を表示(保健師用)
   description: 指定された{centerId}に所属する観察者(保健師)の一覧を表示します
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayAdminAuthorizer: []
   parameters:
     - name: centerId
       in: path

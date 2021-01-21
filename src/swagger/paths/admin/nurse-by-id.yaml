@@ -4,7 +4,7 @@ get:
   summary: 観察者の取得
   description: 指定された{nurseId}を持つ観察者情報を返します
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayAdminAuthorizer: []
   parameters:
     - name: nurseId
       in: path
@@ -92,7 +92,7 @@ put:
   summary: 観察者の更新
   description: 指定されたnurseIdの観察者情報を更新します
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayAdminAuthorizer: []
   parameters:
     - name: nurseId
       in: path

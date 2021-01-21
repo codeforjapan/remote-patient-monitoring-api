@@ -25,8 +25,12 @@ const createConfig = stackResources => ({
   region: provider.region,
   cognito: {
     identityPoolId: getPhysicalId(stackResources, 'RPMAdminIdentityProvider'),
-    userPoolId: getPhysicalId(stackResources, 'RPMAdminUserPool'),
-    userPoolWebClientId: getPhysicalId(stackResources, 'RPMAdminAppClient'),
+    adminUserPoolId: getPhysicalId(stackResources, 'RPMAdminUserPool'),
+    adminUserPoolWebClientId: getPhysicalId(stackResources, 'RPMAdminAppClient'),
+    nurseUserPoolId: getPhysicalId(stackResources, 'RPMNurseUserPool'),
+    nurseUserPoolWebClientId: getPhysicalId(stackResources, 'RPMNurseAppClient'),
+    patientUserPoolId: getPhysicalId(stackResources, 'RPMPatientUserPool'),
+    patientUserPoolWebClientId: getPhysicalId(stackResources, 'RPMPatientAppClient'),
     oauthDomain: `${getPhysicalId(stackResources, 'AdminUserPoolDomain')}.auth.${provider.region}.amazoncognito.com`,
   },
   apiGateway: {

@@ -82,7 +82,7 @@ post:
   summary: 新たに保健所を作成する
   description: 指定された名前で、新たに保健所を作成します。
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayAdminAuthorizer: []
   requestBody:
     description: center model which you want to create.
     content:

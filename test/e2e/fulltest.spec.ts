@@ -201,6 +201,12 @@ describe('admin user', () => {
     const ret = await axios_admin.put(entry_point + `/api/admin/patient/${patient_id}`, patient_item);
     expect(ret.data.policy_accepted).toBe(datetime)
   })
+
+  it('create another center for the next test', async () => {
+    const ret = await axios_admin.post(entry_point + '/api/admin/center', { centerName: 'X保健所' });
+    expect(ret.data).toHaveProperty('centerId')
+  })
+
 })
 
 describe('nurse user login', () => {
@@ -214,7 +220,6 @@ describe('nurse user login', () => {
 })
 describe('patient user login', () => {
   it('get authKey', async () => {
-    expect.assertions(1);
     console.log(entry_point + '/api/patient/login')
     console.log({ username: patient_id, password: patient_password })
     const ret = await axios.post(entry_point + '/api/patient/login', { username: patient_id, password: patient_password });
@@ -260,7 +265,7 @@ describe('Nurse user', () => {
     await expect(t).rejects.toThrowError()
   })
 
-  it.skip('get all centers', async () => {
+  it('get all centers', async () => {
     const ret = await axios_nurse.get(entry_point + '/api/nurse/center');
     expect(ret.data.Count).toBe(3)
     expect(ret.data.Items).toHaveLength(3)

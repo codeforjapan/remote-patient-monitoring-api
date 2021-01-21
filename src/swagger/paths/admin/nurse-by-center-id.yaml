@@ -4,7 +4,7 @@ get:
   summary: 指定の保健所に所属する観察者を表示
   description: 指定された{centerId}に所属する観察者の一覧を表示します
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayAdminAuthorizer: []
   parameters:
     - name: centerId
       in: path
@@ -137,7 +137,7 @@ post:
   summary: 新たに観察者を作成する
   description: 指定された保健所に対し、新たに観察者を作成します。
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayAdminAuthorizer: []
   parameters:
     - name: centerId
       in: path
