@@ -286,14 +286,14 @@ describe('Nurse user', () => {
     await expect(t).rejects.toThrow(/403/)
   })
 
-  it.skip('fails to create new nurse to the center', async () => {
+  it('fails to create new nurse to the center', async () => {
     const t = async () => {
       await axios_nurse.post(entry_point + `/api/admin/centers/${center_id}/nurses`, { nurseId: uuid() });
     }
     await expect(t).rejects.toThrowError()
   })
 
-  it.skip('get two nurses from the center', async () => {
+  it('get two nurses from the center', async () => {
     console.log(entry_point + `/api/nurse/center/${center_id}/nurse`);
     const ret = await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id}/nurses`);
     expect(ret.data.Count).toBe(2)
