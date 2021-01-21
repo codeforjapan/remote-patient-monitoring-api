@@ -6,7 +6,6 @@ import Validator from "../util/validator";
 export namespace Admin {
   export const postAdminLogin: APIGatewayProxyHandler = async (event) => {
     try {
-      console.log(event)
       const validator = new Validator();
       const bodyData = validator.jsonBody(event.body);
       const config: Config = {

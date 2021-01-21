@@ -7,8 +7,12 @@ export interface Config {
     region: string;
     cognito: {
         identityPoolId: string;
-        userPoolId: string;
-        userPoolWebClientId: string;
+        adminUserPoolId?: string;
+        adminUserPoolWebClientId: string;
+        nurseUserPoolId: string;
+        nurseUserPoolWebClientId: string;
+        patientUserPoolId: string;
+        patientUserPoolWebClientId: string;
         oauthDomain: string;
     };
     apiGateway: {

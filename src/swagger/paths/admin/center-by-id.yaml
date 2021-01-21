@@ -90,7 +90,7 @@ put:
   summary: 保健所の更新
   description: 指定されたcenterIdの保健所情報を更新します
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayAdminAuthorizer: []
   parameters:
     - name: centerId
       in: path

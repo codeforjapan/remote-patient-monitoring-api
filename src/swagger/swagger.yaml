@@ -12,51 +12,55 @@ info:
 servers:
   - url: /
 paths:
-  /api/admin/login:
+  /api/admin/login: # implemented
     $ref: ./paths/admin/login.yaml
-  /api/admin/center/:
-    $ref: ./paths/admin/center.yaml
-  /api/nurse/center/:
-    $ref: ./paths/nurse/center.yaml
-  /api/admin/center/{centerId}:
+  /api/nurse/login: # implemented
+    $ref: ./paths/nurse/login.yaml
+  /api/patient/login: # implemented
+    $ref: ./paths/patient/login.yaml
+  /api/admin/centers/: # implemented
+    $ref: ./paths/admin/centers.yaml
+  /api/nurse/centers/:
+    $ref: ./paths/nurse/centers.yaml
+  /api/admin/centers/{centerId}:
     $ref: ./paths/admin/center-by-id.yaml
-  /api/nurse/center/{centerId}:
+  /api/nurse/centers/{centerId}:
     $ref: ./paths/nurse/center-by-id.yaml
-  /api/admin/center/{centerId}/nurse/:
-    $ref: ./paths/admin/nurse-by-center-id.yaml
-  /api/nurse/center/{centerId}/nurse/:
-    $ref: ./paths/nurse/nurse-by-center-id.yaml
-  /api/admin/nurse/{nurseId}:
+  /api/admin/centers/{centerId}/nurses/:
+    $ref: ./paths/admin/nurses-by-center-id.yaml
+  /api/nurse/centers/{centerId}/nurses/:
+    $ref: ./paths/nurse/nurses-by-center-id.yaml
+  /api/admin/nurses/{nurseId}:
     $ref: ./paths/admin/nurse-by-id.yaml
-  /api/nurse/nurse/{nurseId}:
+  /api/nurse/nurses/{nurseId}:
     $ref: ./paths/nurse/nurse-by-id.yaml
-  /api/admin/center/{centerId}/patient/:
-    $ref: ./paths/admin/patient-by-center-id.yaml
-  /api/nurse/center/{centerId}/patient/:
-    $ref: ./paths/nurse/patient-by-center-id.yaml
-  /api/admin/patient/{patientId}:
+  /api/admin/centers/{centerId}/patients/:
+    $ref: ./paths/admin/patients-by-center-id.yaml
+  /api/nurse/centers/{centerId}/patients/:
+    $ref: ./paths/nurse/patients-by-center-id.yaml
+  /api/admin/patients/{patientId}:
     $ref: ./paths/admin/patient-by-id.yaml
-  /api/nurse/patient/{patientId}:
+  /api/nurse/patients/{patientId}:
     $ref: ./paths/nurse/patient-by-id.yaml
-  /api/patient/patient/{patientId}:
+  /api/patient/patients/{patientId}:
     $ref: ./paths/patient/patient-by-id.yaml
-  /api/admin/patient/{patientId}/statuses:
+  /api/admin/patients/{patientId}/statuses:
     $ref: ./paths/admin/statuses-by-patient-id.yaml
-  /api/nurse/patient/{patientId}/statuses:
+  /api/nurse/patients/{patientId}/statuses:
     $ref: ./paths/nurse/statuses-by-patient-id.yaml
-  /api/patient/patient/{patientId}/statuses:
+  /api/patient/patients/{patientId}/statuses:
     $ref: ./paths/patient/statuses-by-patient-id.yaml
-  /api/admin/status/{statusId}:
+  /api/admin/statuses/{statusId}:
     $ref: ./paths/admin/status-by-id.yaml
-  /api/nurse/status/{statusId}:
+  /api/nurse/statuses/{statusId}:
     $ref: ./paths/nurse/status-by-id.yaml
-  /api/patient/status/{statusId}:
+  /api/patient/statuses/{statusId}:
     $ref: ./paths/patient/status-by-id.yaml
 components:
   schemas:
     $ref: "./schemas/index.yaml"
   securitySchemes:
-    APIGatewayAuthorizer:
+    APIGatewayAdminAuthorizer:
       type: "apiKey"
       name: "Authorization"
       in: "header"
@@ -64,7 +68,27 @@ components:
       x-amazon-apigateway-authorizer:
         type: cognito_user_pools
         providerARNs:
-          - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_USER_POOL_ID_TO_BE_REPLACED"
+          - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_ADMIN_USER_POOL_ID_TO_BE_REPLACED"
+        identityValidationExpression: ".*"
+    APIGatewayNurseAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_NURSE_USER_POOL_ID_TO_BE_REPLACED"
+        identityValidationExpression: ".*"
+    APIGatewayPatientAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - "arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_PATIENT_USER_POOL_ID_TO_BE_REPLACED"
         identityValidationExpression: ".*"
 tags:
   - name: Center

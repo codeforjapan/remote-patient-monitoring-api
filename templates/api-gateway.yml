@@ -9,6 +9,18 @@ Resources:
       FunctionName: "remote-patient-monitoring-postAdminLogin-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "apigateway.amazonaws.com"
+  PostNurseLoginApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-postNurseLogin-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  PostPatientLoginApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-postPatientLogin-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
   GetCentersApiPermission:
     Type: "AWS::Lambda::Permission"
     Properties:

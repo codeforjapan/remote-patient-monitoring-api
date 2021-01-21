@@ -1,12 +1,12 @@
 "use strict";
 import AWS from "aws-sdk";
 import { APIGatewayProxyHandler } from 'aws-lambda'
-var dynamodb = require('serverless-dynamodb-client');
-
+import { loadDynamoDBClient } from '../util/dynamodbclient'
 AWS.config.update({
   region: process.env.region
 });
-var docClient = dynamodb.doc;
+var docClient = loadDynamoDBClient()
+
 import CenterTable from "../aws/centerTable";
 import Validator from "../util/validator";
 

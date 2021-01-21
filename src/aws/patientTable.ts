@@ -39,6 +39,7 @@ export default class PatientTable {
           reject(err);
         } else {
           console.log("getPatient Success!");
+          console.log(data.Item);
           resolve(data.Item!);
         }
       });
@@ -72,11 +73,11 @@ export default class PatientTable {
       Key: {
         patientId: patientId
       },
-      UpdateExpression: "set display = :display, policy_accepted = :policy_accepted, Statuses = :Statuses, centerId = :centerId",
+      UpdateExpression: "set phone = :phone, display = :display, policy_accepted = :policy_accepted, centerId = :centerId",
       ExpressionAttributeValues: {
+        ":phone": patient.phone,
         ":display": patient.display,
         ":policy_accepted": patient.policy_accepted,
-        ":Statuses": patient.Statuses,
         ":centerId": patient.centerId
       },
     };

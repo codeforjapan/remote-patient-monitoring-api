@@ -1,6 +1,6 @@
-import Auth, {CognitoUser} from '@aws-amplify/auth';
-import Amplify, {Hub} from '@aws-amplify/core';
-import {config} from './config';
+import Auth, { CognitoUser } from '@aws-amplify/auth';
+import Amplify, { Hub } from '@aws-amplify/core';
+import { config } from './config';
 
 /**
  * Is OAuth authentication in progress.
@@ -18,20 +18,20 @@ let isAuthenticationFailure = false;
  * As a side-effect, current auth status is updated along the process.
  */
 const signedInUser: Promise<CognitoUser> = new Promise((resolve, reject) => {
-    Hub.listen('auth', ({payload: {event, data}}) => {
+    Hub.listen('auth', ({ payload: { event, data } }) => {
         switch (event) {
-        case 'codeFlow':
-            isAuthenticating = true;
-            break;
-        case 'signIn':
-            isAuthenticating = false;
-            resolve(data);
-            break;
-        case 'signIn_failure':
-            isAuthenticating = false;
-            isAuthenticationFailure = true;
-            reject();
-            break;
+            case 'codeFlow':
+                isAuthenticating = true;
+                break;
+            case 'signIn':
+                isAuthenticating = false;
+                resolve(data);
+                break;
+            case 'signIn_failure':
+                isAuthenticating = false;
+                isAuthenticationFailure = true;
+                reject();
+                break;
         }
     });
 });
@@ -48,9 +48,9 @@ Amplify.configure({
         // Amazon Cognito Identity Pool ID
         identityPoolId: config.cognito.identityPoolId,
         // Amazon Cognito User Pool ID
-        userPoolId: config.cognito.userPoolId,
+        userPoolId: config.cognito.adminUserPoolId,
         // Amazon Cognito Web Client ID (26-char alphanumeric string)
-        userPoolWebClientId: config.cognito.userPoolWebClientId,
+        userPoolWebClientId: config.cognito.adminUserPoolWebClientId,
         oauth: {
             // Amazon Cognito domain name
             domain: config.cognito.oauthDomain,

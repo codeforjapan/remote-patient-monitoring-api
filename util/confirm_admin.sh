@@ -34,8 +34,8 @@ fi
 
 USERNAME=`cat .secret.json | jq -r '.auth_user'`
 PASSWORD=`cat .secret.json | jq -r '.auth_pass'`
-POOL_ID=`cat config.json | jq -r '.cognito.userPoolId'`
-CLIENT_ID=`cat config.json | jq -r '.cognito.userPoolWebClientId'`
+POOL_ID=`cat config.json | jq -r '.cognito.adminUserPoolId'`
+CLIENT_ID=`cat config.json | jq -r '.cognito.adminUserPoolWebClientId'`
 
 if [ -z "$CHALLENGE" ]; then
   CHALLENGE=$PASSWORD

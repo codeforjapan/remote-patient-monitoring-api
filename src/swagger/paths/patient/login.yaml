@@ -1,17 +1,15 @@
-get:
+post:
   tags:
-    - Nurse
-  summary: 指定の保健所に所属する観察者(保健師)を表示(保健師用)
-  description: 指定された{centerId}に所属する観察者(保健師)の一覧を表示します
-  security:
-    - APIGatewayAuthorizer: []
-  parameters:
-    - name: centerId
-      in: path
-      description: 取得したい観察者が所属する保健所のID
-      required: true
-      schema:
-        type: string
+    - Login
+  summary: Patient でログインする
+  description: Patient ユーザでログインする
+  requestBody:
+    description: patient login info
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/Login.yaml"
+    required: true
   responses:
     200:
       description: OK
@@ -28,9 +26,25 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../../schemas/Nurses.yaml"
+            $ref: "../../schemas/produceLogin.yaml"
     400:
       description: Bad Request
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Error.yaml"
+    401:
+      description: Unauthorized
       headers:
         Access-Control-Allow-Origin:
           schema:
@@ -76,30 +90,28 @@ get:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
+      AUTH.*:
+        statusCode: "401"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
       INT.*:
         statusCode: "500"
         responseParameters:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-by-centerid-dev/invocations
-    passthroughBehavior: when_no_match
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postPatientLogin-dev/invocations
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
+  x-codegen-request-body-name: body
 options:
   tags:
     - CORS
   summary: CORS support
   description: |
     Enable CORS by returning correct headers
-  parameters:
-    - name: centerId
-      in: path
-      description: 取得したい保健所のID
-      required: true
-      schema:
-        type: integer
-        format: int64
   responses:
     200:
       description: Default response for CORS method
@@ -131,4 +143,3 @@ options:
         responseTemplates:
           application/json: |
             {}
-  x-codegen-request-body-name: body

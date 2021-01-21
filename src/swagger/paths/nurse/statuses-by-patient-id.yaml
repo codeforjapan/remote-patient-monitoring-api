@@ -4,7 +4,7 @@ get:
   summary: 指定の療養者が持つ症状報告を表示
   description: (自分が所属する保健所に所属する療養者のみ表示可能)指定された{patientId}に所属する症状報告の一覧を表示します
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayNurseAuthorizer: []
   parameters:
     - name: patientId
       in: path
@@ -139,7 +139,7 @@ post:
   summary: 新たに症状報告を作成する
   description: (自分が所属する保健所に所属する療養者のみ作成可能)指定された療養者に対し、新たに症状報告を作成します。
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayNurseAuthorizer: []
   parameters:
     - name: patientId
       in: path

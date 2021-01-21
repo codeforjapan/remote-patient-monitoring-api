@@ -55,3 +55,6 @@ custom:
           - table: RemotePatientMonitoring-NurseTable-dev
             sources:
               - ./migrations/nurses.json
+          - table: RemotePatientMonitoring-PatientTable-dev
+            sources:
+              - ./migrations/patients.json

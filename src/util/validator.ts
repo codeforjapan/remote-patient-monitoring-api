@@ -56,4 +56,15 @@ export default class Validator {
       return false;
     }
   }
+  checkPatientPutBody(res: any) {
+    if (
+      res.hasOwnProperty("phone")
+    ) {
+      console.log("checkPatientBody True");
+      return true;
+    } else {
+      console.log("checkPatientBody False");
+      return false;
+    }
+  }
 };

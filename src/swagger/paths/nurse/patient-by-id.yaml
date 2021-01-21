@@ -4,7 +4,7 @@ get:
   summary: 療養者の取得(保険師用)
   description: (自分が所属する保健所のみ操作可能)指定された{PatientId}を持つ療養者情報を返します
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayNurseAuthorizer: []
   parameters:
     - name: patientId
       in: path
@@ -92,7 +92,7 @@ put:
   summary: 療養者の更新(保健師用)
   description: (自分が所属する保健所のみ操作可能)指定されたPatientIdの療養者情報を更新します
   security:
-    - APIGatewayAuthorizer: []
+    - APIGatewayNurseAuthorizer: []
   parameters:
     - name: patientId
       in: path
