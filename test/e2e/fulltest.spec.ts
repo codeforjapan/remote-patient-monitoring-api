@@ -283,7 +283,7 @@ describe('Nurse user', () => {
     const t = async () => {
       await axios_nurse.get(entry_point + `/api/nurse/nurse/${nurse_id2}`);
     }
-    await expect(t).rejects.toThrowError()
+    await expect(t).rejects.toThrow(/403/)
   })
 
   it.skip('fails to create new nurse to the center', async () => {
