@@ -333,16 +333,15 @@ describe('Nurse user', () => {
   })
 
   it('get 4 patients from the center', async () => {
-    console.log(entry_point + `/api/nurse/centers/${center_id}/patients`);
     const ret = await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id}/patients`);
     expect(ret.data.Count).toBe(4)
     expect(ret.data.Items).toHaveLength(4)
   })
 
-  it.skip('update existing patient', async () => {
+  it('update existing patient', async () => {
     const datetime = new Date().toISOString()
     patient_item.policy_accepted = datetime
-    const ret = await axios_nurse.put(entry_point + `/api/admin/patients/${patient_id}`, patient_item);
+    const ret = await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id}`, patient_item);
     expect(ret.data.policy_accepted).toBe(datetime)
   })
 
