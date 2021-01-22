@@ -159,7 +159,7 @@ describe('admin user', () => {
     patient_password = ret.data.password
   })
 
-  it.skip('fails to create new patient with same phone', async () => {
+  it('fails to create new patient with existing phone', async () => {
     const t = async () => {
       await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, { patientId: uuid(), phone: phone });
     }
