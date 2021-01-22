@@ -224,6 +224,25 @@ export namespace Patient {
           })
         }
       }
+      const config: Config = {
+        userPoolId: process.env.PATIENT_POOL_ID!,
+        userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!
+      }
+      const admin = new CognitoAdmin(config)
+      if (validator.isNurseAPI(event)) {
+        const nurseId = admin.getUserId(event);
+        const res = await patientTable.getPatient(event.pathParameters.patientId);
+
+        if (!await isCenterManagedByNurse(nurseId, (res as PatientParam).centerId)) {
+          return {
+            statusCode: 403,
+            body: JSON.stringify({
+              errorCode: "RPM00101",
+              errorMessage: 'Forbidden'
+            })
+          };
+        }
+      }
       const res = await patientTable.putPatient(
         event.pathParameters.patientId,
         bodyData

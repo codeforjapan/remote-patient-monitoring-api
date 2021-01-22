@@ -41,6 +41,7 @@ let nurse_password: string
 
 const patient_id: string = uuid();
 const patient_id_in_another_center: string = uuid()
+let patient_item_in_another_center: any
 let patient_password: string
 const phone: string = '090-3333-3333'
 
@@ -206,6 +207,7 @@ describe('admin user', () => {
     center_id3 = ret.data.centerid
     const ret2 = await axios_admin.post(entry_point + `/api/admin/centers/${center_id3}/patients`, { patientId: patient_id_in_another_center, phone: "090-3899-2222" });
     expect(ret2.data.phone).toBe("090-3899-2222")
+    patient_item_in_another_center = ret2.data
   })
 
 })
@@ -343,6 +345,18 @@ describe('Nurse user', () => {
     patient_item.policy_accepted = datetime
     const ret = await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id}`, patient_item);
     expect(ret.data.policy_accepted).toBe(datetime)
+  })
+
+  it('fails to update existing patient that is not in the managing center', async () => {
+    const datetime = new Date().toISOString()
+    console.log(entry_point + `/api/nurse/patients/${patient_id_in_another_center}`)
+    console.log(patient_item_in_another_center)
+    console.log(idToken)
+    patient_item_in_another_center.policy_accepted = datetime
+    const t = async () => {
+      await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id_in_another_center}`, patient_item_in_another_center);
+    }
+    await expect(t).rejects.toThrow(/403/)
   })
 
 })
