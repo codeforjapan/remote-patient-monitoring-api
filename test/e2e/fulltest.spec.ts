@@ -332,9 +332,9 @@ describe('Nurse user', () => {
     expect(ret.data.phone).toBe('090-3827-1428')
   })
 
-  it.skip('get 4 patients from the center', async () => {
-    console.log(entry_point + `/api/admin/centers/${center_id}/patients`);
-    const ret = await axios_nurse.get(entry_point + `/api/admin/centers/${center_id}/patients`);
+  it('get 4 patients from the center', async () => {
+    console.log(entry_point + `/api/nurse/centers/${center_id}/patients`);
+    const ret = await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id}/patients`);
     expect(ret.data.Count).toBe(4)
     expect(ret.data.Items).toHaveLength(4)
   })
