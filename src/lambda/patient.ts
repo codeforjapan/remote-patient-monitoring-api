@@ -201,7 +201,7 @@ export namespace Patient {
   export const putPatient: APIGatewayProxyHandler = async (event) => {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
-    const bodyData = validator.jsonBody(event.body);
+    const bodyData: PatientParam = validator.jsonBody(event.body);
     try {
       if (!event.body || !validator.checkPatientPutBody(bodyData)) {
         const errorModel = {
@@ -233,7 +233,8 @@ export namespace Patient {
         const nurseId = admin.getUserId(event);
         const res = await patientTable.getPatient(event.pathParameters.patientId);
 
-        if (!await isCenterManagedByNurse(nurseId, (res as PatientParam).centerId)) {
+        if (!await isCenterManagedByNurse(nurseId, (res as PatientParam).centerId) ||
+          !await isCenterManagedByNurse(nurseId, bodyData.centerId)) {
           return {
             statusCode: 403,
             body: JSON.stringify({
