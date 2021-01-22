@@ -13,5 +13,5 @@
     "resolveJsonModule": true,
     "outDir": ".lib"
   },
-  "exclude": ["src/swagger", "src/gh-swagger-ui", "src/webpack"]
+  "exclude": ["src/swagger", "src/gh-swagger-ui", "src/webpack", "test"]
 }
