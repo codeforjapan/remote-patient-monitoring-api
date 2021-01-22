@@ -349,9 +349,6 @@ describe('Nurse user', () => {
 
   it('fails to update existing patient that is not in the managing center', async () => {
     const datetime = new Date().toISOString()
-    console.log(entry_point + `/api/nurse/patients/${patient_id_in_another_center}`)
-    console.log(patient_item_in_another_center)
-    console.log(idToken)
     patient_item_in_another_center.policy_accepted = datetime
     const t = async () => {
       await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id_in_another_center}`, patient_item_in_another_center);
