@@ -20,25 +20,25 @@ paths:
     $ref: ./paths/patient/login.yaml
   /api/admin/centers/: # implemented
     $ref: ./paths/admin/centers.yaml
-  /api/nurse/centers/:
+  /api/nurse/centers/: # implemented
     $ref: ./paths/nurse/centers.yaml
-  /api/admin/centers/{centerId}:
+  /api/admin/centers/{centerId}: # implemented
     $ref: ./paths/admin/center-by-id.yaml
-  /api/nurse/centers/{centerId}:
+  /api/nurse/centers/{centerId}: # implemented
     $ref: ./paths/nurse/center-by-id.yaml
-  /api/admin/centers/{centerId}/nurses/:
+  /api/admin/centers/{centerId}/nurses/: # implemented
     $ref: ./paths/admin/nurses-by-center-id.yaml
-  /api/nurse/centers/{centerId}/nurses/:
+  /api/nurse/centers/{centerId}/nurses/: # implemented
     $ref: ./paths/nurse/nurses-by-center-id.yaml
-  /api/admin/nurses/{nurseId}:
+  /api/admin/nurses/{nurseId}: # implemented
     $ref: ./paths/admin/nurse-by-id.yaml
   /api/nurse/nurses/{nurseId}:
     $ref: ./paths/nurse/nurse-by-id.yaml
-  /api/admin/centers/{centerId}/patients/:
+  /api/admin/centers/{centerId}/patients/: # implemented
     $ref: ./paths/admin/patients-by-center-id.yaml
   /api/nurse/centers/{centerId}/patients/:
     $ref: ./paths/nurse/patients-by-center-id.yaml
-  /api/admin/patients/{patientId}:
+  /api/admin/patients/{patientId}: # implemented
     $ref: ./paths/admin/patient-by-id.yaml
   /api/nurse/patients/{patientId}:
     $ref: ./paths/nurse/patient-by-id.yaml

@@ -14,8 +14,8 @@ export interface Status { }
 export interface PatientParam {
   patientId: string
   phone: string
-  display: boolean
+  display?: boolean
   policy_accepted?: string
-  Statuses: Status[]
+  Statuses?: Status[]
   centerId: string
 }

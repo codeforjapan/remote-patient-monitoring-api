@@ -1,4 +1,5 @@
 "use strict";
+import { APIGatewayProxyEvent } from 'aws-lambda'
 
 export default class Validator {
   jsonBody(bodyData: any) {
@@ -66,5 +67,11 @@ export default class Validator {
       console.log("checkPatientBody False");
       return false;
     }
+  }
+
+  isNurseAPI(event: APIGatewayProxyEvent) {
+    console.log("isNurseAPI called")
+    if (!event.path) return false
+    return event.path.startsWith('/api/nurse/');
   }
 };

@@ -1,3 +1,4 @@
+import { APIGatewayProxyEvent } from 'aws-lambda'
 
 describe('patient test', () => {
   const handler = require('../../src/lambda/handler')
@@ -33,4 +34,5 @@ describe('patient test', () => {
     const ret = await handler.putPatient(params)
     expect(JSON.parse(ret.body).policy_accepted).toBe(datestr)
   })
+
 })

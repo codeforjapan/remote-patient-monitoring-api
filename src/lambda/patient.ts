@@ -1,7 +1,7 @@
 "use strict";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import AWS from "aws-sdk";
-import { PatientParam } from '../lambda/definitions/types'
+import { NurseParam, PatientParam } from '../lambda/definitions/types'
 import { CognitoAdmin, Config } from '../aws/cognito_admin'
 import { loadDynamoDBClient } from '../util/dynamodbclient'
 var docClient = loadDynamoDBClient()
@@ -11,8 +11,18 @@ AWS.config.update({
 });
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
+import NurseTable from "../aws/nurseTable";
+
 
 export namespace Patient {
+  const isCenterManagedByNurse = async (nurseId: string, centerId: string): Promise<boolean> => {
+    const nurseTable = new NurseTable(docClient);
+    const ret = await nurseTable.getNurse(nurseId)
+    console.log(ret)
+    const nurse: NurseParam = ret as NurseParam
+    console.log(nurse)
+    return nurse.manageCenters.findIndex(item => item.centerId === centerId) > -1
+  }
   export const getPatients: APIGatewayProxyHandler = async (event) => {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
@@ -90,6 +100,21 @@ export namespace Patient {
         userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!
       }
       const admin = new CognitoAdmin(config)
+      // check if the center is managable by this user
+
+      if (validator.isNurseAPI(event)) {
+        const nurseId = admin.getUserId(event);
+        if (!await isCenterManagedByNurse(nurseId, event.pathParameters!.centerId)) {
+          return {
+            statusCode: 403,
+            body: JSON.stringify({
+              errorCode: "RPM00101",
+              errorMessage: 'Forbidden'
+            })
+          };
+        }
+      }
+      console.log('create new user');
       const newuser = await admin.signUp(bodyData.patientId)
       console.log(newuser);
       const param: PatientParam = {
@@ -127,10 +152,15 @@ export namespace Patient {
         })
       }
     }
-    console.log('call getPatient with ' + event.pathParameters.patientId);
+    console.log('======== call getPatient with ' + event.pathParameters.patientId);
+    const config: Config = {
+      userPoolId: process.env.PATIENT_POOL_ID!,
+      userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!
+    }
+    const admin = new CognitoAdmin(config)
     try {
       const res = await patientTable.getPatient(event.pathParameters.patientId);
-      console.log(res);
+      console.log('=======res' + JSON.stringify(res))
       if (validator.checkDynamoGetResultEmpty(res)) {
         const errorModel = {
           errorCode: "RPM00001",
@@ -143,8 +173,24 @@ export namespace Patient {
           }),
         };
       }
-      console.log(res);
       console.log(JSON.stringify(res));
+      if (validator.isNurseAPI(event)) {
+        console.log("++++++++++++++NurseAPI")
+        const nurseId = admin.getUserId(event);
+        console.log('oooooooooooooooo')
+        console.log(nurseId)
+
+        if (!await isCenterManagedByNurse(nurseId, (res as PatientParam).centerId)) {
+          return {
+            statusCode: 403,
+            body: JSON.stringify({
+              errorCode: "RPM00101",
+              errorMessage: 'Forbidden'
+            })
+          };
+        }
+      }
+
       return {
         statusCode: 200,
         body: JSON.stringify(res),

@@ -147,13 +147,15 @@ getPatient:
   description: "get Patient"
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
   environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
-posPatient:
+postPatient:
   handler: src/lambda/handler.postPatient
   name: "remote-patient-monitoring-postPatient-${self:provider.stage}"
   description: "post Patient"
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
   environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
     PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
     PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY

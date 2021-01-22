@@ -1,5 +1,6 @@
 'use strict'
 
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import AWS, { CognitoIdentityServiceProvider } from 'aws-sdk';
 
 export interface Config {
@@ -92,7 +93,9 @@ export class CognitoAdmin {
    * return UserID from Authorization header striing
    * @param authHeader Authorization: header
    */
-  getUserId(authHeader: string) {
+  getUserId(event: APIGatewayProxyEvent) {
+    if (!event.headers['Authorization']) return null;
+    const authHeader = event.headers['Authorization']
     const payload = Buffer.from(authHeader.split(".")[1], 'base64').toString('ascii')
     console.log(payload)
     return JSON.parse(payload)['cognito:username']
