@@ -185,7 +185,351 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  /api/admin/center/:
+  /api/nurse/login:
+    post:
+      tags:
+        - Login
+      summary: Nurse ユーザででログインする
+      description: Nurse ユーザでログインする
+      requestBody:
+        description: Nurse のID/Pass
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  authKey:
+                    type: string
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+        '401':
+          description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          AUTH.*:
+            statusCode: '401'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postNurseLogin-dev/invocations
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+  /api/patient/login:
+    post:
+      tags:
+        - Login
+      summary: Patient でログインする
+      description: Patient ユーザでログインする
+      requestBody:
+        description: patient login info
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  authKey:
+                    type: string
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+        '401':
+          description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          AUTH.*:
+            statusCode: '401'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postPatientLogin-dev/invocations
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+  /api/admin/centers/:
     get:
       tags:
         - Center
@@ -288,7 +632,7 @@ paths:
       summary: 新たに保健所を作成する
       description: 指定された名前で、新たに保健所を作成します。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       requestBody:
         description: center model which you want to create.
         content:
@@ -426,7 +770,7 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  /api/nurse/center/:
+  /api/nurse/centers/:
     get:
       tags:
         - Center
@@ -560,7 +904,7 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/admin/center/{centerId}':
+  '/api/admin/centers/{centerId}':
     get:
       tags:
         - Center
@@ -669,7 +1013,7 @@ paths:
       summary: 保健所の更新
       description: 指定されたcenterIdの保健所情報を更新します
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: centerId
           in: path
@@ -822,7 +1166,7 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/nurse/center/{centerId}':
+  '/api/nurse/centers/{centerId}':
     get:
       tags:
         - Center
@@ -969,14 +1313,14 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/admin/center/{centerId}/nurse/':
+  '/api/admin/centers/{centerId}/nurses/':
     get:
       tags:
         - Nurse
       summary: 指定の保健所に所属する観察者を表示
       description: '指定された{centerId}に所属する観察者の一覧を表示します'
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: centerId
           in: path
@@ -1005,8 +1349,6 @@ paths:
                   type: object
                   properties:
                     nurseId:
-                      type: string
-                    nurseName:
                       type: string
                     manageCenters:
                       type: array
@@ -1081,7 +1423,7 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-by-centerid-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurses-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -1136,7 +1478,7 @@ paths:
       summary: 新たに観察者を作成する
       description: 指定された保健所に対し、新たに観察者を作成します。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: centerId
           in: path
@@ -1174,7 +1516,7 @@ paths:
                 properties:
                   nurseId:
                     type: string
-                  nurseName:
+                  password:
                     type: string
                   manageCenters:
                     type: array
@@ -1253,14 +1595,14 @@ paths:
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
       x-codegen-request-body-name: body
-  '/api/nurse/center/{centerId}/nurse/':
+  '/api/nurse/centers/{centerId}/nurses/':
     get:
       tags:
         - Nurse
       summary: 指定の保健所に所属する観察者(保健師)を表示(保健師用)
       description: '指定された{centerId}に所属する観察者(保健師)の一覧を表示します'
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayNurseAuthorizer: []
       parameters:
         - name: centerId
           in: path
@@ -1289,8 +1631,6 @@ paths:
                   type: object
                   properties:
                     nurseId:
-                      type: string
-                    nurseName:
                       type: string
                     manageCenters:
                       type: array
@@ -1365,7 +1705,7 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-by-centerid-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurses-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -1415,14 +1755,14 @@ paths:
               application/json: |
                 {}
       x-codegen-request-body-name: body
-  '/api/admin/nurse/{nurseId}':
+  '/api/admin/nurses/{nurseId}':
     get:
       tags:
         - Nurse
       summary: 観察者の取得
       description: '指定された{nurseId}を持つ観察者情報を返します'
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: nurseId
           in: path
@@ -1449,8 +1789,6 @@ paths:
                 type: object
                 properties:
                   nurseId:
-                    type: string
-                  nurseName:
                     type: string
                   manageCenters:
                     type: array
@@ -1525,7 +1863,7 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-by-id-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -1535,7 +1873,7 @@ paths:
       summary: 観察者の更新
       description: 指定されたnurseIdの観察者情報を更新します
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: nurseId
           in: path
@@ -1550,16 +1888,12 @@ paths:
             schema:
               type: object
               properties:
-                nurseName:
-                  type: string
                 manageCenters:
                   type: array
                   items:
                     type: object
                     properties:
                       centerId:
-                        type: string
-                      centerName:
                         type: string
         required: true
       responses:
@@ -1581,8 +1915,6 @@ paths:
                 type: object
                 properties:
                   nurseId:
-                    type: string
-                  nurseName:
                     type: string
                   manageCenters:
                     type: array
@@ -1706,14 +2038,14 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/nurse/nurse/{nurseId}':
+  '/api/nurse/nurses/{nurseId}':
     get:
       tags:
         - Nurse
       summary: 観察者(保健師)の取得(保健師用)
       description: '指定された{nurseId}を持つ観察者情報を返します。'
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayNurseAuthorizer: []
       parameters:
         - name: nurseId
           in: path
@@ -1740,8 +2072,6 @@ paths:
                 type: object
                 properties:
                   nurseId:
-                    type: string
-                  nurseName:
                     type: string
                   manageCenters:
                     type: array
@@ -1816,7 +2146,7 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-by-id-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -1864,7 +2194,7 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/admin/center/{centerId}/patient/':
+  '/api/admin/centers/{centerId}/patients/':
     get:
       tags:
         - Patient
@@ -1872,7 +2202,7 @@ paths:
       description: >-
         指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。閣僚容赦の持つ病状報告は、最新10件のみ入っています。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: centerId
           in: path
@@ -2021,7 +2351,7 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-by-centerid-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatients-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -2076,7 +2406,7 @@ paths:
       summary: 新たに療養者を作成する
       description: 指定された保健所に対し、新たに療養者を作成します。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: centerId
           in: path
@@ -2091,10 +2421,10 @@ paths:
             schema:
               type: object
               properties:
+                patientId:
+                  type: string
                 phone:
                   type: string
-                display:
-                  type: boolean
         required: true
       responses:
         '201':
@@ -2114,13 +2444,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  loginId:
-                    type: string
-                  password:
-                    type: string
                   patientId:
                     type: string
                   centerId:
+                    type: string
+                  password:
                     type: string
                   policy_accepted:
                     type: string
@@ -2197,7 +2525,7 @@ paths:
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
       x-codegen-request-body-name: body
-  '/api/nurse/center/{centerId}/patient/':
+  '/api/nurse/centers/{centerId}/patients/':
     get:
       tags:
         - Patient
@@ -2205,7 +2533,7 @@ paths:
       description: >-
         (自分が所属する保健所のみ操作可能)指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。閣僚容赦の持つ病状報告は、最新10件のみ入っています。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayNurseAuthorizer: []
       parameters:
         - name: centerId
           in: path
@@ -2409,7 +2737,7 @@ paths:
       summary: 新たに療養者を作成する(保健師用)
       description: (自分が所属する保健所のみ操作可能)指定された保健所に対し、新たに療養者を作成します。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayNurseAuthorizer: []
       parameters:
         - name: centerId
           in: path
@@ -2424,10 +2752,10 @@ paths:
             schema:
               type: object
               properties:
+                patientId:
+                  type: string
                 phone:
                   type: string
-                display:
-                  type: boolean
         required: true
       responses:
         '201':
@@ -2447,13 +2775,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  loginId:
-                    type: string
-                  password:
-                    type: string
                   patientId:
                     type: string
                   centerId:
+                    type: string
+                  password:
                     type: string
                   policy_accepted:
                     type: string
@@ -2530,14 +2856,14 @@ paths:
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
       x-codegen-request-body-name: body
-  '/api/admin/patient/{patientId}':
+  '/api/admin/patients/{patientId}':
     get:
       tags:
         - Patient
       summary: 療養者の取得
       description: '指定された{PatientId}を持つ療養者情報を返します'
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -2678,7 +3004,7 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-by-id-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -2688,7 +3014,7 @@ paths:
       summary: 療養者の更新
       description: 指定されたPatientIdの療養者情報を更新します
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -2703,10 +3029,10 @@ paths:
             schema:
               type: object
               properties:
+                patientId:
+                  type: string
                 phone:
                   type: string
-                display:
-                  type: boolean
         required: true
       responses:
         '200':
@@ -2890,14 +3216,14 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/nurse/patient/{patientId}':
+  '/api/nurse/patients/{patientId}':
     get:
       tags:
         - Patient
       summary: 療養者の取得(保険師用)
       description: '(自分が所属する保健所のみ操作可能)指定された{PatientId}を持つ療養者情報を返します'
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayNurseAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -3038,7 +3364,7 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-by-id-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -3048,7 +3374,7 @@ paths:
       summary: 療養者の更新(保健師用)
       description: (自分が所属する保健所のみ操作可能)指定されたPatientIdの療養者情報を更新します
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayNurseAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -3063,10 +3389,10 @@ paths:
             schema:
               type: object
               properties:
+                patientId:
+                  type: string
                 phone:
                   type: string
-                display:
-                  type: boolean
         required: true
       responses:
         '200':
@@ -3250,14 +3576,14 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/patient/patient/{patientId}':
+  '/api/patient/patients/{patientId}':
     get:
       tags:
         - Patient
       summary: 療養者の取得(療養者用)
       description: '(自分のみ操作可能)指定された{PatientId}を持つ療養者情報を返します'
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayPatientAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -3398,7 +3724,7 @@ paths:
               method.response.header.Access-Control-Allow-Methods: '''*'''
               method.response.header.Access-Control-Allow-Origin: '''*'''
         uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-by-id-dev/invocations
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getPatient-dev/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
@@ -3446,14 +3772,14 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/admin/patient/{patientId}/statuses':
+  '/api/admin/patients/{patientId}/statuses':
     get:
       tags:
         - Status
       summary: 指定の療養者が所有する症状報告を表示
       description: '指定された{patientId}に所属する症状報告の一覧を表示します'
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -3647,7 +3973,7 @@ paths:
       summary: 新たに症状報告を作成する
       description: 指定された療養者に対し、新たに症状報告を作成します。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -3808,14 +4134,14 @@ paths:
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
       x-codegen-request-body-name: body
-  '/api/nurse/patient/{patientId}/statuses':
+  '/api/nurse/patients/{patientId}/statuses':
     get:
       tags:
         - Status
       summary: 指定の療養者が持つ症状報告を表示
       description: '(自分が所属する保健所に所属する療養者のみ表示可能)指定された{patientId}に所属する症状報告の一覧を表示します'
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayNurseAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -4009,7 +4335,7 @@ paths:
       summary: 新たに症状報告を作成する
       description: (自分が所属する保健所に所属する療養者のみ作成可能)指定された療養者に対し、新たに症状報告を作成します。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayNurseAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -4170,14 +4496,14 @@ paths:
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
       x-codegen-request-body-name: body
-  '/api/patient/patient/{patientId}/statuses':
+  '/api/patient/patients/{patientId}/statuses':
     get:
       tags:
         - Status
       summary: 指定の療養者が持つ症状報告を表示
       description: '(自分の症状のみ表示可能)指定された{patientId}に所属する症状報告の一覧を表示します'
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayPatientAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -4371,7 +4697,7 @@ paths:
       summary: 新たに症状報告を作成する
       description: (自分の症状のみ作成可能)指定された療養者に対し、新たに症状報告を作成します。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayPatientAuthorizer: []
       parameters:
         - name: patientId
           in: path
@@ -4532,14 +4858,14 @@ paths:
         httpMethod: POST
         contentHandling: CONVERT_TO_TEXT
       x-codegen-request-body-name: body
-  '/api/admin/status/{statusId}':
+  '/api/admin/statuses/{statusId}':
     delete:
       tags:
         - Status
       summary: 病状報告の削除
       description: 指定されたstatusIdの症状報告情報を削除します。成功したら、responseCode 0 を返します。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayAdminAuthorizer: []
       parameters:
         - name: statusId
           in: path
@@ -4682,14 +5008,14 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/nurse/status/{statusId}':
+  '/api/nurse/statuses/{statusId}':
     delete:
       tags:
         - Status
       summary: 病状報告の削除
       description: (自分が所属する保健所のみ操作可能)指定されたstatusIdの症状報告情報を削除します。成功したら、responseCode 0 を返します。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayNurseAuthorizer: []
       parameters:
         - name: statusId
           in: path
@@ -4832,14 +5158,14 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-  '/api/patient/status/{statusId}':
+  '/api/patient/statuses/{statusId}':
     delete:
       tags:
         - Status
       summary: 病状報告の削除
       description: (自分の症状のみ操作可能)指定されたstatusIdの症状報告情報を削除します。成功したら、responseCode 0 を返します。
       security:
-        - APIGatewayAuthorizer: []
+        - APIGatewayPatientAuthorizer: []
       parameters:
         - name: statusId
           in: path
@@ -5010,8 +5336,6 @@ components:
       properties:
         nurseId:
           type: string
-        nurseName:
-          type: string
         manageCenters:
           type: array
           items:
@@ -5027,8 +5351,6 @@ components:
         type: object
         properties:
           nurseId:
-            type: string
-          nurseName:
             type: string
           manageCenters:
             type: array
@@ -5096,10 +5418,10 @@ components:
     consumePatient:
       type: object
       properties:
+        patientId:
+          type: string
         phone:
           type: string
-        display:
-          type: boolean
     Patients:
       type: array
       items:
@@ -5235,7 +5557,7 @@ components:
             remarks:
               type: string
   securitySchemes:
-    APIGatewayAuthorizer:
+    APIGatewayAdminAuthorizer:
       type: apiKey
       name: Authorization
       in: header
@@ -5244,7 +5566,29 @@ components:
         type: cognito_user_pools
         providerARNs:
           - >-
-            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_USER_POOL_ID
+            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_ADMIN_USER_POOL_ID
+        identityValidationExpression: .*
+    APIGatewayNurseAuthorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: cognito_user_pools
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - >-
+            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_NURSE_USER_POOL_ID
+        identityValidationExpression: .*
+    APIGatewayPatientAuthorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: cognito_user_pools
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - >-
+            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_PATIENT_USER_POOL_ID
         identityValidationExpression: .*
 tags:
   - name: Center
