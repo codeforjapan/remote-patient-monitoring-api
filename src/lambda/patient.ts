@@ -18,9 +18,7 @@ export namespace Patient {
   const isCenterManagedByNurse = async (nurseId: string, centerId: string): Promise<boolean> => {
     const nurseTable = new NurseTable(docClient);
     const ret = await nurseTable.getNurse(nurseId)
-    console.log(ret)
     const nurse: NurseParam = ret as NurseParam
-    console.log(nurse)
     return nurse.manageCenters.findIndex(item => item.centerId === centerId) > -1
   }
   export const getPatients: APIGatewayProxyHandler = async (event) => {
@@ -37,7 +35,6 @@ export namespace Patient {
         }
       }
       const res = await patientTable.getPatients(event.pathParameters.centerId);
-      console.log(res)
       if (validator.checkDyanmoQueryResultEmpty(res)) {
         const errorModel = {
           errorCode: "RPM00001",
@@ -152,7 +149,6 @@ export namespace Patient {
         })
       }
     }
-    console.log('======== call getPatient with ' + event.pathParameters.patientId);
     const config: Config = {
       userPoolId: process.env.PATIENT_POOL_ID!,
       userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!
@@ -160,7 +156,6 @@ export namespace Patient {
     const admin = new CognitoAdmin(config)
     try {
       const res = await patientTable.getPatient(event.pathParameters.patientId);
-      console.log('=======res' + JSON.stringify(res))
       if (validator.checkDynamoGetResultEmpty(res)) {
         const errorModel = {
           errorCode: "RPM00001",
@@ -175,10 +170,7 @@ export namespace Patient {
       }
       console.log(JSON.stringify(res));
       if (validator.isNurseAPI(event)) {
-        console.log("++++++++++++++NurseAPI")
         const nurseId = admin.getUserId(event);
-        console.log('oooooooooooooooo')
-        console.log(nurseId)
 
         if (!await isCenterManagedByNurse(nurseId, (res as PatientParam).centerId)) {
           return {
