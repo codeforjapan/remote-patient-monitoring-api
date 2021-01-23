@@ -102,7 +102,7 @@ post:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postPatientLogin-dev/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postPatientLogin-#{SERVERLESS::Stage}/invocations
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
   x-codegen-request-body-name: body

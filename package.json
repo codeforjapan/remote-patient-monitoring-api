@@ -18,7 +18,8 @@
     "deploy:all-gateway": "run-s build:functions-yaml deploy:lambda deploy:gateway",
     "deploy:dynamodb": "sls deploy -v -c serverless-dynamodb.yml",
     "deploy:lambda": "sls deploy -v -c serverless-lambda.yml",
-    "deploy:gateway": "util/build_function_template.sh; util/build_swagger_yml.sh; sls deploy -v --force",
+    "deploy:gateway": "run-s build:functions-yaml build:swagger-yaml deploy:gateway-force",
+    "deploy:gateway-force": "sls deploy -v --force",
     "build:swagger-yaml": "util/build_swagger_yml.sh",
     "build:functions-yaml": "util/build_function_template.sh",
     "confirmAdmin": "util/confirm_admin.sh",
@@ -35,7 +36,12 @@
     "local": "run-s build:functions-yaml; sls offline --offline true",
     "remove:all": "run-s remove:gateway remove:dynamodb",
     "remove:gateway": "sls remove",
-    "remove:dynamodb": "sls remove -c serverless-dynamodb.yml"
+    "remove:dynamodb": "sls remove -c serverless-dynamodb.yml",
+    "stg:deploy": "run-s \"deploy:dynamodb -- --stage stg\" \"stg:deploy:all-gateway\"",
+    "stg:deploy:all-gateway": "run-s build:functions-yaml \"deploy:lambda -- --stage stg\" \"deploy:gateway -- --stage stg\"",
+    "stg:deploy:gateway": "run-s build:functions-yaml \"build:swagger-yaml -- --stage stg\" \"deploy:gateway-force -- --stage stg\"",
+    "stg:redeploy-all": "run-s stg:remove:all stg:deploy stg:deploy:gateway",
+    "stg:remove:all": "run-s \"remove:gateway -- --stage stg\" \"remove:dynamodb -- --stage stg\""
   },
   "name": "remote-patient-monitoring",
   "devDependencies": {

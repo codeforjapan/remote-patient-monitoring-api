@@ -1,0 +1,12 @@
+{
+  "AuthAdminUserPoolDomain": "rpm-admin",
+  "AuthNurseUserPoolDomain": "rpm-nurse",
+  "AuthPatientUserPoolDomain": "rpm-patient",
+  "OauthCallbackURL": "https://stg.remotepatientmonitoring.jp",
+  "OauthSignoutURL": "https://stg.remotepatientmonitoring.jp",
+  "Bucket": "remote-patient-monitoring-stg",
+  "DebugMode": "on",
+  "DBPrefix": "STGRPM-",
+  "AdminUserEmail": "hal@code4japan.org",
+  "AdminUserName": "admin"
+}

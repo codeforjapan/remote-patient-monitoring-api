@@ -84,7 +84,7 @@ get:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-getStatus-by-centerid-dev/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-getStatus-by-centerid-#{SERVERLESS::Stage}/invocations
     passthroughBehavior: when_no_match
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
@@ -224,7 +224,7 @@ post:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-postStatus-dev/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-Status-monitoring-postStatus-#{SERVERLESS::Stage}/invocations
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
   x-codegen-request-body-name: body
