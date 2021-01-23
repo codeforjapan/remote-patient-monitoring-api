@@ -111,6 +111,17 @@ export namespace Patient {
           };
         }
       }
+      const phoneuser = await patientTable.searchPhone(bodyData.phone)
+      console.log(phoneuser)
+      if (phoneuser !== undefined) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            errorCode: "RPM00003",
+            errorMessage: 'Bad Request: Phone number already existed'
+          })
+        };
+      }
       console.log('create new user');
       const newuser = await admin.signUp(bodyData.patientId)
       console.log(newuser);
