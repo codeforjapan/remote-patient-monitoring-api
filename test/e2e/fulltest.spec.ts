@@ -16,7 +16,6 @@ describe('get Centers', () => {
   it('raise 404 error when there is no data', async () => {
     expect.assertions(1);
     const t = async () => {
-      console.log(entry_point + '/api/admin/centers');
       const ret = await axios.get(entry_point + '/api/admin/centers');
       return ret;
     }
@@ -27,7 +26,6 @@ describe('get Centers', () => {
 describe('admin user login', () => {
   it('get Authkey', async () => {
     expect.assertions(1);
-    console.log(entry_point + '/api/admin/login')
     const ret = await axios.post(entry_point + '/api/admin/login', { username: secret.auth_user, password: secret.auth_pass });
     expect(ret.data).toHaveProperty('idToken')
   })
@@ -43,6 +41,7 @@ let nurse_password: string
 
 const patient_id: string = uuid();
 const patient_id_in_another_center: string = uuid()
+let patient_item_in_another_center: any
 let patient_password: string
 const phone: string = '090-3333-3333'
 
@@ -53,7 +52,6 @@ describe('admin user', () => {
   let nurse_item: any;
   let patient_item: any;
   beforeAll(async () => {
-    console.log('login as an admin')
     const ret = await axios.post(entry_point + '/api/admin/login', { username: secret.auth_user, password: secret.auth_pass });
     const idToken = ret.data.idToken;
     axios_admin = axios.create({
@@ -95,21 +93,19 @@ describe('admin user', () => {
   it('raise 404 error when there is no center id', async () => {
     expect.assertions(1);
     const t = async () => {
-      console.log(entry_point + '/api/admin/centers/no-id');
       const ret = await axios.get(entry_point + '/api/admin/centers/no-id');
       return ret;
     }
     await expect(t).rejects.toThrow(/*404*/);
   })
 
-  it('raise error to post non-existing center', async () => {
+  it.skip('raise error to post non-existing center', async () => {
     expect.assertions(1);
     const t = async () => {
-      console.log(entry_point + '/api/admin/centers/no-id/nurses');
       const ret = await axios_admin.post(entry_point + '/api/admin/centers/no-id/nurses', { nurseId: 'nurseA' });
       return ret;
     }
-    await expect(t).rejects.toThrow(/*404*/);
+    await expect(t).rejects.toThrowError(/404/);
   })
 
   it('create new nurse to the center', async () => {
@@ -122,7 +118,6 @@ describe('admin user', () => {
 
   it('raise error if existing id is going to be created', async () => {
     expect.assertions(1);
-    console.log(entry_point + `/api/admin/centers/${center_id}/nurse`, { nurseId: nurse_id })
     const t = async () => {
       const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/nurses`, { nurseId: nurse_id });
       return ret;
@@ -131,7 +126,6 @@ describe('admin user', () => {
   })
 
   it('read new nurse id', async () => {
-    console.log(entry_point + `/api/admin/nurses/${nurse_id}`)
     const ret = await axios_admin.get(entry_point + `/api/admin/nurses/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))
     nurse_item = ret.data
@@ -145,7 +139,6 @@ describe('admin user', () => {
   })
 
   it('get two nurses from the center', async () => {
-    console.log(entry_point + `/api/admin/centers/${center_id}/nurses`);
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}/nurses`);
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
@@ -158,7 +151,6 @@ describe('admin user', () => {
   })
 
   it('create new patient to the center', async () => {
-    console.log(`patient_id is ${patient_id}`)
     const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, { patientId: patient_id, phone: phone });
     expect(ret.data.patientId).toBe(patient_id)
     expect(ret.data.phone).toBe(phone)
@@ -167,18 +159,19 @@ describe('admin user', () => {
     patient_password = ret.data.password
   })
 
-  it.skip('fails to create new patient with same phone', async () => {
-    const t = async () => {
-      await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, { patientId: uuid(), phone: phone });
-    }
-    await expect(t).rejects.toThrowError()
-  })
-
   it('read new patient id', async () => {
     console.log(entry_point + `/api/admin/patients/${patient_id}`)
     const ret = await axios_admin.get(entry_point + `/api/admin/patients/${patient_id}`);
     patient_item = ret.data;
     expect(ret.data.phone).toBe(phone)
+  })
+
+  it.skip('fails to create new patient with existing phone', async () => {
+    const t = async () => {
+      console.log(entry_point + `/api/admin/centers/${center_id}/patients`)
+      await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, { patientId: uuid(), phone: phone });
+    }
+    await expect(t).rejects.toThrow(/400/)
   })
 
   it('create new patient to the center', async () => {
@@ -192,7 +185,6 @@ describe('admin user', () => {
   })
 
   it('get two patients from the center', async () => {
-    console.log(entry_point + `/api/admin/centers/${center_id}/patients`);
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}/patients`);
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
@@ -214,9 +206,10 @@ describe('admin user', () => {
   it('create another center and patient for the next test', async () => {
     const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'Y保健所' });
     expect(ret.data).toHaveProperty('centerId')
-    center_id3 = ret.data.centerid
+    center_id3 = ret.data.centerId
     const ret2 = await axios_admin.post(entry_point + `/api/admin/centers/${center_id3}/patients`, { patientId: patient_id_in_another_center, phone: "090-3899-2222" });
     expect(ret2.data.phone).toBe("090-3899-2222")
+    patient_item_in_another_center = ret2.data
   })
 
 })
@@ -224,14 +217,12 @@ describe('admin user', () => {
 describe('nurse user login', () => {
   it('get authKey', async () => {
     expect.assertions(1);
-    console.log(entry_point + '/api/nurse/login')
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     expect(ret.data).toHaveProperty('idToken')
   })
 })
 describe('patient user login', () => {
   it('get authKey', async () => {
-    console.log(entry_point + '/api/patient/login')
     const ret = await axios.post(entry_point + '/api/patient/login', { username: patient_id, password: patient_password });
     expect(ret.data).toHaveProperty('idToken')
   })
@@ -248,7 +239,6 @@ describe('Nurse user', () => {
   const patient_id = uuid();
   const phone = '090-4444-4444'
   beforeAll(async () => {
-    console.log('login as a nurse')
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     idToken = ret.data.idToken;
     axios_nurse = axios.create({
@@ -285,7 +275,6 @@ describe('Nurse user', () => {
   })
 
   it('read nurse id', async () => {
-    console.log(entry_point + `/api/nurse/nurses/${nurse_id}`)
     const ret = await axios_nurse.get(entry_point + `/api/nurse/nurses/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]))
     nurse_item = ret.data
@@ -293,7 +282,6 @@ describe('Nurse user', () => {
 
   it('fails to read nurse id that is not mine', async () => {
     expect.assertions(1);
-    console.log(entry_point + `/api/nurse/nurses/${nurse_id2}`)
     const t = async () => {
       await axios_nurse.get(entry_point + `/api/nurse/nurses/${nurse_id2}`);
     }
@@ -309,7 +297,6 @@ describe('Nurse user', () => {
   })
 
   it('get two nurses from the center', async () => {
-    console.log(entry_point + `/api/nurse/center/${center_id}/nurse`);
     const ret = await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id}/nurses`);
     expect(ret.data.Count).toBe(2)
     expect(ret.data.Items).toHaveLength(2)
@@ -330,7 +317,6 @@ describe('Nurse user', () => {
   })
 
   it('read new patient id', async () => {
-    console.log(entry_point + `/api/nurse/patients/${patient_id}`)
     const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id}`);
     patient_item = ret.data;
     expect(ret.data.phone).toBe(phone)
@@ -338,20 +324,50 @@ describe('Nurse user', () => {
 
   it('can\'t read patient which is not related to a managing center', async () => {
     expect.assertions(1)
-    console.log(entry_point + `/api/nurse/patients/${patient_id_in_another_center}`)
     const t = async () => {
       await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id_in_another_center}`);
     }
     await expect(t).rejects.toThrowError()
   })
 
-  it.skip('create new patient to the center', async () => {
+  it('create new patient to the center', async () => {
+    const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, { patientId: uuid(), phone: '090-3827-1428' });
+    expect(ret.data).toHaveProperty('password')
+    expect(ret.data.phone).toBe('090-3827-1428')
   })
 
-  it.skip('get ? patients from the center', async () => {
+  it('get 4 patients from the center', async () => {
+    const ret = await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id}/patients`);
+    expect(ret.data.Count).toBe(4)
+    expect(ret.data.Items).toHaveLength(4)
   })
 
-  it.skip('update existing patient', async () => {
+  it('update existing patient', async () => {
+    const datetime = new Date().toISOString()
+    patient_item.policy_accepted = datetime
+    const ret = await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id}`, patient_item);
+    expect(ret.data.policy_accepted).toBe(datetime)
+  })
+
+  it('fails to update existing patient that is not in the managing center', async () => {
+    const datetime = new Date().toISOString()
+    patient_item_in_another_center.policy_accepted = datetime
+    const t = async () => {
+      await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id_in_another_center}`, patient_item_in_another_center);
+    }
+    await expect(t).rejects.toThrow(/403/)
+  })
+
+  it('fails to update existing patient to move another center that is not mine', async () => {
+    expect.assertions(1)
+    patient_item.centerId = center_id3
+    console.log(entry_point + `/api/nurse/patients/${patient_id}`)
+    console.log(patient_item)
+    console.log(idToken)
+    const t = async () => {
+      await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id}`, patient_item);
+    }
+    await expect(t).rejects.toThrow(/403/)
   })
 
 })

@@ -45,7 +45,24 @@ export default class PatientTable {
       });
     });
   }
-
+  searchPhone(phone: string) {
+    const query: DynamoDB.DocumentClient.QueryInput = {
+      TableName: process.env.PATIENT_TABLE_NAME!,
+      KeyConditionExpression: "phone = :phone",
+      ExpressionAttributeValues: { ":phone": phone }
+    };
+    console.log(query);
+    return new Promise((resolve) => {
+      this.client.query(query, (err, data) => {
+        if (err) {
+          console.log(err)
+          resolve(undefined);
+        } else {
+          resolve(data)
+        }
+      })
+    })
+  }
   postPatient(patient: PatientParam) {
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,

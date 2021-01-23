@@ -31,4 +31,13 @@ Resources:
       AttributeDefinitions:
         - AttributeName: patientId
           AttributeType: S
+        - AttributeName: phone
+          AttributeType: S
+      GlobalSecondaryIndexes:
+        - IndexName: RemotePatientMonitoringPatientTableGSIPhone
+          KeySchema:
+            - AttributeName: phone
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
       BillingMode: PAY_PER_REQUEST

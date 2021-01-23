@@ -129,11 +129,10 @@ export namespace Nurse {
       userPoolClientId: process.env.NURSE_POOL_CLIENT_ID!
     }
     console.log(config)
-    console.log(event.headers['Authorization'])
     const cognito = new CognitoAdmin(config);
     // check permission
-    if (event.path.startsWith('/api/nurse/')) {
-      const userid = cognito.getUserId(event.headers['Authorization']!);
+    if (validator.isNurseAPI(event)) {
+      const userid = cognito.getUserId(event);
       console.log(`user id is ${userid}`)
       if (userid !== event.pathParameters.nurseId) {
         return {
