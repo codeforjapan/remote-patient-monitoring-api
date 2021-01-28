@@ -61,12 +61,6 @@ DynamoDB 以外を deploy する場合
 npm run deploy:all-gateway
 ```
 
-※初回のデプロイ時のみ、API Gateway の Authorization の CLIENT_POOL のIDを設定するため、以下の手順で2回 deploy をしてください。
-
-```bash
-npm run deploy && npm run deploy:gateway
-```
-
 ### 5. Confirm admin user
 
 `util/.secret.json` というファイルを作り、以下の内容を設定してください。
