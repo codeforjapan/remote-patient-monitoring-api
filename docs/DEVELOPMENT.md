@@ -159,7 +159,7 @@ sls dynamodb install
 #### DynamoDB のローカルインスタンスを開始
 
 ```bash
-npm dynamodb:start
+npm run dynamodb:start
 ```
 
 `migrations` 以下に、初期に投入される seed データがあります。
