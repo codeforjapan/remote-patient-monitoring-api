@@ -24,7 +24,7 @@ export AWS_PROFILE="your-profile-name"
 
 ### 3. Edit environment settings
 
-グローバルに一意なので、Bucket名とドメイン名は変えて下さい。
+Bucket名はグローバルに一意、ドメイン名はリージョンで一意なので変えて下さい。
 また、AdminUserEmail も変更してください。
 
 config/dev.json
