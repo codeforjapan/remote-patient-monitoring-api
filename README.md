@@ -17,7 +17,7 @@ Issues に手伝って欲しいタスクを記載していますのでご確認�
 
 ## Swagger UI
 
-[Swagger UI](https://codeforjapan.github.io/remote-patient-monitoring-api/) からステージング用のAPIを実行することができます。
+[Swagger UI](https://codeforjapan.github.io/remote-patient-monitoring-api/) からステージング用のAPIを実行することができます。
 
 まず、`/api/admin/login` から、指示された User/Password を使ってログインを行ってください。
 成功すると、`idToken` が返却されます。
