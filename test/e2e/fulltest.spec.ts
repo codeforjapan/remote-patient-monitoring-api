@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid'
 const axios = require('axios')
 let entry_point: string;
 beforeAll(async () => {
-  entry_point = `https://${config.apiGateway.restApiId}.execute-api.${config.region}.amazonaws.com/dev`;
+  entry_point = `https://${config.apiGateway.restApiId}.execute-api.${config.region}.amazonaws.com/${config.apiGateway.stageName}`;
   console.log(entry_point)
   await TruncateDB.truncate()
 });
@@ -26,6 +26,8 @@ describe('get Centers', () => {
 describe('admin user login', () => {
   it('get Authkey', async () => {
     expect.assertions(1);
+    console.log(entry_point + '/api/admin/login')
+    console.log({ username: secret.auth_user, password: secret.auth_pass })
     const ret = await axios.post(entry_point + '/api/admin/login', { username: secret.auth_user, password: secret.auth_pass });
     expect(ret.data).toHaveProperty('idToken')
   })

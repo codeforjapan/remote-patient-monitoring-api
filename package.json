@@ -37,8 +37,8 @@
     "remove:all": "run-s remove:gateway remove:dynamodb",
     "remove:gateway": "sls remove",
     "remove:dynamodb": "sls remove -c serverless-dynamodb.yml",
-    "stg:deploy": "run-s \"deploy:dynamodb -- --stage stg\" \"stg:deploy:all-gateway\"",
-    "stg:deploy:all-gateway": "run-s build:functions-yaml \"deploy:lambda -- --stage stg\" \"deploy:gateway -- --stage stg\"",
+    "stg:deploy": "run-s \"deploy:dynamodb -- --stage stg\" stg:deploy:all-gateway",
+    "stg:deploy:all-gateway": "run-s build:functions-yaml \"deploy:lambda -- --stage stg\" stg:deploy:gateway",
     "stg:deploy:gateway": "run-s build:functions-yaml \"build:swagger-yaml -- --stage stg\" \"deploy:gateway-force -- --stage stg\"",
     "stg:redeploy-all": "run-s stg:remove:all stg:deploy stg:deploy:gateway",
     "stg:remove:all": "run-s \"remove:gateway -- --stage stg\" \"remove:dynamodb -- --stage stg\""
