@@ -22,6 +22,7 @@
     "deploy:gateway-force": "sls deploy -v --force",
     "build:swagger-yaml": "util/build_swagger_yml.sh",
     "build:functions-yaml": "util/build_function_template.sh",
+    "createAdmin": "util/create_admin.sh",
     "confirmAdmin": "util/confirm_admin.sh",
     "openSwaggerUI": "util/open_swagger-ui.sh",
     "prepublish": "tsc",

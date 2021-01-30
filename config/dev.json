@@ -6,7 +6,5 @@
   "OauthSignoutURL": "https://dev.remotepatientmonitoring.jp",
   "Bucket": "remote-patient-monitoring-dev",
   "DebugMode": "on",
-  "DBPrefix": "RemotePatientMonitoring-",
-  "AdminUserEmail": "hal@code4japan.org",
-  "AdminUserName": "admin"
+  "DBPrefix": "RemotePatientMonitoring-"
 }

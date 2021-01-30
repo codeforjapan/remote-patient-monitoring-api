@@ -24,8 +24,7 @@ export AWS_PROFILE="your-profile-name"
 
 ### 3. Edit environment settings
 
-リージョン毎に一意なので、Bucket名とドメイン名は変えて下さい。
-また、AdminUserEmail も変更してください。
+Bucket名はグローバルに一意、ドメイン名はリージョンで一意なので変えて下さい。
 
 config/dev.json
 
@@ -40,8 +39,6 @@ config/dev.json
   "Bucket":"your-bucket-name",
   "DebugMode":"on"
   "DBPrefix":"RemotePatientMonitoring-",
-  "AdminUserEmail":"hal@code4japan.org",
-  "AdminUserName":"admin"
 }
 ```
 
@@ -61,34 +58,24 @@ DynamoDB 以外を deploy する場合
 npm run deploy:all-gateway
 ```
 
-※初回のデプロイ時のみ、API Gateway の Authorization の CLIENT_POOL のIDを設定するため、以下の手順で2回 deploy をしてください。
-
-```bash
-npm run deploy && npm run deploy:gateway
-```
-
 ### 5. Confirm admin user
 
 `util/.secret.json` というファイルを作り、以下の内容を設定してください。
 
 ```json
 {
-  "auth_user":"admin(dev.json で設定したものと同じ)", 
-  "auth_pass":"設定したいパスワード"
+  "auth_user":"管理者のユーザ名", 
+  "auth_pass":"設定したいパスワード" (8文字以上、半角英数小文字、半角英数大文字、シンボルを必ず一文字含む)
 }
 ```
 
-`config/dev.json` にセットしたメールアドレスに、仮パスワードを届いていると思います。
-それを使って、下記コマンドでユーザを有効にしてください。
+以下のコマンドを設定すると、管理者アカウントが設定されます。
 
 ```bash
-npm run confirmAdmin -- -c '仮パスワード' 
+npm run createAdmin
 ```
 
-`.secret.json` で設定されたパスワードで、Auth用ユーザの Confirmation がされます。
-
-最後に IdToken が表示されますので、コピーしておいてください。（ステップ6で使います）
-
+最後に IdToken が表示されますので、コピーしておいてください。（ステップ7で使います）
 
 ### 6, run Test
 
@@ -159,7 +146,7 @@ sls dynamodb install
 #### DynamoDB のローカルインスタンスを開始
 
 ```bash
-npm dynamodb:start
+npm run dynamodb:start
 ```
 
 `migrations` 以下に、初期に投入される seed データがあります。
