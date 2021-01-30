@@ -55,8 +55,6 @@ provider:
     AuthNurseUserPoolDomain: ${file(config/${self:provider.stage}.json):AuthNurseUserPoolDomain}
     AuthPatientUserPoolDomain: ${file(config/${self:provider.stage}.json):AuthPatientUserPoolDomain}
     DBPrefix: ${file(config/${self:provider.stage}.json):DBPrefix}
-    AdminUserEmail: ${file(config/${self:provider.stage}.json):AdminUserEmail}
-    AdminUserName: ${file(config/${self:provider.stage}.json):AdminUserName}
     IS_OFFLINE: ${opt:offline, ''}
 custom:
   project: remote-patient-monitoring

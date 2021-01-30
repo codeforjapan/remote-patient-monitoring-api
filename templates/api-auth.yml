@@ -79,14 +79,6 @@ Resources:
               - Effect: Allow
                 Action: apigateway:GET
                 Resource: "arn:aws:apigateway:#{AWS::Region}::/restapis/#{ApiGatewayRestApi}/stages/${self:provider.stage}/exports/*"
-  RPMAdminUser:
-    Type: "AWS::Cognito::UserPoolUser"
-    Properties:
-      UserPoolId: !Ref RPMAdminUserPool
-      UserAttributes:
-        - Name: "email"
-          Value: ${self:provider.environment.AdminUserEmail}
-      Username: ${self:provider.environment.AdminUserName}
 
   RPMNurseUserPool:
     Type: AWS::Cognito::UserPool
