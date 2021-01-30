@@ -24,7 +24,7 @@ export AWS_PROFILE="your-profile-name"
 
 ### 3. Edit environment settings
 
-リージョン毎に一意なので、Bucket名とドメイン名は変えて下さい。
+Bucket名はグローバルに一意、ドメイン名はリージョンで一意なので変えて下さい。
 また、AdminUserEmail も変更してください。
 
 config/dev.json
@@ -59,12 +59,6 @@ DynamoDB 以外を deploy する場合
 
 ```bash
 npm run deploy:all-gateway
-```
-
-※初回のデプロイ時のみ、API Gateway の Authorization の CLIENT_POOL のIDを設定するため、以下の手順で2回 deploy をしてください。
-
-```bash
-npm run deploy && npm run deploy:gateway
 ```
 
 ### 5. Confirm admin user
@@ -159,7 +153,7 @@ sls dynamodb install
 #### DynamoDB のローカルインスタンスを開始
 
 ```bash
-npm dynamodb:start
+npm run dynamodb:start
 ```
 
 `migrations` 以下に、初期に投入される seed データがあります。
