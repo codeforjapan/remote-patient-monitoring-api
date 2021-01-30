@@ -23,6 +23,7 @@ const listStackResources = async (resources, nextToken) => {
 
 const createConfig = stackResources => ({
   region: provider.region,
+  stage: provider.stage,
   cognito: {
     identityPoolId: getPhysicalId(stackResources, 'RPMAdminIdentityProvider'),
     adminUserPoolId: getPhysicalId(stackResources, 'RPMAdminUserPool'),

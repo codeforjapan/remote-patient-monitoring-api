@@ -7,7 +7,7 @@ provider:
   runtime: nodejs12.x
 
   # you can overwrite defaults here
-  stage: dev
+  stage: ${opt:stage, self:custom.defaultStage}
   region: ap-northeast-1
 
   # 中略
@@ -38,6 +38,7 @@ plugins:
   - serverless-offline
 
 custom:
+  defaultStage: dev
   dynamodb:
     stages:
       - dev

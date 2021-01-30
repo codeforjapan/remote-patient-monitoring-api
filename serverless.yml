@@ -24,7 +24,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   # you can overwrite defaults here
-  stage: dev
+  stage: ${opt:stage, self:custom.defaultStage}
   region: ap-northeast-1
   apiGateway:
     shouldStartNameWithService: true
@@ -57,6 +57,7 @@ provider:
     DBPrefix: ${file(config/${self:provider.stage}.json):DBPrefix}
     IS_OFFLINE: ${opt:offline, ''}
 custom:
+  defaultStage: dev
   project: remote-patient-monitoring
   baseName: ${self:custom.project}-${self:provider.stage}
   scriptHooks:

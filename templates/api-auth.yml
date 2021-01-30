@@ -2,7 +2,7 @@ Resources:
   RPMAdminUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: RPMAdminUserPool
+      UserPoolName: RPMAdminUserPool-${self:provider.stage}
       Schema:
         - Name: email
           Required: true
@@ -19,7 +19,7 @@ Resources:
   RPMAdminAppClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: RPMAdminAppClient
+      ClientName: RPMAdminAppClient-${self:provider.stage}
       UserPoolId: !Ref RPMAdminUserPool
       GenerateSecret: false
       SupportedIdentityProviders:
@@ -43,7 +43,7 @@ Resources:
   RPMAdminIdentityProvider:
     Type: AWS::Cognito::IdentityPool
     Properties:
-      IdentityPoolName: RPMAdminIdentityPool
+      IdentityPoolName: RPMAdminIdentityPool-${self:provider.stage}
       CognitoIdentityProviders:
         - ProviderName: "cognito-idp.#{AWS::Region}.amazonaws.com/#{RPMAdminUserPool}"
           ClientId: !Ref RPMAdminAppClient
@@ -83,7 +83,7 @@ Resources:
   RPMNurseUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: RPMNursePool
+      UserPoolName: RPMNursePool-${self:provider.stage}
       AdminCreateUserConfig:
         AllowAdminCreateUserOnly: true
       AccountRecoverySetting:
@@ -107,7 +107,7 @@ Resources:
   RPMNurseAppClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: RPMNurseAppClient
+      ClientName: RPMNurseAppClient-${self:provider.stage}
       UserPoolId: !Ref RPMNurseUserPool
       GenerateSecret: false
       SupportedIdentityProviders:
@@ -131,7 +131,7 @@ Resources:
   RPMNurseIdentityProvider:
     Type: AWS::Cognito::IdentityPool
     Properties:
-      IdentityPoolName: RPMNurseIdentityPool
+      IdentityPoolName: RPMNurseIdentityPool-${self:provider.stage}
       CognitoIdentityProviders:
         - ProviderName: "cognito-idp.#{AWS::Region}.amazonaws.com/#{RPMNurseUserPool}"
           ClientId: !Ref RPMNurseAppClient
@@ -171,7 +171,7 @@ Resources:
   RPMPatientUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: RPMPatientPool
+      UserPoolName: RPMPatientPool-${self:provider.stage}
       AdminCreateUserConfig:
         AllowAdminCreateUserOnly: true
       AccountRecoverySetting:
@@ -195,7 +195,7 @@ Resources:
   RPMPatientAppClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: RPMPatientAppClient
+      ClientName: RPMPatientAppClient-${self:provider.stage}
       UserPoolId: !Ref RPMPatientUserPool
       GenerateSecret: false
       SupportedIdentityProviders:
@@ -219,7 +219,7 @@ Resources:
   RPMPatientIdentityProvider:
     Type: AWS::Cognito::IdentityPool
     Properties:
-      IdentityPoolName: RPMPatientIdentityPool
+      IdentityPoolName: RPMPatientIdentityPool-${self:provider.stage}
       CognitoIdentityProviders:
         - ProviderName: "cognito-idp.#{AWS::Region}.amazonaws.com/#{RPMPatientUserPool}"
           ClientId: !Ref RPMPatientAppClient

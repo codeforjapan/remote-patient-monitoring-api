@@ -25,7 +25,7 @@ provider:
   runtime: nodejs12.x
 
   # you can overwrite defaults here
-  stage: dev
+  stage: ${opt:stage, self:custom.defaultStage}
   region: ap-northeast-1
   apiGateway:
     shouldStartNameWithService: true
@@ -73,5 +73,6 @@ plugins:
   - serverless-cloudformation-sub-variables
   - serverless-plugin-typescript
 custom:
+  defaultStage: dev
   project: remote-patient-monitoring
   baseName: ${self:custom.project}-${self:provider.stage}-${self:service}
