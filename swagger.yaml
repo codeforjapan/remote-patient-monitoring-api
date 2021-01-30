@@ -5565,8 +5565,7 @@ components:
       x-amazon-apigateway-authorizer:
         type: cognito_user_pools
         providerARNs:
-          - >-
-            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_ADMIN_USER_POOL_ID
+          - 'Fn::Sub': '${RPMAdminUserPool.Arn}'
         identityValidationExpression: .*
     APIGatewayNurseAuthorizer:
       type: apiKey
@@ -5576,8 +5575,7 @@ components:
       x-amazon-apigateway-authorizer:
         type: cognito_user_pools
         providerARNs:
-          - >-
-            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_NURSE_USER_POOL_ID
+          - 'Fn::Sub': '${RPMNurseUserPool.Arn}'
         identityValidationExpression: .*
     APIGatewayPatientAuthorizer:
       type: apiKey
@@ -5587,8 +5585,7 @@ components:
       x-amazon-apigateway-authorizer:
         type: cognito_user_pools
         providerARNs:
-          - >-
-            arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/COGNITO_PATIENT_USER_POOL_ID
+          - 'Fn::Sub': '${RPMPatientUserPool.Arn}'
         identityValidationExpression: .*
 tags:
   - name: Center
