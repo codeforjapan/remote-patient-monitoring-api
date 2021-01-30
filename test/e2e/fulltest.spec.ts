@@ -101,7 +101,7 @@ describe('admin user', () => {
     await expect(t).rejects.toThrow(/*404*/);
   })
 
-  it.skip('raise error to post non-existing center', async () => {
+  it('raise error to post non-existing center', async () => {
     expect.assertions(1);
     const t = async () => {
       const ret = await axios_admin.post(entry_point + '/api/admin/centers/no-id/nurses', { nurseId: 'nurseA' });

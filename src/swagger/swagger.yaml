@@ -10,7 +10,7 @@ info:
     url: https://github.com/codeforjapan/remote-patient-monitoring-api/blob/main/LICENSE
   version: 1.0.0
 servers:
-  - url: /
+  - url: https://monitoring.stopcovid19.jp/stg/
 paths:
   /api/admin/login: # implemented
     $ref: ./paths/admin/login.yaml
