@@ -2,7 +2,7 @@
 "use strict"
 
 import AWS, { DynamoDB } from 'aws-sdk';
-import { config } from '../src/webpack/config';
+import * as configsys from '../src/webpack/config';
 import configFile from '../config/dev.json';
 
 let profile = 'default';
@@ -10,27 +10,31 @@ if (process.env.AWS_PROFILE) {
   profile = process.env.AWS_PROFILE;
 }
 var credentials = new AWS.SharedIniFileCredentials({ profile: profile });
-AWS.config.update({ region: config.region });
-AWS.config.credentials = credentials;
-const db = new DynamoDB({ apiVersion: '2012-08-10' })
-
 interface StringKeyObject {
   // 今回はstring
   [key: string]: any;
 }
-export namespace TruncateDB {
-  export async function truncate() {
-    const tables = await db.listTables({ Limit: 100 }).promise()
+export class TruncateDB {
+  private db: DynamoDB;
+  private config: configsys.Config;
+  constructor(stage: string) {
+    this.config = configsys.readConfig(stage)
+    AWS.config.update({ region: this.config.region });
+    AWS.config.credentials = credentials;
+    this.db = new DynamoDB({ apiVersion: '2012-08-10' })
+  }
+  async truncate() {
+    const tables = await this.db.listTables({ Limit: 100 }).promise()
     for (let table of tables.TableNames!.filter(table => table.startsWith(configFile.DBPrefix!))) {
-      await truncateTable(table);
+      await this.truncateTable(table);
     }
     return tables;
   }
-  async function truncateTable(table: string) {
+  async truncateTable(table: string) {
     try {
       // テーブル詳細を取得
       const params = { TableName: table }
-      const data = await db.describeTable(params).promise()
+      const data = await this.db.describeTable(params).promise()
       const key_schema = data.Table!.KeySchema!.map(schema => schema.AttributeName);
       // テーブルスキャン
       const scanparams: DynamoDB.DocumentClient.ScanInput = {
@@ -39,7 +43,7 @@ export namespace TruncateDB {
         AttributesToGet: key_schema
       }
       // 削除対象がなくなるまで繰り返す
-      let records = await db.scan(scanparams).promise()
+      let records = await this.db.scan(scanparams).promise()
       while (records.Count! > 0) {
         let items: StringKeyObject = {}
         // delete scanned data
@@ -47,8 +51,8 @@ export namespace TruncateDB {
         const deleterecords: DynamoDB.BatchWriteItemInput = {
           RequestItems: items
         }
-        await db.batchWriteItem(deleterecords).promise();
-        records = await db.scan(scanparams).promise()
+        await this.db.batchWriteItem(deleterecords).promise();
+        records = await this.db.scan(scanparams).promise()
       }
     } catch (err) {
       console.log(err);

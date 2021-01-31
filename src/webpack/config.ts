@@ -1,8 +1,5 @@
 // @ts-ignore
 import configFile from './config.json';
-
-export const config = configFile as Config;
-
 export interface Config {
     region: string;
     cognito: {
@@ -21,6 +18,6 @@ export interface Config {
     };
 }
 
-/*export function readConfig(stage: string) {
-    return configFile.find(item => item.apiGateway.stageName === stage)
-}*/
+export function readConfig(stage: string): Config {
+    return configFile.find(item => item.apiGateway.stageName === stage) as Config
+}

@@ -1,7 +1,8 @@
 import Auth, { CognitoUser } from '@aws-amplify/auth';
 import Amplify, { Hub } from '@aws-amplify/core';
-import { config } from './config';
+import * as configsys from './config';
 
+const config = configsys.readConfig('dev');
 /**
  * Is OAuth authentication in progress.
  * After redirection from Cognito Hosted UI to obtain user tokens

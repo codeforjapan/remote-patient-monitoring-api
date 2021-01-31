@@ -1,15 +1,19 @@
 "use strict"
-import { config } from '../../src/webpack/config';
+import * as configsys from '../../src/webpack/config';
 import { TruncateDB } from '../../util/truncatedb';
 import { secret } from '../lib/secret';
 import { v4 as uuid } from 'uuid'
 
 const axios = require('axios')
 let entry_point: string;
+
+const STAGE = process.env.JEST_STAGE || 'dev'
+const config = configsys.readConfig(STAGE)
 beforeAll(async () => {
   entry_point = `https://${config.apiGateway.restApiId}.execute-api.${config.region}.amazonaws.com/${config.apiGateway.stageName}`;
   console.log(entry_point)
-  await TruncateDB.truncate()
+  const db = new TruncateDB(STAGE)
+  await db.truncate()
 });
 
 describe('get Centers', () => {

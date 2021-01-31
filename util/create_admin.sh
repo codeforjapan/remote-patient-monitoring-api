@@ -22,9 +22,8 @@ PASSWORD=`cat .secret.json | jq -r '.auth_pass'`
 
 
 # check .secret
-
-POOL_ID=`cat config.json | jq -r '.cognito.adminUserPoolId'`
-CLIENT_ID=`cat config.json | jq -r '.cognito.adminUserPoolWebClientId'`
+POOL_ID=`cat config.json | jq -r 'select(.[].apiGateway.stageName == "dev") | .[].cognito.adminUserPoolId'`
+CLIENT_ID=`cat config.json | jq -r 'select(.[].apiGateway.stageName == "dev") | .[].cognito.adminUserPoolWebClientId'`
 
 echo "#--- create admin user "
 
@@ -33,6 +32,10 @@ RET=`aws cognito-idp admin-create-user \
 --username ${USERID} \
 --user-attributes Name="email",Value="$EMAIL" \
 --temporary-password ${PASSWORD}`
+if [ $? -ne 0 ]; then
+  echo "create failed"
+  exit 1
+fi
 
 
 RET=`aws cognito-idp admin-initiate-auth \

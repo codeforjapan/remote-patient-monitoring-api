@@ -7,6 +7,7 @@ const fs = require('fs');
 const provider = serverless.service.provider;
 //@ts-ignore
 const awsProvider = serverless.getProvider('aws');
+const CONFIG_FILE = './src/webpack/config.json';
 
 const listStackResources = async (resources?: any, nextToken?: string): Promise<any> => {
   resources = resources || [];
@@ -45,15 +46,37 @@ const createConfig = (stackResources: any) => ({
   }
 });
 
+const isFileExists = (path: string) => {
+  try {
+    fs.statSync(path);
+    return true
+  } catch (e) {
+    return false
+  }
+}
+const mergeConfigResources = (config: any) => {
+  if (isFileExists(CONFIG_FILE)) {
+    const configs = JSON.parse(fs.readFileSync(CONFIG_FILE))
+    if (configs.isArray != undefined && configs.isArray() && configs.findIndex((item: any) => item.apiGateway.stageName === config.apiGateway.stageName) > -1) {
+      return configs.splice(configs.findIndex((item: any) => item.apiGateway.stageName === config.apiGateway.stageName), 1, config)
+    } else {
+      return [config];
+    }
+  } else {
+    return [config];
+  }
+}
+
 const getPhysicalId = (stackResources: any, logicalId: string) => {
   return stackResources.find((r: any) => r.LogicalResourceId === logicalId).PhysicalResourceId || '';
 };
 
-const writeConfigFile = (config: any) => {
-  fs.writeFileSync('./src/webpack/config.json', JSON.stringify(config));
-  fs.writeFileSync('./util/config.json', JSON.stringify(config));
+const writeConfigFile = (configs: any) => {
+  fs.writeFileSync(CONFIG_FILE, JSON.stringify(configs));
+  fs.writeFileSync('./util/config.json', JSON.stringify(configs));
 };
 
 listStackResources()
   .then(createConfig)
+  .then(mergeConfigResources)
   .then(writeConfigFile);
