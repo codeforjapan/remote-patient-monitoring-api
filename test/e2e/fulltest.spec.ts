@@ -46,6 +46,7 @@ let center_id_with_no_nurse: string
 let nurse_password: string
 
 const patient_id: string = uuid();
+const patient_id2: string = uuid();
 const patient_id_in_another_center: string = uuid()
 let patient_item_in_another_center: any
 let patient_password: string
@@ -181,7 +182,7 @@ describe('admin user', () => {
   })
 
   it('create new patient to the center', async () => {
-    const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, { patientId: uuid(), phone: "090-1111-1111" });
+    const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, { patientId: patient_id2, phone: "090-1111-1111" });
     expect(ret.data.phone).toBe('090-1111-1111')
   })
 
@@ -217,7 +218,6 @@ describe('admin user', () => {
     expect(ret2.data.phone).toBe("090-3899-2222")
     patient_item_in_another_center = ret2.data
   })
-
 })
 
 describe('nurse user login', () => {
@@ -242,8 +242,7 @@ describe('Nurse user', () => {
   let axios_nurse: any;
   let nurse_item: any;
   let patient_item: any;
-  const patient_id = uuid();
-  const phone = '090-4444-4444'
+  const patient_id2 = uuid();
   beforeAll(async () => {
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     idToken = ret.data.idToken;
@@ -309,7 +308,7 @@ describe('Nurse user', () => {
   })
 
   it('create new patient to the center', async () => {
-    const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, { patientId: patient_id, phone: phone });
+    const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, { patientId: patient_id2, phone: phone });
     expect(ret.data).toHaveProperty('password')
     expect(ret.data.phone).toBe(phone)
   })
@@ -323,7 +322,7 @@ describe('Nurse user', () => {
   })
 
   it('read new patient id', async () => {
-    const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id}`);
+    const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id2}`);
     patient_item = ret.data;
     expect(ret.data.phone).toBe(phone)
   })
@@ -367,13 +366,100 @@ describe('Nurse user', () => {
   it('fails to update existing patient to move another center that is not mine', async () => {
     expect.assertions(1)
     patient_item.centerId = center_id3
-    console.log(entry_point + `/api/nurse/patients/${patient_id}`)
-    console.log(patient_item)
-    console.log(idToken)
     const t = async () => {
-      await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id}`, patient_item);
+      await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id2}`, patient_item);
     }
     await expect(t).rejects.toThrow(/403/)
   })
 
+})
+
+/*
+ * Patient methods
+ */
+describe('Patient user', () => {
+  let axios_patient: any;
+  let patient_item: any;
+  beforeAll(async () => {
+    const ret = await axios.post(entry_point + '/api/patient/login', { username: patient_id, password: patient_password });
+    idToken = ret.data.idToken;
+    axios_patient = axios.create({
+      headers: {
+        Authorization: idToken
+      }
+    })
+  });
+
+  it('fails to create new center', async () => {
+    expect.assertions(1);
+    const t = async () => {
+      await axios_patient.post(entry_point + '/api/admin/centers', { centerName: 'A保健所' });
+    }
+    await expect(t).rejects.toThrowError()
+  })
+
+  it('read my patient id', async () => {
+    const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}`);
+    patient_item = ret.data;
+    expect(ret.data.phone).toBe(phone)
+  })
+
+  it.skip('can\'t read patient which is not mine', async () => {
+    expect.assertions(1)
+    const t = async () => {
+      await axios_patient.get(entry_point + `/api/patient/patients/${patient_id2}`);
+    }
+    await expect(t).rejects.toThrowError()
+  })
+
+  it.skip('post new status', async () => {
+    // post /api/patient/patients/{patientId}/statuses
+  })
+  it.skip('post another status', async () => {
+    // post /api/patient/patients/{patientId}/statuses
+  })
+  it.skip('post another status', async () => {
+    // post /api/patient/patients/{patientId}/statuses
+  })
+  it.skip('get three statuses', async () => {
+    // get /api/patient/patients/{patientId}/statuses
+  })
+  it.skip('delete statuses', async () => {
+    // delete /api/patient/statuses/{statusId}
+  })
+  it.skip('get two statuses', async () => {
+    // get /api/patient/patients/{patientId}/statuses
+  })
+  it.skip('can\'t post status to another patient', async () => {
+    // post /api/patient/patients/{not_my_id}/statuses
+    // expect error
+  })
+  it.skip('post other statuses', async () => {
+    // いくつかポストしておく
+  })
+})
+
+
+/*
+ * Nurse will read patient's data
+ */
+describe('Nurse user(again)', () => {
+  let axios_nurse: any;
+  let nurse_item: any;
+  let patient_item: any;
+  const patient_id2 = uuid();
+  beforeAll(async () => {
+    const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
+    idToken = ret.data.idToken;
+    axios_nurse = axios.create({
+      headers: {
+        Authorization: idToken
+      }
+    })
+  });
+
+  it.skip('read statuses', async () => {
+    // get /api/nurse/patients/{patientId}/statuses
+    // これまで入れた件数表示されるはず
+  })
 })
