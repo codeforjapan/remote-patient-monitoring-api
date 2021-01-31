@@ -3,7 +3,8 @@
 
 import AWS, { DynamoDB } from 'aws-sdk';
 import * as configsys from '../src/webpack/config';
-import configFile from '../config/dev.json';
+import configFileDev from '../config/dev.json';
+import configFileStg from '../config/stg.json';
 
 let profile = 'default';
 if (process.env.AWS_PROFILE) {
@@ -16,8 +17,10 @@ interface StringKeyObject {
 }
 export class TruncateDB {
   private db: DynamoDB;
+  private configFile: any;
   private config: configsys.Config;
   constructor(stage: string) {
+    this.configFile = (stage === 'stg') ? configFileStg : configFileDev;
     this.config = configsys.readConfig(stage)
     AWS.config.update({ region: this.config.region });
     AWS.config.credentials = credentials;
@@ -25,7 +28,7 @@ export class TruncateDB {
   }
   async truncate() {
     const tables = await this.db.listTables({ Limit: 100 }).promise()
-    for (let table of tables.TableNames!.filter(table => table.startsWith(configFile.DBPrefix!))) {
+    for (let table of tables.TableNames!.filter(table => table.startsWith(this.configFile.DBPrefix!))) {
       await this.truncateTable(table);
     }
     return tables;
