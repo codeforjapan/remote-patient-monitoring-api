@@ -30,7 +30,7 @@
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
     "test": "jest --silent=false --runInBand",
-    "test:stg:e2e": "export JEST_STAGE='stg' jest --silent=false --runInBand test/e2e",
+    "test:stg:e2e": "JEST_STAGE=\"stg\" jest --silent=false --runInBand test/e2e",
     "test:e2e": "jest --silent=false --runInBand test/e2e",
     "test:e2e:watch": "jest --watch --silent=false --runInBand test/e2e",
     "test:local": "jest --silent=false test/lambda",
