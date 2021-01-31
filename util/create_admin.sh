@@ -1,9 +1,25 @@
 #!/bin/bash
 
 usage_exit() {
-        echo "Usage: $0" 1>&2
+        echo "Usage: $0 [-s stage]" 1>&2
         exit 1
 }
+
+STAGE="dev"
+while getopts s:h OPT
+do
+    case $OPT in
+        s)  STAGE=$OPTARG
+            ;;
+        h)  usage_exit
+            ;;
+        \?) usage_exit
+            ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
 
 PATH_DIR_SCRIPT=$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)
 cd "$PATH_DIR_SCRIPT"
@@ -22,8 +38,8 @@ PASSWORD=`cat .secret.json | jq -r '.auth_pass'`
 
 
 # check .secret
-POOL_ID=`cat config.json | jq -r 'select(.[].apiGateway.stageName == "dev") | .[].cognito.adminUserPoolId'`
-CLIENT_ID=`cat config.json | jq -r 'select(.[].apiGateway.stageName == "dev") | .[].cognito.adminUserPoolWebClientId'`
+POOL_ID=`cat config.json | jq -r "map(select(.apiGateway.stageName == \"${STAGE}\")) | .[].cognito.adminUserPoolId"`
+CLIENT_ID=`cat config.json | jq -r "map(select(.apiGateway.stageName == \"${STAGE}\")) | .[].cognito.adminUserPoolWebClientId"`
 
 echo "#--- create admin user "
 
