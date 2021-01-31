@@ -2,6 +2,7 @@
 import configFile from './config.json';
 export interface Config {
     region: string;
+    stage: string;
     cognito: {
         identityPoolId: string;
         adminUserPoolId?: string;
@@ -15,6 +16,9 @@ export interface Config {
     apiGateway: {
         restApiId: string;
         stageName: string;
+    };
+    distribution: {
+        SwaggerUIDistribution: string
     };
 }
 
