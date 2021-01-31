@@ -62,8 +62,7 @@ custom:
   baseName: ${self:custom.project}-${self:provider.stage}
   scriptHooks:
     after:aws:deploy:deploy:updateStack:
-      - generateConfigFile.js
-      - generateAuthConfigFile.js
+      - ./.lib/src/plugins/generateConfigFile.js
       - ./node_modules/.bin/webpack --mode production --progress
   assets:
     auto: true

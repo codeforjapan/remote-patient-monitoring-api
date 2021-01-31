@@ -8,8 +8,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strictNullChecks": true,
+    "strictBindCallApply": false,
     "sourceMap": true,
-    "target": "es2019",
+    "target": "es5",
     "resolveJsonModule": true,
     "outDir": ".lib"
   },

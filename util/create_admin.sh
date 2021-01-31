@@ -1,9 +1,25 @@
 #!/bin/bash
 
 usage_exit() {
-        echo "Usage: $0" 1>&2
+        echo "Usage: $0 [-s stage]" 1>&2
         exit 1
 }
+
+STAGE="dev"
+while getopts s:h OPT
+do
+    case $OPT in
+        s)  STAGE=$OPTARG
+            ;;
+        h)  usage_exit
+            ;;
+        \?) usage_exit
+            ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
 
 PATH_DIR_SCRIPT=$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)
 cd "$PATH_DIR_SCRIPT"
@@ -22,9 +38,8 @@ PASSWORD=`cat .secret.json | jq -r '.auth_pass'`
 
 
 # check .secret
-
-POOL_ID=`cat config.json | jq -r '.cognito.adminUserPoolId'`
-CLIENT_ID=`cat config.json | jq -r '.cognito.adminUserPoolWebClientId'`
+POOL_ID=`cat config.json | jq -r "map(select(.apiGateway.stageName == \"${STAGE}\")) | .[].cognito.adminUserPoolId"`
+CLIENT_ID=`cat config.json | jq -r "map(select(.apiGateway.stageName == \"${STAGE}\")) | .[].cognito.adminUserPoolWebClientId"`
 
 echo "#--- create admin user "
 
@@ -33,6 +48,10 @@ RET=`aws cognito-idp admin-create-user \
 --username ${USERID} \
 --user-attributes Name="email",Value="$EMAIL" \
 --temporary-password ${PASSWORD}`
+if [ $? -ne 0 ]; then
+  echo "create failed"
+  exit 1
+fi
 
 
 RET=`aws cognito-idp admin-initiate-auth \

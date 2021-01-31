@@ -1,14 +1,17 @@
 #!/bin/bash
 
 usage_exit() {
-        echo "Usage: $0 [-c confirmation code]" 1>&2
+        echo "Usage: $0 [-c confirmation code] [-s stage]" 1>&2
         exit 1
 }
 
-while getopts c:h OPT
+STAGE="dev"
+while getopts c:s:h OPT
 do
     case $OPT in
         c)  CHALLENGE=$OPTARG
+            ;;
+        s)  STAGE=$OPTARG
             ;;
         h)  usage_exit
             ;;
@@ -34,8 +37,8 @@ fi
 
 USERNAME=`cat .secret.json | jq -r '.auth_user'`
 PASSWORD=`cat .secret.json | jq -r '.auth_pass'`
-POOL_ID=`cat config.json | jq -r '.cognito.adminUserPoolId'`
-CLIENT_ID=`cat config.json | jq -r '.cognito.adminUserPoolWebClientId'`
+POOL_ID=`cat config.json | jq -r "map(select(.apiGateway.stageName == \"${STAGE}\")) | .[].cognito.adminUserPoolId"`
+CLIENT_ID=`cat config.json | jq -r "map(select(.apiGateway.stageName == \"${STAGE}\")) | .[].cognito.adminUserPoolWebClientId"`
 
 if [ -z "$CHALLENGE" ]; then
   CHALLENGE=$PASSWORD

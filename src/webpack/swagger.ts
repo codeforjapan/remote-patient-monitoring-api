@@ -1,9 +1,9 @@
 import Auth from '@aws-amplify/auth';
-import {config} from './config';
 import APIGateway from 'aws-sdk/clients/apigateway';
-import {ICredentials} from '@aws-amplify/core';
-import {Spec, SwaggerUIBundle} from 'swagger-ui-dist'
-
+import { ICredentials } from '@aws-amplify/core';
+import { Spec, SwaggerUIBundle } from 'swagger-ui-dist'
+import * as configsys from './config';
+const config = configsys.readConfig('dev')
 export const initSwagger = async (): Promise<void> => {
     const credentials = await Auth.currentCredentials();
     const apiGateway = createAPIGatewayClient(credentials);
