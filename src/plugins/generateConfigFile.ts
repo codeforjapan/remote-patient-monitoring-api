@@ -40,6 +40,9 @@ const createConfig = (stackResources: any) => ({
     restApiId: getPhysicalId(stackResources, 'ApiGatewayRestApi'),
     stageName: provider.stage,
   },
+  distribution: {
+    SwaggerUIDistribution: getPhysicalId(stackResources, 'SwaggerDistribution')
+  }
 });
 
 const getPhysicalId = (stackResources: any, logicalId: string) => {
@@ -48,6 +51,7 @@ const getPhysicalId = (stackResources: any, logicalId: string) => {
 
 const writeConfigFile = (config: any) => {
   fs.writeFileSync('./src/webpack/config.json', JSON.stringify(config));
+  fs.writeFileSync('./util/config.json', JSON.stringify(config));
 };
 
 listStackResources()

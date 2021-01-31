@@ -63,7 +63,6 @@ custom:
   scriptHooks:
     after:aws:deploy:deploy:updateStack:
       - ./.lib/src/plugins/generateConfigFile.js
-      - generateAuthConfigFile.js
       - ./node_modules/.bin/webpack --mode production --progress
   assets:
     auto: true
