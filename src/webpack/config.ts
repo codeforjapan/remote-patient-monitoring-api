@@ -20,3 +20,7 @@ export interface Config {
         stageName: string;
     };
 }
+
+/*export function readConfig(stage: string) {
+    return configFile.find(item => item.apiGateway.stageName === stage)
+}*/

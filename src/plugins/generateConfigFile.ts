@@ -1,12 +1,14 @@
-/*global serverless */
+/* global serverless, options */
 'use strict';
 
 const fs = require('fs');
 
+//@ts-ignore
 const provider = serverless.service.provider;
+//@ts-ignore
 const awsProvider = serverless.getProvider('aws');
 
-const listStackResources = async (resources, nextToken) => {
+const listStackResources = async (resources?: any, nextToken?: string): Promise<any> => {
   resources = resources || [];
   const response = await awsProvider.request('CloudFormation', 'listStackResources', {
     StackName: awsProvider.naming.getStackName(),
@@ -21,7 +23,7 @@ const listStackResources = async (resources, nextToken) => {
   return resources;
 };
 
-const createConfig = stackResources => ({
+const createConfig = (stackResources: any) => ({
   region: provider.region,
   stage: provider.stage,
   cognito: {
@@ -40,11 +42,11 @@ const createConfig = stackResources => ({
   },
 });
 
-const getPhysicalId = (stackResources, logicalId) => {
-  return stackResources.find(r => r.LogicalResourceId === logicalId).PhysicalResourceId || '';
+const getPhysicalId = (stackResources: any, logicalId: string) => {
+  return stackResources.find((r: any) => r.LogicalResourceId === logicalId).PhysicalResourceId || '';
 };
 
-const writeConfigFile = config => {
+const writeConfigFile = (config: any) => {
   fs.writeFileSync('./src/webpack/config.json', JSON.stringify(config));
 };
 
