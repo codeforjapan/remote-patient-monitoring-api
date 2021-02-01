@@ -6,6 +6,12 @@ delete:
   security:
     - APIGatewayNurseAuthorizer: []
   parameters:
+    - name: patientId
+      in: path
+      description: 削除したい症状報告を持っている患者のID
+      required: true
+      schema:
+        type: string
     - name: statusId
       in: path
       description: 削除したい症状報告のID

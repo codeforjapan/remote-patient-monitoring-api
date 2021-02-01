@@ -1,11 +1,11 @@
 type: object
+required:
+  - cough
+  - phlegm
+  - suffocation
+  - headache
+  - sore_throat
 properties:
-  required:
-    - "cough"
-    - "phlegm"
-    - "suffocation"
-    - "headache"
-    - "sore_throat"
   cough:
     type: boolean
   phlegm:
