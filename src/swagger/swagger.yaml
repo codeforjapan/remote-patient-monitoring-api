@@ -46,15 +46,15 @@ paths:
     $ref: ./paths/patient/patient-by-id.yaml
   /api/admin/patients/{patientId}/statuses:
     $ref: ./paths/admin/statuses-by-patient-id.yaml
+  /api/admin/patients/{patientId}/statuses/{statusId}:
+    $ref: ./paths/admin/status-by-id.yaml
   /api/nurse/patients/{patientId}/statuses:
     $ref: ./paths/nurse/statuses-by-patient-id.yaml
+  /api/nurse/patients/{patientId}/statuses/{statusId}:
+    $ref: ./paths/nurse/status-by-id.yaml
   /api/patient/patients/{patientId}/statuses:
     $ref: ./paths/patient/statuses-by-patient-id.yaml
-  /api/admin/statuses/{statusId}:
-    $ref: ./paths/admin/status-by-id.yaml
-  /api/nurse/statuses/{statusId}:
-    $ref: ./paths/nurse/status-by-id.yaml
-  /api/patient/statuses/{statusId}:
+  /api/patient/patients/{patientId}/statuses/{statusId}:
     $ref: ./paths/patient/status-by-id.yaml
 components:
   schemas:
