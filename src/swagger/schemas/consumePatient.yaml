@@ -1,4 +1,7 @@
 type: object
+required:
+  - patientId
+  - phone
 properties:
   patientId:
     type: string
