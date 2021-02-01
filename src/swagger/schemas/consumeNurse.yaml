@@ -1,4 +1,6 @@
 type: object
+required:
+  - manageCenters
 properties:
   manageCenters:
     type: array
