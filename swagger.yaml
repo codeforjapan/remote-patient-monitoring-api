@@ -639,6 +639,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - centerName
               properties:
                 centerName:
                   type: string
@@ -1027,6 +1029,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - centerName
               properties:
                 centerName:
                   type: string
@@ -1887,6 +1891,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - manageCenters
               properties:
                 manageCenters:
                   type: array
@@ -2420,6 +2426,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - patientId
+                - phone
               properties:
                 patientId:
                   type: string
@@ -2751,6 +2760,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - patientId
+                - phone
               properties:
                 patientId:
                   type: string
@@ -3028,6 +3040,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - patientId
+                - phone
               properties:
                 patientId:
                   type: string
@@ -3388,6 +3403,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - patientId
+                - phone
               properties:
                 patientId:
                   type: string
@@ -4263,6 +4281,12 @@ paths:
       description: |
         Enable CORS by returning correct headers
       parameters:
+        - name: patientId
+          in: path
+          description: 削除したい症状報告を持っている患者のID
+          required: true
+          schema:
+            type: string
         - name: statusId
           in: path
           description: 取得したい療養者のID
@@ -4791,6 +4815,12 @@ paths:
       description: |
         Enable CORS by returning correct headers
       parameters:
+        - name: patientId
+          in: path
+          description: 削除したい症状報告を持っている患者のID
+          required: true
+          schema:
+            type: string
         - name: statusId
           in: path
           description: 取得したい療養者のID
@@ -5319,6 +5349,12 @@ paths:
       description: |
         Enable CORS by returning correct headers
       parameters:
+        - name: patientId
+          in: path
+          description: 削除したい症状報告を持っている患者のID
+          required: true
+          schema:
+            type: string
         - name: statusId
           in: path
           description: 取得したい療養者のID
@@ -5367,6 +5403,8 @@ components:
           type: string
     consumeCenter:
       type: object
+      required:
+        - centerName
       properties:
         centerName:
           type: string
@@ -5465,6 +5503,9 @@ components:
                     type: string
     consumePatient:
       type: object
+      required:
+        - patientId
+        - phone
       properties:
         patientId:
           type: string
