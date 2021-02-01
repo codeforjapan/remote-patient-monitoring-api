@@ -105,6 +105,12 @@ options:
   description: |
     Enable CORS by returning correct headers
   parameters:
+    - name: patientId
+      in: path
+      description: 削除したい症状報告を持っている患者のID
+      required: true
+      schema:
+        type: string
     - name: statusId
       in: path
       description: 取得したい療養者のID
