@@ -3988,6 +3988,10 @@ paths:
             schema:
               type: object
               properties:
+                required:
+                  - SpO2
+                  - body_temperature
+                  - pulse
                 SpO2:
                   type: integer
                   format: int32
@@ -4000,6 +4004,12 @@ paths:
                 symptom:
                   type: object
                   properties:
+                    required:
+                      - cough
+                      - phlegm
+                      - suffocation
+                      - headache
+                      - sore_throat
                     cough:
                       type: boolean
                     phlegm:
@@ -4350,6 +4360,10 @@ paths:
             schema:
               type: object
               properties:
+                required:
+                  - SpO2
+                  - body_temperature
+                  - pulse
                 SpO2:
                   type: integer
                   format: int32
@@ -4362,6 +4376,12 @@ paths:
                 symptom:
                   type: object
                   properties:
+                    required:
+                      - cough
+                      - phlegm
+                      - suffocation
+                      - headache
+                      - sore_throat
                     cough:
                       type: boolean
                     phlegm:
@@ -4712,6 +4732,10 @@ paths:
             schema:
               type: object
               properties:
+                required:
+                  - SpO2
+                  - body_temperature
+                  - pulse
                 SpO2:
                   type: integer
                   format: int32
@@ -4724,6 +4748,12 @@ paths:
                 symptom:
                   type: object
                   properties:
+                    required:
+                      - cough
+                      - phlegm
+                      - suffocation
+                      - headache
+                      - sore_throat
                     cough:
                       type: boolean
                     phlegm:
