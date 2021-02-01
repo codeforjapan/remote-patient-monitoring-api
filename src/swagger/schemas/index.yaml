@@ -18,3 +18,7 @@ Statuses:
   $ref: "./Statuses.yaml"
 Status:
   $ref: "./Status.yaml"
+consumeStatus:
+  $ref: "./consumeStatus.yaml"
+consumeSymptom:
+  $ref: "./consumeSymptom.yaml"
