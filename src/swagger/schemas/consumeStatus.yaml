@@ -1,9 +1,9 @@
 type: object
 properties:
   required:
-    - "SpO2"
-    - "body_temperature"
-    - "pulse"
+    - SpO2
+    - body_temperature
+    - pulse
   SpO2:
     type: integer
     format: int32
