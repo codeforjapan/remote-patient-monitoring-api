@@ -5586,6 +5586,64 @@ components:
               type: boolean
             remarks:
               type: string
+    consumeStatus:
+      type: object
+      properties:
+        required:
+          - SpO2
+          - body_temperature
+          - pulse
+        SpO2:
+          type: integer
+          format: int32
+        body_temperature:
+          type: number
+          format: float
+        pulse:
+          type: integer
+          format: int32
+        symptom:
+          type: object
+          properties:
+            required:
+              - cough
+              - phlegm
+              - suffocation
+              - headache
+              - sore_throat
+            cough:
+              type: boolean
+            phlegm:
+              type: boolean
+            suffocation:
+              type: boolean
+            headache:
+              type: boolean
+            sore_throat:
+              type: boolean
+            remarks:
+              type: string
+    consumeSymptom:
+      type: object
+      properties:
+        required:
+          - cough
+          - phlegm
+          - suffocation
+          - headache
+          - sore_throat
+        cough:
+          type: boolean
+        phlegm:
+          type: boolean
+        suffocation:
+          type: boolean
+        headache:
+          type: boolean
+        sore_throat:
+          type: boolean
+        remarks:
+          type: string
   securitySchemes:
     APIGatewayAdminAuthorizer:
       type: apiKey
