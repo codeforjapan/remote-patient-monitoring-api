@@ -19,21 +19,21 @@ export interface Status {
   pulse: number;
   symptom?: {
     symptomId: string;
-    cough: true;
-    phlegm: true;
-    suffocation: true;
-    headache: true;
-    sore_throat: true;
+    cough: boolean;
+    phlegm: boolean;
+    suffocation: boolean;
+    headache: boolean;
+    sore_throat: boolean;
     remarks?: string;
   };
 }
 
 export interface Symptom {
-  cough: true;
-  phlegm: true;
-  suffocation: true;
-  headache: true;
-  sore_throat: true;
+  cough: boolean;
+  phlegm: boolean;
+  suffocation: boolean;
+  headache: boolean;
+  sore_throat: boolean;
   remarks?: string;
 }
 
