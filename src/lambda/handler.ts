@@ -1,49 +1,29 @@
-"use strict";
+'use strict';
 import { cors } from 'aws-lambda-cors';
 import { Admin } from './admin';
 import { Center } from './center';
 import { Patient } from './patient';
 import { Nurse } from './nurse';
+import { Status } from './status';
 
 const cors_get = {
   allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'GET'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
+  allowOrigins: '*',
+  allowMethods: ['OPTIONS', 'HEAD', 'GET'],
+  allowHeaders: ['Authorization', 'Content-Type'],
 };
 const cors_put = {
   allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'PUT'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
+  allowOrigins: '*',
+  allowMethods: ['OPTIONS', 'HEAD', 'PUT'],
+  allowHeaders: ['Authorization', 'Content-Type'],
 };
 
 const cors_post = {
   allowCredentials: true,
-  allowOrigins: "*",
-  allowMethods: [
-    'OPTIONS',
-    'HEAD',
-    'POST'
-  ],
-  allowHeaders: [
-    'Authorization',
-    'Content-Type',
-  ]
+  allowOrigins: '*',
+  allowMethods: ['OPTIONS', 'HEAD', 'POST'],
+  allowHeaders: ['Authorization', 'Content-Type'],
 };
 // login
 export var postAdminLogin = cors(cors_post)(Admin.postAdminLogin);
@@ -70,3 +50,5 @@ export var getNurses = cors(cors_get)(Nurse.getNurses);
 export var getNurse = cors(cors_get)(Nurse.getNurse);
 export var putNurse = cors(cors_put)(Nurse.putNurse);
 export var postNurse = cors(cors_post)(Nurse.postNurse);
+
+export var postStatus = cors(cors_post)(Status.postStatus);
