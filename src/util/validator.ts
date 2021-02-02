@@ -60,6 +60,38 @@ export default class Validator {
     }
   }
 
+  checkPatientStatusBody(res: any) {
+    const requiredParamList = ['SpO2', 'body_temperature', 'pulse'];
+    for (let i = 0; i < requiredParamList.length; i++) {
+      if (res.hasOwnProperty(requiredParamList[i])) {
+        continue;
+      } else {
+        console.log('check PatientStatusBody False');
+        return false;
+      }
+    }
+    console.log('check PatientStatusBody True');
+    return true;
+  }
+
+  checkPatientStatusSymptomBody(res: any) {
+    // symptomが指定されていない場合はパラメータチェックをしない
+    if (res == null) {
+      return true;
+    }
+    const requiredParamList = ['cough', 'phlegm', 'suffocation', 'headache', 'sore_throat'];
+    for (let i = 0; i < requiredParamList.length; i++) {
+      if (res.hasOwnProperty(requiredParamList[i])) {
+        console.log('check PatientStatusSymptomBody False');
+        continue;
+      } else {
+        return false;
+      }
+    }
+    console.log('check PatientStatusSymptomBody True');
+    return true;
+  }
+
   isNurseAPI(event: APIGatewayProxyEvent) {
     console.log('isNurseAPI called');
     if (!event.path) return false;
