@@ -1,5 +1,5 @@
-"use strict";
-import { APIGatewayProxyEvent } from 'aws-lambda'
+'use strict';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 
 export default class Validator {
   jsonBody(bodyData: any) {
@@ -24,54 +24,51 @@ export default class Validator {
   }
 
   checkCenterBody(res: any) {
-    if (
-      res.hasOwnProperty("centerName")
-    ) {
-      console.log("checkCenterBody True");
+    if (res.hasOwnProperty('centerName')) {
+      console.log('checkCenterBody True');
       return true;
     } else {
-      console.log("checkCenterBody False");
+      console.log('checkCenterBody False');
       return false;
     }
   }
   checkNurseBody(res: any) {
-    if (
-      res.hasOwnProperty("nurseId")
-    ) {
-      console.log("checkNurseId True");
+    if (res.hasOwnProperty('nurseId')) {
+      console.log('checkNurseId True');
       return true;
     } else {
-      console.log("checkNurseId False");
+      console.log('checkNurseId False');
       return false;
     }
   }
   checkPatientBody(res: any) {
-    if (
-      res.hasOwnProperty("patientId")
-      && res.hasOwnProperty("phone")
-    ) {
-      console.log("checkPatientBody True");
+    if (res.hasOwnProperty('patientId') && res.hasOwnProperty('phone')) {
+      console.log('checkPatientBody True');
       return true;
     } else {
-      console.log("checkPatientBody False");
+      console.log('checkPatientBody False');
       return false;
     }
   }
   checkPatientPutBody(res: any) {
-    if (
-      res.hasOwnProperty("phone")
-    ) {
-      console.log("checkPatientBody True");
+    if (res.hasOwnProperty('phone')) {
+      console.log('checkPatientBody True');
       return true;
     } else {
-      console.log("checkPatientBody False");
+      console.log('checkPatientBody False');
       return false;
     }
   }
 
   isNurseAPI(event: APIGatewayProxyEvent) {
-    console.log("isNurseAPI called")
-    if (!event.path) return false
+    console.log('isNurseAPI called');
+    if (!event.path) return false;
     return event.path.startsWith('/api/nurse/');
   }
-};
+
+  isPatientAPI(event: APIGatewayProxyEvent) {
+    console.log('isPatientAPI called');
+    if (!event.path) return false;
+    return event.path.startsWith('/api/patient/');
+  }
+}
