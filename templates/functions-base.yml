@@ -122,6 +122,7 @@ postNurse:
   description: "post Nurse"
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMNurseTableRole-${self:provider.stage}"
   environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
     NURSE_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
     NURSE_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY

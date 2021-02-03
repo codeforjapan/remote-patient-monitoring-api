@@ -59,8 +59,7 @@ const mergeConfigResources = (config: any) => {
   if (isFileExists(CONFIG_FILE)) {
     console.log('file exists');
     const configs = JSON.parse(fs.readFileSync(CONFIG_FILE))
-    console.log(configs.isArray);
-    if (configs.isArray != undefined && configs.isArray() && configs.findIndex((item: any) => item.apiGateway.stageName === config.apiGateway.stageName) > -1) {
+    if (configs.constructor === Array && configs.findIndex((item: any) => item.apiGateway.stageName === config.apiGateway.stageName) > -1) {
       return configs.splice(configs.findIndex((item: any) => item.apiGateway.stageName === config.apiGateway.stageName), 1, config)
     } else {
       configs.push(config);

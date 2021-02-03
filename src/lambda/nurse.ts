@@ -9,6 +9,7 @@ AWS.config.update({
   region: process.env.region
 });
 import NurseTable from "../aws/nurseTable";
+import CenterTable from "../aws/centerTable";
 import Validator from "../util/validator";
 import Formatter from "../util/formatter";
 
@@ -59,6 +60,7 @@ export namespace Nurse {
   export const postNurse: APIGatewayProxyHandler = async (event) => {
     console.log('called postNurse');
     const nurseTable = new NurseTable(docClient);
+    const centerTable = new CenterTable(docClient);
     const validator = new Validator();
     const formatter = new Formatter();
     const bodyData = validator.jsonBody(event.body);
@@ -71,6 +73,19 @@ export namespace Nurse {
           errorMessage: 'Center Not Found'
         })
       }
+    }
+    const res = await centerTable.getCenter(event.pathParameters.centerId);
+    if (validator.checkDynamoGetResultEmpty(res)) {
+      const errorModel = {
+        errorCode: "RPM00001",
+        errorMessage: "Not Found",
+      };
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorModel,
+        }),
+      };
     }
 
     try {
