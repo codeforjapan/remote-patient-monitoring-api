@@ -61,34 +61,52 @@ export default class Validator {
   }
 
   checkPatientStatusBody(res: any) {
-    const requiredParamList = ['SpO2', 'body_temperature', 'pulse'];
-    for (let i = 0; i < requiredParamList.length; i++) {
-      if (res.hasOwnProperty(requiredParamList[i])) {
-        continue;
-      } else {
-        console.log('check PatientStatusBody False');
-        return false;
-      }
+    if (res == null || typeof res !== 'object') {
+      return false;
     }
-    console.log('check PatientStatusBody True');
-    return true;
+    // 必須パラメータのチェック
+    const requiredParams = [
+      { name: 'SpO2', type: 'number' },
+      { name: 'body_temperature', type: 'number' },
+      { name: 'pulse', type: 'number' },
+    ];
+    return this.checkRequestBody(res, requiredParams);
   }
 
-  checkPatientStatusSymptomBody(res: any) {
-    // symptomが指定されていない場合はパラメータチェックをしない
-    if (res == null) {
-      return true;
+  checkPatientStatusSymptomBody(res: any): boolean {
+    if (res == null || typeof res !== 'object') {
+      return false;
     }
-    const requiredParamList = ['cough', 'phlegm', 'suffocation', 'headache', 'sore_throat'];
-    for (let i = 0; i < requiredParamList.length; i++) {
-      if (res.hasOwnProperty(requiredParamList[i])) {
-        console.log('check PatientStatusSymptomBody False');
+
+    // 任意パラメータのチェック
+    if (res.remarks !== null && typeof res.remarks !== 'string') {
+      return false;
+    }
+
+    //　必須パラメータのチェック
+    const requiredParams = [
+      { name: 'cough', type: 'boolean' },
+      { name: 'phlegm', type: 'boolean' },
+      { name: 'suffocation', type: 'boolean' },
+      { name: 'headache', type: 'boolean' },
+      { name: 'sore_throat', type: 'boolean' },
+    ];
+    return this.checkRequestBody(res, requiredParams);
+  }
+
+  checkRequestBody(res: object, requiredParams: { name: string; type: string }[]): boolean {
+    for (let i = 0; i < requiredParams.length; i++) {
+      const targetName = requiredParams[i].name;
+      const targetType = requiredParams[i].type;
+      if (res[targetName] !== null && typeof res[targetName] === targetType) {
         continue;
       } else {
+        // 対象のパラメータのkeyが未定義の場合
+        // 対象のパラメータのkeyがあり、valueが未指定の場合
+        // 対象のValueが想定した型と異なる場合
         return false;
       }
     }
-    console.log('check PatientStatusSymptomBody True');
     return true;
   }
 

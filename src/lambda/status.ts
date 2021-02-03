@@ -1,4 +1,3 @@
-'use strict';
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
 import { NurseParam, PatientParam, StatusParam } from '../lambda/definitions/types';
@@ -37,6 +36,7 @@ export namespace Status {
         };
       }
       const patientId = event.pathParameters.patientId;
+      // patientIdから療養者の方が属する保健所のIdを取得する
       const patient = (await patientTable.getPatient(patientId)) as PatientParam;
       const centerId = patient.centerId;
       const config: Config = {
@@ -47,7 +47,6 @@ export namespace Status {
       // /api/nurse の場合
       if (validator.isNurseAPI(event)) {
         const nurseId = admin.getUserId(event);
-        // patientIdから療養者の方が属する保健所のIdを取得する
         if (centerId !== null) {
           const errorModel = {
             errorCode: 'RPM00001',
