@@ -142,9 +142,12 @@ export default class PatientTable {
           patientId: patientId,
         },
         UpdateExpression: 'set #statuses = list_append(if_not_exists(#statuses, :emptyList), :status)',
+        ExpressionAttributeNames: {
+          '#statuses': 'statuses',
+        },
         ExpressionAttributeValues: {
-          ':status': [status],
-          emptyList: [],
+          ':status': [requestBody],
+          ':emptyList': [],
         },
       };
       await this.client.update(params).promise();
