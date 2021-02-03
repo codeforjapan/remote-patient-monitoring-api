@@ -70,35 +70,44 @@ export default class Validator {
       { name: 'body_temperature', type: 'number' },
       { name: 'pulse', type: 'number' },
     ];
+    console.log('validate post status');
     return this.checkRequestBody(res, requiredParams);
   }
 
   checkPatientStatusSymptomBody(res: any): boolean {
-    if (res == null || typeof res !== 'object') {
+    // symptomは任意パラメータなので未定義の場合はtrue
+    if (res == null) {
+      return true;
+    }
+    if (res != null && typeof res !== 'object') {
+      console.log('symptom invalid type');
       return false;
     }
 
     // 任意パラメータのチェック
-    if (res.remarks !== null && typeof res.remarks !== 'string') {
+    const remarks = res.remarks;
+    if (remarks != null && typeof remarks !== 'string') {
+      console.log('remarks invalid type');
       return false;
     }
 
     //　必須パラメータのチェック
-    const requiredParams = [
+    const requiredParams: { name: string; type: string }[] = [
       { name: 'cough', type: 'boolean' },
       { name: 'phlegm', type: 'boolean' },
       { name: 'suffocation', type: 'boolean' },
       { name: 'headache', type: 'boolean' },
       { name: 'sore_throat', type: 'boolean' },
     ];
+    console.log('validate post status.symptom');
     return this.checkRequestBody(res, requiredParams);
   }
 
-  checkRequestBody(res: object, requiredParams: { name: string; type: string }[]): boolean {
+  checkRequestBody(res: { [key: string]: string }, requiredParams: { name: string; type: string }[]): boolean {
     for (let i = 0; i < requiredParams.length; i++) {
-      const targetName = requiredParams[i].name;
-      const targetType = requiredParams[i].type;
-      if (res[targetName] !== null && typeof res[targetName] === targetType) {
+      const name = requiredParams[i].name;
+      const type = requiredParams[i].type;
+      if (res[name] != null && typeof res[name] === type) {
         continue;
       } else {
         // 対象のパラメータのkeyが未定義の場合
