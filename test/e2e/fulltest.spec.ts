@@ -11,7 +11,7 @@ let entry_point: string;
 const STAGE = process.env.JEST_STAGE || 'dev';
 const config = configsys.readConfig(STAGE);
 beforeAll(async () => {
-  entry_point = `https://8u79qlu1v6.execute-api.${config.region}.amazonaws.com/${config.apiGateway.stageName}`;
+  entry_point = `https://${config.apiGateway.restApiId}.execute-api.${config.region}.amazonaws.com/${config.apiGateway.stageName}`;
   console.log(entry_point);
   const db = new TruncateDB(STAGE);
   await db.truncate();
