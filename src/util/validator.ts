@@ -112,7 +112,7 @@ export default class Validator {
       } else {
         // 対象のパラメータのkeyが未定義の場合
         // 対象のパラメータのkeyがあり、valueが未指定の場合
-        // 対象のValueが想定した型と異なる場合
+        // 対象のvalueが想定した型と異なる場合
         return false;
       }
     }

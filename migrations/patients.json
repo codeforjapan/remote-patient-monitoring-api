@@ -16,5 +16,29 @@
         "centerId": "942f71cf-5f19-45d3-846b-4e6609f48269",
         "phone": "090-2222-2222",
         "display": false
+    },
+    {
+        "patientId": "test-status-dummy-patient-1",
+        "centerId": "test-status-dummy-center",
+        "phone": "090-2222-2222",
+        "display": false
+    },
+    {
+        "patientId": "test-status-dummy-patient-2",
+        "centerId": "test-status-dummy-center",
+        "phone": "090-2222-2222",
+        "display": false
+    },
+    {
+        "patientId": "test-status-dummy-patient-3",
+        "centerId": "test-status-dummy-center",
+        "phone": "090-2222-2222",
+        "display": false
+    },
+    {
+        "patientId": "test-status-dummy-patient-4",
+        "centerId": "test-status-dummy-center",
+        "phone": "090-2222-2222",
+        "display": false
     }
 ]
