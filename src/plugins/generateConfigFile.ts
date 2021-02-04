@@ -60,7 +60,8 @@ const mergeConfigResources = (config: any) => {
     console.log('file exists');
     const configs = JSON.parse(fs.readFileSync(CONFIG_FILE))
     if (configs.constructor === Array && configs.findIndex((item: any) => item.apiGateway.stageName === config.apiGateway.stageName) > -1) {
-      return configs.splice(configs.findIndex((item: any) => item.apiGateway.stageName === config.apiGateway.stageName), 1, config)
+      configs.splice(configs.findIndex((item: any) => item.apiGateway.stageName === config.apiGateway.stageName), 1, config)
+      return configs;
     } else {
       configs.push(config);
       return configs;
