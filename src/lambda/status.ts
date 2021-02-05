@@ -6,6 +6,7 @@ import PatientTable from '../aws/patientTable';
 import Validator from '../util/validator';
 import NurseTable from '../aws/nurseTable';
 import { CognitoAdmin, Config } from '../aws/cognito_admin';
+import { Patient } from './definitions/types';
 const docClient = loadDynamoDBClient();
 
 AWS.config.update({
@@ -111,4 +112,44 @@ export namespace Status {
       };
     }
   };
+  export const getStatuses: APIGatewayProxyHandler = async (event) => {
+    const patientTable = new PatientTable(docClient);
+    const validator = new Validator();
+    console.log(event);
+    if (!event.pathParameters || !event.pathParameters.patientId) {
+      const errorModel = {
+        errorCode: 'PRM00001',
+        errorMessage: 'Patient Not Found',
+      };
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorModel,
+        }),
+      };
+    }
+    const patientId = event.pathParameters.patientId;
+    try {
+      const ret = await patientTable.getPatient(patientId)
+      if (validator.checkDynamoGetResultEmpty(ret)) {
+        return {
+          statusCode: 404,
+          body: "not found",
+        };
+      }
+      console.log(ret);
+      const patient = ret as Patient
+      return {
+        statusCode: 200,
+        body: JSON.stringify(patient.statuses),
+      };
+    } catch (err) {
+      const errorModel = { error: err };
+      return {
+        statusCode: 500,
+        body: JSON.stringify(errorModel),
+      };
+    }
+
+  }
 }

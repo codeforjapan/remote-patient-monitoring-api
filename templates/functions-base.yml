@@ -180,3 +180,10 @@ postStatus:
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
     PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
     PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+getStatuses:
+  handler: src/lambda/handler.getStatuses
+  name: "remote-patient-monitoring-getStatuses-${self:provider.stage}"
+  description: "get Statuses"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}

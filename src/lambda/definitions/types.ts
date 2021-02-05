@@ -8,7 +8,23 @@ export interface NurseParam {
     centerId: string;
   }[];
 }
+export interface PatientParam {
+  patientId: string;
+  phone: string;
+  display?: boolean;
+  policy_accepted?: string;
+  Statuses?: Status[];
+  centerId: string;
+}
 
+export interface Patient {
+  patientId: string;
+  phone: string;
+  display?: boolean;
+  policy_accepted?: string;
+  statuses?: Status[];
+  centerId: string;
+}
 export interface Status {
   statusId: string;
   patientId: string;
@@ -42,12 +58,4 @@ export interface StatusParam {
   body_temperature: number;
   pulse: number;
   symptom?: Symptom;
-}
-export interface PatientParam {
-  patientId: string;
-  phone: string;
-  display?: boolean;
-  policy_accepted?: string;
-  Statuses?: Status[];
-  centerId: string;
 }

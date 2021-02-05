@@ -51,4 +51,6 @@ export var getNurse = cors(cors_get)(Nurse.getNurse);
 export var putNurse = cors(cors_put)(Nurse.putNurse);
 export var postNurse = cors(cors_post)(Nurse.postNurse);
 
+// statuses
 export var postStatus = cors(cors_post)(Status.postStatus);
+export var getStatuses = cors(cors_post)(Status.getStatuses);
