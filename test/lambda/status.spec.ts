@@ -470,4 +470,99 @@ describe('status test', () => {
     expect(result.errorCode).toBe(invalidErrorCode);
     expect(result.errorMessage).toBe(invalidErrorMessage);
   });
+
+  it('post status with symptom', async () => {
+    const dummyPatientId = 'test-status-dummy-patient-3';
+    const dummyCenterId = 'test-status-dummy-center';
+    const dummyPostData: StatusParam = {
+      SpO2: 98,
+      body_temperature: 36.0,
+      pulse: 60,
+      symptom: {
+        cough: false,
+        phlegm: false,
+        suffocation: false,
+        headache: false,
+        sore_throat: false,
+        remarks: 'dummy',
+      },
+    };
+    const params = {
+      path: `api/admin/patients/${dummyPatientId}/statuses`,
+      pathParameters: {
+        patientId: dummyPatientId,
+      },
+      body: dummyPostData,
+    };
+    const response = await handler.postStatus(params);
+    const result: Status = JSON.parse(response.body);
+    expect(result.statusId).not.toBe(null);
+    expect(result.SpO2).toBe(dummyPostData.SpO2);
+    expect(result.body_temperature).toBe(dummyPostData.body_temperature);
+    expect(result.pulse).toBe(dummyPostData.pulse);
+    expect(result.centerId).toBe(dummyCenterId);
+    expect(result.patientId).toBe(dummyPatientId);
+    expect(result.created).not.toBe(null);
+    expect(result.symptom!.cough).toBe(dummyPostData.symptom!.cough);
+    expect(result.symptom!.phlegm).toBe(dummyPostData.symptom!.phlegm);
+    expect(result.symptom!.headache).toBe(dummyPostData.symptom!.headache);
+    expect(result.symptom!.sore_throat).toBe(dummyPostData.symptom!.sore_throat);
+    expect(result.symptom!.suffocation).toBe(dummyPostData.symptom!.suffocation);
+    expect(result.symptom!.remarks).toBe(dummyPostData.symptom!.remarks);
+    expect(result.symptom!.symptomId).not.toBe(null);
+  });
+  it('post status with symptom', async () => {
+    const dummyPatientId = 'test-status-dummy-patient-3';
+    const dummyCenterId = 'test-status-dummy-center';
+    const dummyPostData: StatusParam = {
+      SpO2: 98,
+      body_temperature: 36.0,
+      pulse: 60,
+      symptom: {
+        cough: false,
+        phlegm: false,
+        suffocation: false,
+        headache: false,
+        sore_throat: false,
+        remarks: 'dummy',
+      },
+    };
+    const params = {
+      path: `api/admin/patients/${dummyPatientId}/statuses`,
+      pathParameters: {
+        patientId: dummyPatientId,
+      },
+      body: dummyPostData,
+    };
+    const response = await handler.postStatus(params);
+    const result: Status = JSON.parse(response.body);
+    expect(result.statusId).not.toBe(null);
+    expect(result.SpO2).toBe(dummyPostData.SpO2);
+    expect(result.body_temperature).toBe(dummyPostData.body_temperature);
+    expect(result.pulse).toBe(dummyPostData.pulse);
+    expect(result.centerId).toBe(dummyCenterId);
+    expect(result.patientId).toBe(dummyPatientId);
+    expect(result.created).not.toBe(null);
+    expect(result.symptom!.cough).toBe(dummyPostData.symptom!.cough);
+    expect(result.symptom!.phlegm).toBe(dummyPostData.symptom!.phlegm);
+    expect(result.symptom!.headache).toBe(dummyPostData.symptom!.headache);
+    expect(result.symptom!.sore_throat).toBe(dummyPostData.symptom!.sore_throat);
+    expect(result.symptom!.suffocation).toBe(dummyPostData.symptom!.suffocation);
+    expect(result.symptom!.remarks).toBe(dummyPostData.symptom!.remarks);
+    expect(result.symptom!.symptomId).not.toBe(null);
+  });
+  it('get statuses', async () => {
+    const handler = require('../../src/lambda/handler');
+    process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
+    const dummyPatientId = 'test-status-dummy-patient-3';
+    const params = {
+      path: `api/admin/patients/${dummyPatientId}/statuses`,
+      pathParameters: {
+        patientId: dummyPatientId,
+      }
+    };
+    const response = await handler.getStatuses(params);
+    const result: Status[] = JSON.parse(response.body);
+    expect(result.length).toBe(3);
+  });
 });

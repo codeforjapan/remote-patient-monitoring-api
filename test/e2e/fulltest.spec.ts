@@ -422,6 +422,7 @@ describe('Patient user', () => {
       password: patient_password,
     });
     idToken = ret.data.idToken;
+    console.log(idToken);
     axios_patient = axios.create({
       headers: {
         Authorization: idToken,
@@ -529,8 +530,10 @@ describe('Patient user', () => {
     expect(result.symptom!.remarks).toBe(dummyPostData.symptom!.remarks);
     expect(result.symptom!.symptomId).not.toBe(null);
   });
-  it.skip('get three statuses', async () => {
-    // get /api/patient/patients/{patientId}/statuses
+
+  it('get three statuses', async () => {
+    const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
+    expect(ret.data.length).toBe(3);
   });
   it.skip('delete statuses', async () => {
     // delete /api/patient/statuses/{statusId}
