@@ -129,6 +129,26 @@ export namespace Status {
       };
     }
     const patientId = event.pathParameters.patientId;
+    // /api/patient の場合
+    if (validator.isPatientAPI(event)) {
+      const config: Config = {
+        userPoolId: process.env.PATIENT_POOL_ID!,
+        userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!,
+      };
+      const admin = new CognitoAdmin(config);
+      const selfId = admin.getUserId(event);
+      // 認証情報から取得した自身のIdと指定Idが異なる場合はエラー
+      if (selfId !== patientId) {
+        const errorModel = {
+          errorCode: 'RPM00101',
+          errorMessage: 'Forbidden',
+        };
+        return {
+          statusCode: 403,
+          body: JSON.stringify(errorModel),
+        };
+      }
+    }
     try {
       const ret = await patientTable.getPatient(patientId)
       if (validator.checkDynamoGetResultEmpty(ret)) {
