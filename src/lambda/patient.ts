@@ -166,6 +166,18 @@ export namespace Patient {
     }
     const admin = new CognitoAdmin(config)
     try {
+      if (validator.isPatientAPI(event)) {
+        const patientId = admin.getUserId(event);
+        if (patientId != event.pathParameters.patientId) {
+          return {
+            statusCode: 403,
+            body: JSON.stringify({
+              errorCode: "RPM00101",
+              errorMessage: 'Forbidden'
+            })
+          };
+        }
+      }
       const res = await patientTable.getPatient(event.pathParameters.patientId);
       if (validator.checkDynamoGetResultEmpty(res)) {
         const errorModel = {

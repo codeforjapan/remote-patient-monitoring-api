@@ -443,12 +443,12 @@ describe('Patient user', () => {
     expect(ret.data.phone).toBe(phone);
   });
 
-  it.skip("can't read patient which is not mine", async () => {
+  it("can't read patient which is not mine", async () => {
     expect.assertions(1);
     const t = async () => {
       await axios_patient.get(entry_point + `/api/patient/patients/${patient_id2}`);
     };
-    await expect(t).rejects.toThrowError();
+    await expect(t).rejects.toThrow(/403/);
   });
 
   it('post new status without symptom', async () => {
