@@ -535,6 +535,16 @@ describe('Patient user', () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
     expect(ret.data.length).toBe(3);
   });
+
+  it('could not read statuses to another patient', async () => {
+    console.log(entry_point + `/api/patient/patients/${patient_id2}/statuses`)
+    expect.assertions(1);
+    const t = async () => {
+      await axios_patient.get(entry_point + `/api/patient/patients/${patient_id2}/statuses`);
+    };
+    await expect(t).rejects.toThrow(/403/);
+  });
+
   it.skip('delete statuses', async () => {
     // delete /api/patient/statuses/{statusId}
   });
