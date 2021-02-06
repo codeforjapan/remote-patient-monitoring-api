@@ -4,7 +4,7 @@ import { TruncateDB } from '../../util/truncatedb';
 import { Status, StatusParam } from '../../src/lambda/definitions/types';
 import { secret } from '../lib/secret';
 import { v4 as uuid } from 'uuid';
-
+import { AxiosInstance } from 'axios'
 const axios = require('axios');
 let entry_point: string;
 
@@ -414,8 +414,9 @@ describe('Nurse user', () => {
  * Patient methods
  */
 describe('Patient user', () => {
-  let axios_patient: any;
+  let axios_patient: AxiosInstance;
   let patient_item: any;
+  let status_id: string;
   beforeAll(async () => {
     const ret = await axios.post(entry_point + '/api/patient/login', {
       username: patient_id,
@@ -461,6 +462,7 @@ describe('Patient user', () => {
     const ret = await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData);
     const result: Status = ret.data;
     expect(result.statusId).not.toBe(null);
+    status_id = result.statusId;
     expect(result.SpO2).toBe(dummyPostData.SpO2);
     expect(result.body_temperature).toBe(dummyPostData.body_temperature);
     expect(result.pulse).toBe(dummyPostData.pulse);
@@ -535,11 +537,26 @@ describe('Patient user', () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
     expect(ret.data.length).toBe(3);
   });
-  it.skip('delete statuses', async () => {
-    // delete /api/patient/statuses/{statusId}
+
+  it('could not read statuses to another patient', async () => {
+    console.log(entry_point + `/api/patient/patients/${patient_id2}/statuses`)
+    expect.assertions(1);
+    const t = async () => {
+      await axios_patient.get(entry_point + `/api/patient/patients/${patient_id2}/statuses`);
+    };
+    await expect(t).rejects.toThrow(/403/);
   });
-  it.skip('get two statuses', async () => {
-    // get /api/patient/patients/{patientId}/statuses
+
+  it('delete specified status', async () => {
+    console.log(entry_point + `/api/patient/patients/${patient_id}/statuses/${status_id}`);
+    const ret = await axios_patient.delete(entry_point + `/api/patient/patients/${patient_id}/statuses/${status_id}`);
+    expect(ret.status).toBe(200)
+    expect(ret.data.statuses.length).toBe(2);
+    expect(ret.data.statuses.findIndex((item: any) => item.status_id === status_id)).toBe(-1)
+  });
+  it('get two statuses', async () => {
+    const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
+    expect(ret.data.length).toBe(2);
   });
   it("can't post status to another patient", async () => {
     expect.assertions(1);

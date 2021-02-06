@@ -187,3 +187,10 @@ getStatuses:
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
   environment:
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+deleteStatus:
+  handler: src/lambda/handler.deleteStatus
+  name: "remote-patient-monitoring-deleteStatus-${self:provider.stage}"
+  description: "get Statuses"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}

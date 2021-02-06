@@ -1,7 +1,7 @@
 'use strict';
 import { AWSError, DynamoDB } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
-import { PatientParam, Status, StatusParam } from '../lambda/definitions/types';
+import { PatientParam, Status, StatusParam, Patient } from '../lambda/definitions/types';
 export default class PatientTable {
   client: DynamoDB.DocumentClient;
   constructor(serviceClient: DynamoDB.DocumentClient) {
@@ -26,7 +26,7 @@ export default class PatientTable {
     });
   }
 
-  getPatient(patientId: string): Promise<DynamoDB.GetItemOutput | AWSError> {
+  getPatient(patientId: string): Promise<Patient | AWSError> {
     const params: DynamoDB.DocumentClient.GetItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Key: {
@@ -41,7 +41,7 @@ export default class PatientTable {
         } else {
           console.log('getPatient Success!');
           console.log(data.Item);
-          resolve(data.Item!);
+          resolve(data.Item! as Patient);
         }
       });
     });
@@ -86,20 +86,28 @@ export default class PatientTable {
   }
 
   putPatient(patientId: string, patient: PatientParam) {
-    console.log(patient);
+    let updateExpression = 'set phone = :phone, display = :display, centerId = :centerId'
+    let expressionAttributeValues: any = {
+      ':phone': patient.phone,
+      ':display': patient.display,
+      ':centerId': patient.centerId,
+      ":statuses": patient.statuses
+    }
+    if (patient.policy_accepted) {
+      updateExpression += ', policy_accepted = :policy_accepted'
+      expressionAttributeValues[':policy_accepted'] = patient.policy_accepted
+    }
+    if (patient.statuses) {
+      updateExpression += ', statuses = :statuses'
+      expressionAttributeValues[':statuses'] = patient.statuses
+    }
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Key: {
         patientId: patientId,
       },
-      UpdateExpression:
-        'set phone = :phone, display = :display, policy_accepted = :policy_accepted, centerId = :centerId',
-      ExpressionAttributeValues: {
-        ':phone': patient.phone,
-        ':display': patient.display,
-        ':policy_accepted': patient.policy_accepted,
-        ':centerId': patient.centerId,
-      },
+      UpdateExpression: updateExpression,
+      ExpressionAttributeValues: expressionAttributeValues
     };
     console.log(params);
     return new Promise((resolve, reject) => {
@@ -155,6 +163,21 @@ export default class PatientTable {
     } catch (err) {
       console.log(err);
       throw err;
+    }
+  }
+  async deletePatientStatus(patientId: string, statusId: string) {
+    try {
+      const ret = await this.getPatient(patientId)
+
+      const patient = ret as Patient
+      if (patient.statuses) {
+        patient.statuses.splice(patient.statuses.findIndex(item => item.statusId === statusId), 1)
+      }
+      const ret2 = await this.putPatient(patientId, patient)
+      return Promise.resolve(ret2);
+    } catch (err) {
+      console.log(err);
+      throw err
     }
   }
 }
