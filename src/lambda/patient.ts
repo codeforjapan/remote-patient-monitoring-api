@@ -13,7 +13,6 @@ import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
 
-
 export namespace Patient {
   const isCenterManagedByNurse = async (nurseId: string, centerId: string): Promise<boolean> => {
     const nurseTable = new NurseTable(docClient);
@@ -204,10 +203,18 @@ export namespace Patient {
           };
         }
       }
-
+      const patient = res as PatientParam
+      if (patient.statuses) {
+        patient.statuses.sort((a, b) => {
+          return new Date(b.created).getTime() - new Date(a.created).getTime()
+        })
+        if (patient.statuses.length > 20) {
+          patient.statuses.splice(20, patient.statuses.length - 20)
+        }
+      }
       return {
         statusCode: 200,
-        body: JSON.stringify(res),
+        body: JSON.stringify(patient),
       };
     } catch (err) {
       console.log("getPatientTable-index error");

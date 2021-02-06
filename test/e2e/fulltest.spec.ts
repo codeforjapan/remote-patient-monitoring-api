@@ -602,14 +602,17 @@ describe('Patient user', () => {
       await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
     }
     ))
+    dummyPostData.symptom!.remarks = 'latest one'
+    await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
   });
-  it('get 52 statuses', async () => {
+  it('get 53 statuses', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
-    expect(ret.data.length).toBe(52);
+    expect(ret.data.length).toBe(53);
   });
   it('get latest 20 statuses by patient', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}`);
     expect(ret.data.statuses.length).toBe(20);
+    expect(ret.data.statuses![0].symptom!.remarks).toBe('latest one');
   });
 });
 
