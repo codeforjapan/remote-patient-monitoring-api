@@ -603,7 +603,7 @@ describe('Patient user', () => {
     }
     ))
   });
-  it('get three statuses', async () => {
+  it('get 52 statuses', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
     expect(ret.data.length).toBe(52);
   });
