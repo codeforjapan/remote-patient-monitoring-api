@@ -223,7 +223,7 @@ describe('admin user', () => {
   it('create another center for the next test', async () => {
     const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'X保健所' });
     expect(ret.data).toHaveProperty('centerId');
-    center_id_with_no_nurse = ret.data.centerid;
+    center_id_with_no_nurse = ret.data.centerId;
   });
 
   it('create another center and patient for the next test', async () => {
@@ -729,5 +729,13 @@ describe('Nurse user(again)', () => {
     const mydata = items.find(item => item.patientId === patient_id)
     expect(mydata).toBeDefined()
     expect(mydata!.statuses!.length).toBe(20)
+  });
+  it('fails to get the patients that does not depend on mine', async () => {
+    expect.assertions(1);
+    console.log(entry_point + `/api/nurse/centers/${center_id3}/patients`)
+    const t = async () => {
+      await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id3}/patients`);
+    }
+    await expect(t).rejects.toThrow(/403/)
   });
 });
