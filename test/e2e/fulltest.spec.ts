@@ -723,11 +723,9 @@ describe('Nurse user(again)', () => {
 
   it('get list of patients and statuses by center', async () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id}/patients`);
-    console.log(ret.data.Items)
     expect(ret.data.Count).toBe(4);
     expect(ret.data.Items).toBeDefined()
     const items = ret.data.Items! as PatientParam[]
-    console.log(patient_id)
     const mydata = items.find(item => item.patientId === patient_id)
     expect(mydata).toBeDefined()
     expect(mydata!.statuses!.length).toBe(20)

@@ -8,7 +8,7 @@ export default class PatientTable {
     this.client = serviceClient;
   }
 
-  getPatients(centerId: string) {
+  getPatients(centerId: string): Promise<DynamoDB.DocumentClient.ScanOutput | AWSError> {
     const params: DynamoDB.ScanInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
     };
