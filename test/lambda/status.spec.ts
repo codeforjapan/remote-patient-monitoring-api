@@ -1,6 +1,7 @@
-import { Status, StatusParam } from '../../src/lambda/definitions/types';
+import { Status, StatusParam, Patient } from '../../src/lambda/definitions/types';
 
 describe('status test', () => {
+  let statusId: string;
   const handler = require('../../src/lambda/handler');
   process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
   it('post status without symptom', async () => {
@@ -537,6 +538,7 @@ describe('status test', () => {
     const response = await handler.postStatus(params);
     const result: Status = JSON.parse(response.body);
     expect(result.statusId).not.toBe(null);
+    statusId = result.statusId;
     expect(result.SpO2).toBe(dummyPostData.SpO2);
     expect(result.body_temperature).toBe(dummyPostData.body_temperature);
     expect(result.pulse).toBe(dummyPostData.pulse);
@@ -564,5 +566,35 @@ describe('status test', () => {
     const response = await handler.getStatuses(params);
     const result: Status[] = JSON.parse(response.body);
     expect(result.length).toBe(3);
+  });
+  it('delete statuses', async () => {
+    const handler = require('../../src/lambda/handler');
+    process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
+    const dummyPatientId = 'test-status-dummy-patient-3';
+    const params = {
+      path: `api/admin/patients/${dummyPatientId}/statuses/${statusId}`,
+      pathParameters: {
+        patientId: dummyPatientId,
+        statusId: statusId,
+      }
+    };
+    const response = await handler.deleteStatus(params);
+    const result: Patient = JSON.parse(response.body);
+    console.log(result);
+    expect(result.statuses!.length).toBe(2);
+  });
+  it('get two statuses', async () => {
+    const handler = require('../../src/lambda/handler');
+    process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
+    const dummyPatientId = 'test-status-dummy-patient-3';
+    const params = {
+      path: `api/admin/patients/${dummyPatientId}/statuses`,
+      pathParameters: {
+        patientId: dummyPatientId,
+      }
+    };
+    const response = await handler.getStatuses(params);
+    const result: Status[] = JSON.parse(response.body);
+    expect(result.length).toBe(2);
   });
 });

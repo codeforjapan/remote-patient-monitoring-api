@@ -172,4 +172,69 @@ export namespace Status {
     }
 
   }
+  export const deleteStatus: APIGatewayProxyHandler = async (event) => {
+    const patientTable = new PatientTable(docClient);
+    const validator = new Validator();
+    if (!event.pathParameters || !event.pathParameters.patientId) {
+      const errorModel = {
+        errorCode: 'PRM00001',
+        errorMessage: 'Patient Not Found',
+      };
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorModel,
+        }),
+      };
+    }
+    if (!event.pathParameters || !event.pathParameters.statusId) {
+      const errorModel = {
+        errorCode: 'PRM00002',
+        errorMessage: 'Status Not Found',
+      };
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          errorModel,
+        }),
+      };
+    }
+    const patientId = event.pathParameters.patientId;
+    const statusId = event.pathParameters.statusId;
+    // /api/patient の場合
+    if (validator.isPatientAPI(event)) {
+      const config: Config = {
+        userPoolId: process.env.PATIENT_POOL_ID!,
+        userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!,
+      };
+      const admin = new CognitoAdmin(config);
+      const selfId = admin.getUserId(event);
+      // 認証情報から取得した自身のIdと指定Idが異なる場合はエラー
+      if (selfId !== patientId) {
+        const errorModel = {
+          errorCode: 'RPM00101',
+          errorMessage: 'Forbidden',
+        };
+        return {
+          statusCode: 403,
+          body: JSON.stringify(errorModel),
+        };
+      }
+    }
+    try {
+      const ret = await patientTable.deletePatientStatus(patientId, statusId)
+      return {
+        statusCode: 200,
+        body: JSON.stringify(ret),
+      };
+    } catch (err) {
+      const errorModel = { error: err };
+      return {
+        statusCode: 500,
+        body: JSON.stringify(errorModel),
+      };
+    }
+
+  }
+
 }

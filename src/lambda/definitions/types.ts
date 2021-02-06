@@ -13,7 +13,7 @@ export interface PatientParam {
   phone: string;
   display?: boolean;
   policy_accepted?: string;
-  Statuses?: Status[];
+  statuses?: Status[];
   centerId: string;
 }
 

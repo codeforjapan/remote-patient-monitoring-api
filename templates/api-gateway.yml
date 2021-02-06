@@ -105,6 +105,12 @@ Resources:
       FunctionName: "remote-patient-monitoring-postStatus-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "apigateway.amazonaws.com"
+  DeleteStatusApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-deleteStatus-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
   ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
     Properties:
