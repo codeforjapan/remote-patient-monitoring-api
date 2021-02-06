@@ -12,7 +12,9 @@ AWS.config.update({
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
-
+/**
+ * A data handler for  Patients
+ */
 export namespace Patient {
   const sortStatus = (patient: PatientParam, limit: number = -1): PatientParam => {
     // ステータスをソートして、指定した件数に絞る
@@ -57,6 +59,25 @@ export namespace Patient {
             errorModel,
           }),
         };
+      }
+      // check if the center is managable by this user
+      if (validator.isNurseAPI(event)) {
+        // create new Patient User
+        const config: Config = {
+          userPoolId: process.env.NURSE_POOL_ID!,
+          userPoolClientId: process.env.NURSE_POOL_CLIENT_ID!
+        }
+        const admin = new CognitoAdmin(config)
+        const nurseId = admin.getUserId(event);
+        if (!await isCenterManagedByNurse(nurseId, event.pathParameters!.centerId)) {
+          return {
+            statusCode: 403,
+            body: JSON.stringify({
+              errorCode: "RPM00101",
+              errorMessage: 'Forbidden'
+            })
+          };
+        }
       }
       const myres = res as DynamoDB.DocumentClient.ScanOutput
       const items = myres.Items?.map((item: any) => {

@@ -300,6 +300,7 @@ describe('Nurse user', () => {
   beforeAll(async () => {
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     idToken = ret.data.idToken;
+    console.log(idToken)
     axios_nurse = axios.create({
       headers: {
         Authorization: idToken,

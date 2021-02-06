@@ -141,6 +141,9 @@ getPatients:
   description: "get Patients"
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
   environment:
+    NURSE_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
+    NURSE_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
 getPatient:
   handler: src/lambda/handler.getPatient
