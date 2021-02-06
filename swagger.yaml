@@ -2206,7 +2206,7 @@ paths:
         - Patient
       summary: 指定の保健所に所属する療養者を表示
       description: >-
-        指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。閣僚容赦の持つ病状報告は、最新10件のみ入っています。
+        指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。各療養者の持つ病状報告は、最新20件のみ入っています。
       security:
         - APIGatewayAdminAuthorizer: []
       parameters:
@@ -2540,7 +2540,7 @@ paths:
         - Patient
       summary: 指定の保健所に所属する療養者を表示(保健師用)
       description: >-
-        (自分が所属する保健所のみ操作可能)指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。閣僚容赦の持つ病状報告は、最新10件のみ入っています。
+        (自分が所属する保健所のみ操作可能)指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。各療養者の持つ病状報告は、最新20件のみ入っています。
       security:
         - APIGatewayNurseAuthorizer: []
       parameters:
@@ -2873,7 +2873,7 @@ paths:
       tags:
         - Patient
       summary: 療養者の取得
-      description: '指定された{PatientId}を持つ療養者情報を返します'
+      description: '指定された{PatientId}を持つ療養者情報を返します。症状報告は最新の20件を表示します。'
       security:
         - APIGatewayAdminAuthorizer: []
       parameters:
@@ -3236,7 +3236,7 @@ paths:
       tags:
         - Patient
       summary: 療養者の取得(保険師用)
-      description: '(自分が所属する保健所のみ操作可能)指定された{PatientId}を持つ療養者情報を返します'
+      description: '(自分が所属する保健所のみ操作可能)指定された{PatientId}を持つ療養者情報を返します。症状報告は最新の20件を表示します。'
       security:
         - APIGatewayNurseAuthorizer: []
       parameters:
@@ -3599,7 +3599,7 @@ paths:
       tags:
         - Patient
       summary: 療養者の取得(療養者用)
-      description: '(自分のみ操作可能)指定された{PatientId}を持つ療養者情報を返します'
+      description: '(自分のみ操作可能)指定された{PatientId}を持つ療養者情報を返します。症状報告は最新の20件を表示します。'
       security:
         - APIGatewayPatientAuthorizer: []
       parameters:
