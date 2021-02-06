@@ -2,7 +2,7 @@ get:
   tags:
     - Patient
   summary: 指定の保健所に所属する療養者を表示
-  description: 指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。閣僚容赦の持つ病状報告は、最新10件のみ入っています。
+  description: 指定された{centerId}に所属する療養者の一覧を表示します。並び順は、登録が新しい順です。各療養者の持つ病状報告は、最新20件のみ入っています。
   security:
     - APIGatewayAdminAuthorizer: []
   parameters:

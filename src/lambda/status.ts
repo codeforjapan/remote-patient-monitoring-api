@@ -48,7 +48,7 @@ export namespace Status {
       // /api/nurse の場合
       if (validator.isNurseAPI(event)) {
         const nurseId = admin.getUserId(event);
-        if (centerId !== null) {
+        if (!centerId) {
           const errorModel = {
             errorCode: 'RPM00001',
             errorMessage: 'Not Found',

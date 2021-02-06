@@ -2,7 +2,7 @@ get:
   tags:
     - Patient
   summary: 療養者の取得(療養者用)
-  description: (自分のみ操作可能)指定された{PatientId}を持つ療養者情報を返します
+  description: (自分のみ操作可能)指定された{PatientId}を持つ療養者情報を返します。症状報告は最新の20件を表示します。
   security:
     - APIGatewayPatientAuthorizer: []
   parameters:

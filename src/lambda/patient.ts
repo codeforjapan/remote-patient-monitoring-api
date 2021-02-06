@@ -1,6 +1,6 @@
 "use strict";
 import { APIGatewayProxyHandler } from "aws-lambda";
-import AWS from "aws-sdk";
+import AWS, { DynamoDB } from "aws-sdk";
 import { NurseParam, PatientParam } from '../lambda/definitions/types'
 import { CognitoAdmin, Config } from '../aws/cognito_admin'
 import { loadDynamoDBClient } from '../util/dynamodbclient'
@@ -12,9 +12,22 @@ AWS.config.update({
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
-
-
+/**
+ * A data handler for  Patients
+ */
 export namespace Patient {
+  const sortStatus = (patient: PatientParam, limit: number = -1): PatientParam => {
+    // ステータスをソートして、指定した件数に絞る
+    if (patient.statuses) {
+      patient.statuses.sort((a, b) => {
+        return new Date(b.created).getTime() - new Date(a.created).getTime()
+      })
+      if (limit > -1 && patient.statuses.length > limit) {
+        patient.statuses.splice(limit, patient.statuses.length - limit)
+      }
+    }
+    return patient
+  }
   const isCenterManagedByNurse = async (nurseId: string, centerId: string): Promise<boolean> => {
     const nurseTable = new NurseTable(docClient);
     const ret = await nurseTable.getNurse(nurseId)
@@ -47,9 +60,35 @@ export namespace Patient {
           }),
         };
       }
+      // check if the center is managable by this user
+      if (validator.isNurseAPI(event)) {
+        // create new Patient User
+        const config: Config = {
+          userPoolId: process.env.NURSE_POOL_ID!,
+          userPoolClientId: process.env.NURSE_POOL_CLIENT_ID!
+        }
+        const admin = new CognitoAdmin(config)
+        const nurseId = admin.getUserId(event);
+        if (!await isCenterManagedByNurse(nurseId, event.pathParameters!.centerId)) {
+          return {
+            statusCode: 403,
+            body: JSON.stringify({
+              errorCode: "RPM00101",
+              errorMessage: 'Forbidden'
+            })
+          };
+        }
+      }
+      const myres = res as DynamoDB.DocumentClient.ScanOutput
+      const items = myres.Items?.map((item: any) => {
+        if (item.statuses) {
+          item = sortStatus(item, 20)
+        }
+        return item
+      })
       return {
         statusCode: 200,
-        body: JSON.stringify(res),
+        body: JSON.stringify({ Count: myres.Count, Items: items }),
       };
     } catch (err) {
       console.log("getPatientTable-index error");
@@ -191,7 +230,6 @@ export namespace Patient {
           }),
         };
       }
-      console.log(JSON.stringify(res));
       if (validator.isNurseAPI(event)) {
         const nurseId = admin.getUserId(event);
 
@@ -205,10 +243,11 @@ export namespace Patient {
           };
         }
       }
+      const patient = sortStatus(res as PatientParam, 20)
 
       return {
         statusCode: 200,
-        body: JSON.stringify(res),
+        body: JSON.stringify(patient),
       };
     } catch (err) {
       console.log("getPatientTable-index error");

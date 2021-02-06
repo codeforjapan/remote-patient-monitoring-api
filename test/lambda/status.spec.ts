@@ -597,4 +597,71 @@ describe('status test', () => {
     const result: Status[] = JSON.parse(response.body);
     expect(result.length).toBe(2);
   });
+
+  it('post other statuses', async () => {
+    let dummyPostData: StatusParam = {
+      SpO2: 98,
+      body_temperature: 36.0,
+      pulse: 60,
+      symptom: {
+        cough: false,
+        phlegm: false,
+        suffocation: false,
+        headache: false,
+        sore_throat: false,
+        remarks: 'dummy',
+      },
+    };
+    const handler = require('../../src/lambda/handler');
+    process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
+    const dummyPatientId = 'test-status-dummy-patient-3';
+    const params: any = {
+      path: `api/admin/patients/${dummyPatientId}/statuses`,
+      pathParameters: {
+        patientId: dummyPatientId,
+      },
+      body: {}
+    };
+    await Promise.all([...Array(50)].map(async () => {
+      dummyPostData.SpO2 = 90 + Math.random() * 10
+      dummyPostData.pulse = 70 + Math.random() * 20
+      dummyPostData.body_temperature = 35 + Math.random() * 5
+      params.body = dummyPostData
+      await handler.postStatus(params)
+    }
+    ))
+    params.body.symptom.remarks = 'latest one'
+    await handler.postStatus(params)
+
+  });
+  it('get 53 statuses', async () => {
+    const handler = require('../../src/lambda/handler');
+    process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
+    const dummyPatientId = 'test-status-dummy-patient-3';
+    const params = {
+      path: `api/patient/patients/${dummyPatientId}/statuses`,
+      pathParameters: {
+        patientId: dummyPatientId,
+      }
+    };
+    const response = await handler.getStatuses(params);
+    const result: Status[] = JSON.parse(response.body);
+    expect(result.length).toBe(53);
+  });
+  it('get latest 20 statuses', async () => {
+    const handler = require('../../src/lambda/handler');
+    process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
+    const dummyPatientId = 'test-status-dummy-patient-3';
+    const params = {
+      path: `api/patient/patients/${dummyPatientId}`,
+      pathParameters: {
+        patientId: dummyPatientId,
+      }
+    };
+    const response = await handler.getPatient(params);
+    const result: Patient = JSON.parse(response.body);
+    expect(result.statuses!.length).toBe(20);
+    expect(result.statuses![0].symptom!.remarks).toBe('latest one');
+  });
+
 });
