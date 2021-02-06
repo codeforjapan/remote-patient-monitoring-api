@@ -607,6 +607,10 @@ describe('Patient user', () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
     expect(ret.data.length).toBe(52);
   });
+  it('get latest 20 statuses by patient', async () => {
+    const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}`);
+    expect(ret.data.statuses.length).toBe(20);
+  });
 });
 
 /*
