@@ -240,6 +240,38 @@ describe('admin user', () => {
     expect(ret2.data.phone).toBe('090-3899-2222');
     patient_item_in_another_center = ret2.data;
   });
+
+  it('post new status to existing patient', async () => {
+    const dummyPostData: StatusParam = {
+      SpO2: 98,
+      body_temperature: 36.0,
+      pulse: 60,
+      symptom: {
+        cough: false,
+        phlegm: false,
+        suffocation: false,
+        headache: false,
+        sore_throat: false,
+        remarks: 'dummy',
+      },
+    };
+    const ret = await axios_admin.post(`${entry_point}/api/admin/patients/${patient_id2}/statuses`, dummyPostData);
+    const result = ret.data;
+    expect(result.statusId).not.toBe(null);
+    expect(result.SpO2).toBe(dummyPostData.SpO2);
+    expect(result.body_temperature).toBe(dummyPostData.body_temperature);
+    expect(result.pulse).toBe(dummyPostData.pulse);
+    expect(result.centerId).toBe(center_id);
+    expect(result.patientId).toBe(patient_id2);
+    expect(result.created).not.toBe(null);
+    expect(result.symptom!.cough).toBe(dummyPostData.symptom!.cough);
+    expect(result.symptom!.phlegm).toBe(dummyPostData.symptom!.phlegm);
+    expect(result.symptom!.headache).toBe(dummyPostData.symptom!.headache);
+    expect(result.symptom!.sore_throat).toBe(dummyPostData.symptom!.sore_throat);
+    expect(result.symptom!.suffocation).toBe(dummyPostData.symptom!.suffocation);
+    expect(result.symptom!.remarks).toBe(dummyPostData.symptom!.remarks);
+    expect(result.symptom!.symptomId).not.toBe(null);
+  });
 });
 
 describe('nurse user login', () => {
@@ -408,6 +440,40 @@ describe('Nurse user', () => {
     };
     await expect(t).rejects.toThrow(/403/);
   });
+
+  it('post new status to existing patient', async () => {
+    const dummyPostData: StatusParam = {
+      SpO2: 98,
+      body_temperature: 36.0,
+      pulse: 60,
+      symptom: {
+        cough: false,
+        phlegm: false,
+        suffocation: false,
+        headache: false,
+        sore_throat: false,
+        remarks: 'dummy',
+      },
+    };
+    console.log(`${entry_point}/api/nurse/patients/${patient_id2}/statuses`)
+    console.log(dummyPostData)
+    const ret = await axios_nurse.post(`${entry_point}/api/nurse/patients/${patient_id2}/statuses`, dummyPostData);
+    const result = ret.data;
+    expect(result.statusId).not.toBe(null);
+    expect(result.SpO2).toBe(dummyPostData.SpO2);
+    expect(result.body_temperature).toBe(dummyPostData.body_temperature);
+    expect(result.pulse).toBe(dummyPostData.pulse);
+    expect(result.centerId).toBe(center_id);
+    expect(result.patientId).toBe(patient_id2);
+    expect(result.created).not.toBe(null);
+    expect(result.symptom!.cough).toBe(dummyPostData.symptom!.cough);
+    expect(result.symptom!.phlegm).toBe(dummyPostData.symptom!.phlegm);
+    expect(result.symptom!.headache).toBe(dummyPostData.symptom!.headache);
+    expect(result.symptom!.sore_throat).toBe(dummyPostData.symptom!.sore_throat);
+    expect(result.symptom!.suffocation).toBe(dummyPostData.symptom!.suffocation);
+    expect(result.symptom!.remarks).toBe(dummyPostData.symptom!.remarks);
+    expect(result.symptom!.symptomId).not.toBe(null);
+  });
 });
 
 /*
@@ -423,7 +489,6 @@ describe('Patient user', () => {
       password: patient_password,
     });
     idToken = ret.data.idToken;
-    console.log(idToken);
     axios_patient = axios.create({
       headers: {
         Authorization: idToken,
