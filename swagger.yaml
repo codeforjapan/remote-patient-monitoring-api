@@ -5235,7 +5235,9 @@ paths:
       tags:
         - Status
       summary: 病状報告の削除
-      description: (自分の症状のみ操作可能)指定されたstatusIdの症状報告情報を削除します。成功したら、responseCode 0 を返します。
+      description: >-
+        (自分の症状のみ操作可能)指定されたstatusIdの症状報告情報を削除します。成功したら、responseCode 200
+        と、削除後のステータス一覧 を返します。
       security:
         - APIGatewayPatientAuthorizer: []
       parameters:
@@ -5267,12 +5269,45 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  responseCode:
-                    type: number
-                  responseMessage:
-                    type: string
+                type: array
+                items:
+                  type: object
+                  properties:
+                    statusId:
+                      type: string
+                    patientId:
+                      type: string
+                    centerId:
+                      type: string
+                    created:
+                      type: string
+                      format: date-time
+                    SpO2:
+                      type: integer
+                      format: int32
+                    body_temperature:
+                      type: number
+                      format: float
+                    pulse:
+                      type: integer
+                      format: int32
+                    symptom:
+                      type: object
+                      properties:
+                        symptomId:
+                          type: string
+                        cough:
+                          type: boolean
+                        phlegm:
+                          type: boolean
+                        suffocation:
+                          type: boolean
+                        headache:
+                          type: boolean
+                        sore_throat:
+                          type: boolean
+                        remarks:
+                          type: string
         '400':
           description: Bad Request
           headers:
@@ -5357,7 +5392,7 @@ paths:
             type: string
         - name: statusId
           in: path
-          description: 取得したい療養者のID
+          description: 取得したい病状報告のID
           required: true
           schema:
             type: string
