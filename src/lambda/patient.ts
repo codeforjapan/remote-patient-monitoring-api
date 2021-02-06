@@ -191,7 +191,6 @@ export namespace Patient {
           }),
         };
       }
-      console.log(JSON.stringify(res));
       if (validator.isNurseAPI(event)) {
         const nurseId = admin.getUserId(event);
 

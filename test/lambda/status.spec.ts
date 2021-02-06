@@ -635,7 +635,7 @@ describe('status test', () => {
     process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
     const dummyPatientId = 'test-status-dummy-patient-3';
     const params = {
-      path: `api/admin/patients/${dummyPatientId}/statuses`,
+      path: `api/patient/patients/${dummyPatientId}/statuses`,
       pathParameters: {
         patientId: dummyPatientId,
       }
@@ -643,6 +643,21 @@ describe('status test', () => {
     const response = await handler.getStatuses(params);
     const result: Status[] = JSON.parse(response.body);
     expect(result.length).toBe(52);
+  });
+  it('get 20 statuses', async () => {
+    const handler = require('../../src/lambda/handler');
+    process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
+    const dummyPatientId = 'test-status-dummy-patient-3';
+    const params = {
+      path: `api/patient/patients/${dummyPatientId}`,
+      pathParameters: {
+        patientId: dummyPatientId,
+      }
+    };
+    const response = await handler.getPatient(params);
+    console.log(response)
+    const result: Patient = JSON.parse(response.body);
+    expect(result.statuses!.length).toBe(20);
   });
 
 });
