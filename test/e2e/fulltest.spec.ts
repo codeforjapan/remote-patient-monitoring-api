@@ -581,8 +581,31 @@ describe('Patient user', () => {
     };
     await expect(t).rejects.toThrowError();
   });
-  it.skip('post other statuses', async () => {
-    // いくつかポストしておく
+  it('post other statuses', async () => {
+    let dummyPostData: StatusParam = {
+      SpO2: 98,
+      body_temperature: 36.0,
+      pulse: 60,
+      symptom: {
+        cough: false,
+        phlegm: false,
+        suffocation: false,
+        headache: false,
+        sore_throat: false,
+        remarks: 'dummy',
+      },
+    };
+    await Promise.all([...Array(50)].map(async () => {
+      dummyPostData.SpO2 = 90 + Math.random() * 10
+      dummyPostData.pulse = 70 + Math.random() * 20
+      dummyPostData.body_temperature = 35 + Math.random() * 5
+      await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
+    }
+    ))
+  });
+  it('get three statuses', async () => {
+    const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
+    expect(ret.data.length).toBe(52);
   });
 });
 
