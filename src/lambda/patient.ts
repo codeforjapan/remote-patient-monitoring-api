@@ -154,7 +154,10 @@ export namespace Patient {
       if (phoneExists) {
         return {
           statusCode: 400,
-          body: { message: "Phone already exists" }
+          body: JSON.stringify({
+            errorCode: "RPM00103",
+            errorMessage: 'Phone already exists'
+          })
         };
       }
       console.log('create new user');

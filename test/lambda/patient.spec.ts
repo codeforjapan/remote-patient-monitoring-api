@@ -38,7 +38,7 @@ describe('patient test', () => {
     expect(JSON.parse(ret.body).policy_accepted).toBe(datestr)
   })
   it('create new patient to the center', async () => {
-    const signUp = jest.spyOn(CognitoAdmin.prototype, "signUp").mockImplementation(async (username: string, password: string) => {
+    const signUp = jest.spyOn(CognitoAdmin.prototype, "signUp").mockImplementation(async (username: string, password?: string) => {
       return { username: username, password: password!, user: {} }
     })
     const params = {
@@ -56,7 +56,7 @@ describe('patient test', () => {
   });
   it('fails to create patient which has a same phone', async () => {
     jest.clearAllMocks();
-    const signUp = jest.spyOn(CognitoAdmin.prototype, "signUp").mockImplementation(async (username: string, password: string) => {
+    const signUp = jest.spyOn(CognitoAdmin.prototype, "signUp").mockImplementation(async (username: string, password?: string) => {
       return { username: username, password: password!, user: {} }
     })
     const params = {
