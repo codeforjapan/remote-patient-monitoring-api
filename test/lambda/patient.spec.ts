@@ -3,28 +3,6 @@ import { CognitoAdmin } from '../../src/aws/cognito_admin'
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { ResolvePlugin } from 'webpack';
 
-jest.mock('../../src/aws/cognito_admin')
-const CognitAdminMock = CognitoAdmin as jest.Mock
-
-describe('Mock test', () => {
-  it('call mock', async () => {
-    CognitAdminMock.mockImplementation(() => {
-      return {
-        signUp: async (username: string, password?: string): Promise<{ username: string, password: string, user: CognitoIdentityServiceProvider.AdminSetUserPasswordResponse }> => {
-          return { username: username, password: password!, user: {} }
-        },
-        signIn: async (username: string, password: string) => {
-          return { username: username, idToken: password }
-        }
-      }
-    })
-    const admin = new CognitoAdmin({ userPoolId: "hoge", userPoolClientId: "fuga" })
-    const ret = await admin.signUp("hal", "password")
-    const ret2 = await admin.signIn("hal", "password")
-    expect(ret).toStrictEqual({ username: "hal", password: "password", user: {} })
-    expect(ret2).toStrictEqual({ username: "hal", idToken: "password" })
-  })
-})
 describe('patient test', () => {
   const handler = require('../../src/lambda/handler')
   process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev'
@@ -60,6 +38,9 @@ describe('patient test', () => {
     expect(JSON.parse(ret.body).policy_accepted).toBe(datestr)
   })
   it('create new patient to the center', async () => {
+    const signUp = jest.spyOn(CognitoAdmin.prototype, "signUp").mockImplementation(async (username: string, password: string) => {
+      return { username: username, password: password!, user: {} }
+    })
     const params = {
       pathParameters: {
         centerId: "942f71cf-5f19-45d2-846b-4e6609f48269"
@@ -74,6 +55,10 @@ describe('patient test', () => {
     expect(JSON.parse(ret.body).phone).toBe("090-1234-5678")
   });
   it('fails to create patient which has a same phone', async () => {
+    jest.clearAllMocks();
+    const signUp = jest.spyOn(CognitoAdmin.prototype, "signUp").mockImplementation(async (username: string, password: string) => {
+      return { username: username, password: password!, user: {} }
+    })
     const params = {
       pathParameters: {
         centerId: "942f71cf-5f19-45d2-846b-4e6609f48269"
@@ -85,6 +70,7 @@ describe('patient test', () => {
       }
     }
     const ret = await handler.postPatient(params)
+    expect(signUp).not.toHaveBeenCalled()
     expect(ret.statusCode).toBe(400)
   });
 })
