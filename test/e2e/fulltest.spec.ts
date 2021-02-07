@@ -67,6 +67,7 @@ describe('admin user', () => {
       password: secret.auth_pass,
     });
     const idToken = ret.data.idToken;
+    console.log(idToken)
     axios_admin = axios.create({
       headers: {
         Authorization: idToken,
@@ -181,7 +182,7 @@ describe('admin user', () => {
     expect(ret.data.phone).toBe(phone);
   });
 
-  it.skip('fails to create new patient with existing phone', async () => {
+  it('fails to create new patient with existing phone', async () => {
     const t = async () => {
       await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, {
         patientId: uuid(),
