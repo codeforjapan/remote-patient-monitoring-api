@@ -46,7 +46,7 @@ export default class PatientTable {
     });
   }
 
-  searchPhone(phone: string) {
+  searchPhone(phone: string): Promise<boolean> {
     const query: DynamoDB.DocumentClient.QueryInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       IndexName: "RemotePatientMonitoringPatientTableGSIPhone",
@@ -59,9 +59,9 @@ export default class PatientTable {
       this.client.query(query, (err, data) => {
         if (err) {
           console.log(err);
-          resolve(undefined);
+          resolve(false);
         } else {
-          resolve(data);
+          resolve((data as DynamoDB.DocumentClient.QueryOutput).Count! > 0);
         }
       });
     });
@@ -73,7 +73,7 @@ export default class PatientTable {
     };
     const ret = await this.searchPhone(patient.phone)
     return new Promise((resolve, reject) => {
-      if ((ret as DynamoDB.DocumentClient.QueryOutput).Count! > 0) {
+      if (ret) {
         reject({ message: "phone already exists" })
       } else {
         this.client.put(params, (err, data) => {

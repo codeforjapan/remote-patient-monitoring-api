@@ -150,6 +150,13 @@ export namespace Patient {
           };
         }
       }
+      const phoneExists = await patientTable.searchPhone(bodyData.phone);
+      if (phoneExists) {
+        return {
+          statusCode: 400,
+          body: { message: "Phone already exists" }
+        };
+      }
       console.log('create new user');
       const newuser = await admin.signUp(bodyData.patientId)
       console.log(newuser);
