@@ -150,14 +150,13 @@ export namespace Patient {
           };
         }
       }
-      const phoneuser = await patientTable.searchPhone(bodyData.phone)
-      console.log(phoneuser)
-      if (phoneuser !== undefined) {
+      const phoneExists = await patientTable.searchPhone(bodyData.phone);
+      if (phoneExists) {
         return {
           statusCode: 400,
           body: JSON.stringify({
-            errorCode: "RPM00003",
-            errorMessage: 'Bad Request: Phone number already existed'
+            errorCode: "RPM00103",
+            errorMessage: 'Phone already exists'
           })
         };
       }
@@ -170,12 +169,18 @@ export namespace Patient {
         policy_accepted: undefined,
         centerId: event.pathParameters.centerId
       }
-      const res = await patientTable.postPatient(param);
-      console.log(res)
-      return {
-        statusCode: 201,
-        body: JSON.stringify({ ...param, password: newuser.password })
-      };
+      try {
+        await patientTable.postPatient(param);
+        return {
+          statusCode: 201,
+          body: JSON.stringify({ ...param, password: newuser.password })
+        };
+      } catch (err) {
+        return {
+          statusCode: 400,
+          body: err
+        };
+      }
     } catch (err) {
       console.log("postPatientTable-index error");
       return {

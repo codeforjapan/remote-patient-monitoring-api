@@ -40,48 +40,53 @@ export default class PatientTable {
           reject(err);
         } else {
           console.log('getPatient Success!');
-          console.log(data.Item);
           resolve(data.Item! as Patient);
         }
       });
     });
   }
 
-  searchPhone(phone: string) {
+  searchPhone(phone: string): Promise<boolean> {
     const query: DynamoDB.DocumentClient.QueryInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
+      IndexName: "RemotePatientMonitoringPatientTableGSIPhone",
       KeyConditionExpression: 'phone = :phone',
       ExpressionAttributeValues: { ':phone': phone },
+      ProjectionExpression: "patientId"
     };
     console.log(query);
     return new Promise((resolve) => {
       this.client.query(query, (err, data) => {
         if (err) {
           console.log(err);
-          resolve(undefined);
+          resolve(false);
         } else {
-          resolve(data);
+          resolve((data as DynamoDB.DocumentClient.QueryOutput).Count! > 0);
         }
       });
     });
   }
-  postPatient(patient: PatientParam) {
+  async postPatient(patient: PatientParam) {
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Item: patient,
     };
-    console.log(params);
+    const ret = await this.searchPhone(patient.phone)
     return new Promise((resolve, reject) => {
-      this.client.put(params, (err, data) => {
-        console.log(data);
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          console.log('postPatient Success!');
-          resolve(patient);
-        }
-      });
+      if (ret) {
+        reject({ message: "phone already exists" })
+      } else {
+        this.client.put(params, (err, data) => {
+          console.log(data);
+          if (err) {
+            console.log(err);
+            reject(err);
+          } else {
+            console.log('postPatient Success!');
+            resolve(patient);
+          }
+        });
+      }
     });
   }
 

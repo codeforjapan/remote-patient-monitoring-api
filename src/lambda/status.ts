@@ -157,7 +157,6 @@ export namespace Status {
           body: "not found",
         };
       }
-      console.log(ret);
       const patient = ret as Patient
       return {
         statusCode: 200,
