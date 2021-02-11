@@ -43,12 +43,12 @@ describe('admin user login', () => {
 let center_id: string;
 let center_id3: string;
 
-const nurse_id: string = uuid();
+const nurse_id: string = 'testNurse';
 const nurse_id2: string = uuid();
 let center_id_with_no_nurse: string;
 let nurse_password: string;
 
-const patient_id: string = uuid();
+const patient_id: string = 'testPatient';
 const patient_id2: string = uuid();
 const patient_id_in_another_center: string = uuid();
 let patient_item_in_another_center: any;
@@ -746,38 +746,9 @@ describe('Nurse user(again)', () => {
 /*
  * Create users for testing
  */
-describe('Test user creation', () => {
-  let axios_admin: any;
-  let nurse_password: string;
-  let patient_password: string;
-  beforeAll(async () => {
-    const ret = await axios.post(entry_point + '/api/admin/login', {
-      username: secret.auth_user,
-      password: secret.auth_pass,
-    });
-    const idToken = ret.data.idToken;
-    console.log(idToken)
-    axios_admin = axios.create({
-      headers: {
-        Authorization: idToken,
-      },
-    });
-  });
+describe('Test user info', () => {
 
-  it('create new nurse to the center named testNurse', async () => {
-    const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/nurses`, { nurseId: 'testNurse' });
-    expect(ret.data).toHaveProperty('nurseId');
-    expect(ret.data).toHaveProperty('password');
-    nurse_password = ret.data.password
-  });
-  it('create new patient to the center named testPaient', async () => {
-    const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, {
-      patientId: 'testPaient',
-      phone: '090-2309-3282',
-    });
-    expect(ret.data.patientId).toBe('testPaient');
-    expect(ret.data).toHaveProperty('password');
-    patient_password = ret.data.password
+  it('display passwords', () => {
     console.log('=================================');
     console.log(`testNurse password is: ${nurse_password}`);
     console.log(`testPatient password is: ${patient_password}`);
