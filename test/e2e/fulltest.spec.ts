@@ -741,3 +741,46 @@ describe('Nurse user(again)', () => {
     await expect(t).rejects.toThrow(/403/)
   });
 });
+
+
+/*
+ * Create users for testing
+ */
+describe('Test user creation', () => {
+  let axios_admin: any;
+  let nurse_password: string;
+  let patient_password: string;
+  beforeAll(async () => {
+    const ret = await axios.post(entry_point + '/api/admin/login', {
+      username: secret.auth_user,
+      password: secret.auth_pass,
+    });
+    const idToken = ret.data.idToken;
+    console.log(idToken)
+    axios_admin = axios.create({
+      headers: {
+        Authorization: idToken,
+      },
+    });
+  });
+
+  it('create new nurse to the center named testNurse', async () => {
+    const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/nurses`, { nurseId: 'testNurse' });
+    expect(ret.data).toHaveProperty('nurseId');
+    expect(ret.data).toHaveProperty('password');
+    nurse_password = ret.data.password
+  });
+  it('create new patient to the center named testPaient', async () => {
+    const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, {
+      patientId: 'testPaient',
+      phone: '090-2309-3282',
+    });
+    expect(ret.data.patientId).toBe('testPaient');
+    expect(ret.data).toHaveProperty('password');
+    patient_password = ret.data.password
+    console.log('=================================');
+    console.log(`testNurse password is: ${nurse_password}`);
+    console.log(`testPatient password is: ${patient_password}`);
+    console.log('=================================');
+  });
+});

@@ -84,7 +84,7 @@ npm run createAdmin
 まだ実装されていないテストは、`skip` してあります。
 
 ```bash
-npm run test
+npm run test:e2e
 ```
 
 Network Error が出る場合、以下を試してみてください。
@@ -116,6 +116,20 @@ SwaggerUIからAPIを叩いてもうまくいかない場合があります。�
 ![test lambda](images/test-lambda.png)
 
 ## 開発用情報
+
+### クライアント開発用のテストユーザ
+
+npm run test:e2e を実行すると、`testNurse` と `testPatient` を作成します。最後にパスワードが表示されます。
+
+```:bash
+ console.log
+    testNurse password is: 5n24uptq
+
+      at test/e2e/fulltest.spec.ts:782:13
+
+  console.log
+    testPatient password is: pmxq23v1
+```
 
 ### E2E テストを実行する
 
