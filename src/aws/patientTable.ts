@@ -154,7 +154,7 @@ export default class PatientTable {
         Key: {
           patientId: patientId,
         },
-        UpdateExpression: 'set #statuses = list_append(if_not_exists(#statuses, :emptyList), :status)',
+        UpdateExpression: 'set #statuses = list_append(:status, if_not_exists(#statuses, :emptyList))',
         ExpressionAttributeNames: {
           '#statuses': 'statuses',
         },

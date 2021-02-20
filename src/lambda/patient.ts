@@ -16,12 +16,9 @@ import NurseTable from "../aws/nurseTable";
  * A data handler for  Patients
  */
 export namespace Patient {
-  const sortStatus = (patient: PatientParam, limit: number = -1): PatientParam => {
-    // ステータスをソートして、指定した件数に絞る
+  const sliceStatus = (patient: PatientParam, limit: number = -1): PatientParam => {
+    // ステータスを指定した件数に絞る
     if (patient.statuses) {
-      patient.statuses.sort((a, b) => {
-        return new Date(b.created).getTime() - new Date(a.created).getTime()
-      })
       if (limit > -1 && patient.statuses.length > limit) {
         patient.statuses.splice(limit, patient.statuses.length - limit)
       }
@@ -82,7 +79,7 @@ export namespace Patient {
       const myres = res as DynamoDB.DocumentClient.ScanOutput
       const items = myres.Items?.map((item: any) => {
         if (item.statuses) {
-          item = sortStatus(item, 20)
+          item = sliceStatus(item, 20)
         }
         return item
       })
@@ -248,7 +245,7 @@ export namespace Patient {
           };
         }
       }
-      const patient = sortStatus(res as PatientParam, 20)
+      const patient = sliceStatus(res as PatientParam, 20)
 
       return {
         statusCode: 200,
