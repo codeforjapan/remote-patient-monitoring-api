@@ -622,14 +622,13 @@ describe('status test', () => {
       },
       body: {}
     };
-    await Promise.all([...Array(50)].map(async () => {
+    for (let i = 0; i < 50; i++){
       dummyPostData.SpO2 = 90 + Math.random() * 10
       dummyPostData.pulse = 70 + Math.random() * 20
       dummyPostData.body_temperature = 35 + Math.random() * 5
       params.body = dummyPostData
       await handler.postStatus(params)
     }
-    ))
     params.body.symptom.remarks = 'latest one'
     await handler.postStatus(params)
 
@@ -647,6 +646,12 @@ describe('status test', () => {
     const response = await handler.getStatuses(params);
     const result: Status[] = JSON.parse(response.body);
     expect(result.length).toBe(53);
+    let prevCreated = new Date().getTime();
+    result.forEach (status => {
+      let created = Date.parse(status.created)
+      expect(created).toBeLessThanOrEqual(prevCreated)
+      prevCreated = created;
+    });
   });
   it('get latest 20 statuses', async () => {
     const handler = require('../../src/lambda/handler');

@@ -1,6 +1,6 @@
 import './style.css';
-import {getIsAuthenticationFailure, getUser} from './auth';
-import {initSwagger} from './swagger';
+import { getIsAuthenticationFailure, getUser } from './auth';
+import { initSwagger } from './swagger';
 import Auth from '@aws-amplify/auth';
 
 getUser().then(user => {
