@@ -687,11 +687,13 @@ describe('Patient user', () => {
   it('get 53 statuses', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
     expect(ret.data.length).toBe(53);
+    expect(Date.parse(ret.data[0].created)).toBeGreaterThan(Date.parse(ret.data[1].created))
   });
   it('get latest 20 statuses by patient', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}`);
     expect(ret.data.statuses.length).toBe(20);
     expect(ret.data.statuses![0].symptom!.remarks).toBe('latest one');
+    expect(Date.parse(ret.data.statuses![0].created)).toBeGreaterThan(Date.parse(ret.data.statuses![1].created))
   });
 });
 
