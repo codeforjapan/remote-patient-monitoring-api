@@ -4,6 +4,8 @@ import AWS, { DynamoDB } from "aws-sdk";
 import { NurseParam, PatientParam } from '../lambda/definitions/types'
 import { CognitoAdmin, Config } from '../aws/cognito_admin'
 import { loadDynamoDBClient } from '../util/dynamodbclient'
+import { SMSSender } from '../util/smssender'
+
 var docClient = loadDynamoDBClient()
 
 AWS.config.update({
@@ -134,7 +136,6 @@ export namespace Patient {
       }
       const admin = new CognitoAdmin(config)
       // check if the center is managable by this user
-
       if (validator.isNurseAPI(event)) {
         const nurseId = admin.getUserId(event);
         if (!await isCenterManagedByNurse(nurseId, event.pathParameters!.centerId)) {
@@ -168,9 +169,24 @@ export namespace Patient {
       }
       try {
         await patientTable.postPatient(param);
+        // add BASE64 encoded user/password as a login key
+        const loginKey = Buffer.from(newuser.username + '/' + newuser.password).toString('base64')
+        // send login url via SMS
+        if (process.env.SMS_ENDPOINT) {
+          //@TODO implementation
+          const endpoint = process.env.SMS_ENDPOINT!
+          const logininfo = { key: process.env.SMS_APIKEY }
+          let loginURL = 'http://localhost:8000/login/'
+          if (process.env.STAGE && process.env.STAGE == 'stg') {
+            loginURL = process.env.SMS_LOGINURL!
+          }
+          const smsSender = new SMSSender(endpoint, logininfo)
+          console.log(event)
+          smsSender.sendSMS(param.phone, `体調入力URL: ${loginURL + loginKey}`)
+        }
         return {
           statusCode: 201,
-          body: JSON.stringify({ ...param, password: newuser.password })
+          body: JSON.stringify({ ...param, password: newuser.password, loginKey: loginKey })
         };
       } catch (err) {
         return {

@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { CognitoAdmin } from '../../src/aws/cognito_admin'
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { SMSSender } from '../../src/util/smssender'
+import { CognitoIdentityServiceProvider, SMS } from 'aws-sdk';
 import { ResolvePlugin } from 'webpack';
 
 describe('patient test', () => {
@@ -38,8 +39,17 @@ describe('patient test', () => {
     expect(JSON.parse(ret.body).policy_accepted).toBe(datestr)
   })
   it('create new patient to the center', async () => {
+    process.env.SMS_LOGINURL = "https://client.mnt.stopcovid19.jp/login"
+    process.env.SMS_ENDPOINT = "localhost"
+    process.env.SMS_APIKEY = "apikey"
+
     const signUp = jest.spyOn(CognitoAdmin.prototype, "signUp").mockImplementation(async (username: string, password?: string) => {
-      return { username: username, password: password!, user: {} }
+      console.log(password)
+      return { username: username, password: 'hoge', user: {} }
+    })
+    const sms = jest.spyOn(SMSSender.prototype, "sendSMS").mockImplementation((to: string, text: string) => {
+      console.log(to, text)
+      return true
     })
     const params = {
       pathParameters: {
@@ -53,6 +63,8 @@ describe('patient test', () => {
     }
     const ret = await handler.postPatient(params)
     expect(JSON.parse(ret.body).phone).toBe("090-1234-5678")
+    expect(JSON.parse(ret.body)).toHaveProperty('loginKey')
+    expect(sms).toHaveBeenCalled()
   });
   it('fails to create patient which has a same phone', async () => {
     jest.clearAllMocks();

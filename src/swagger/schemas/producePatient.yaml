@@ -13,3 +13,5 @@ properties:
     type: string
   display:
     type: boolean
+  loginKey:
+    type: string
