@@ -161,6 +161,10 @@ postPatient:
   environment:
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    STAGE: ${self:provider.stage}
+    SMS_LOGINURL: "https://client.mnt.stopcovid19.jp/login"
+    SMS_ENDPOINT: "localhost"
+    SMS_APIKEY: "apikey"
     PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
     PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
 putPatient:
