@@ -176,10 +176,9 @@ export namespace Patient {
           //@TODO implementation
           const endpoint = process.env.SMS_ENDPOINT!
           const logininfo = { key: process.env.SMS_APIKEY }
-          console.log('*******************')
-          let loginURL = 'http://localhost:8000/login?key='
+          let loginURL = 'http://localhost:8000/login/'
           if (process.env.STAGE && process.env.STAGE == 'stg') {
-            loginURL = process.env.SMS_LOGINURL + '?key='
+            loginURL = process.env.SMS_LOGINURL!
           }
           const smsSender = new SMSSender(endpoint, logininfo)
           console.log(event)
