@@ -168,9 +168,12 @@ export namespace Patient {
       }
       try {
         await patientTable.postPatient(param);
+        // add BASE64 encoded user/password as a login key
+        const loginKey = Buffer.from(newuser.username + '/' + newuser.password).toString('base64')
+        // send login url via SMS
         return {
           statusCode: 201,
-          body: JSON.stringify({ ...param, password: newuser.password })
+          body: JSON.stringify({ ...param, password: newuser.password, loginKey: loginKey })
         };
       } catch (err) {
         return {

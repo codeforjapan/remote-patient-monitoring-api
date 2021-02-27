@@ -53,6 +53,7 @@ describe('patient test', () => {
     }
     const ret = await handler.postPatient(params)
     expect(JSON.parse(ret.body).phone).toBe("090-1234-5678")
+    expect(JSON.parse(ret.body)).toHaveProperty('loginKey')
   });
   it('fails to create patient which has a same phone', async () => {
     jest.clearAllMocks();
