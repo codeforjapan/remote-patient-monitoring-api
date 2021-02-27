@@ -2466,6 +2466,8 @@ paths:
                     type: string
                   display:
                     type: boolean
+                  loginKey:
+                    type: string
         '400':
           description: Bad Request
           headers:
@@ -2800,6 +2802,8 @@ paths:
                     type: string
                   display:
                     type: boolean
+                  loginKey:
+                    type: string
         '400':
           description: Bad Request
           headers:
