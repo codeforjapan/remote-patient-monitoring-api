@@ -31,7 +31,7 @@
 * 提案なども受け付けます！積極的に新しく Issue を作ってください。
 
 ## CONTRIBUTORS.md への追加について
-ご協力いただいた皆様のお名前（ハンドルネーム）や役割を記す、[CONTRIBUTORS.md](https://github.com/codeforjapan/remote-patient-monitoring/blob/development/docs/CONTRIBUTORS.md) というファイルがあります。
+ご協力いただいた皆様のお名前（ハンドルネーム）や役割を記す、[CONTRIBUTORS.md](CONTRIBUTORS.md) というファイルがあります。
 何かしらの貢献を行った方は、ぜひこちらにもお名前をお載せください。
 
 ## 開発に関する情報
