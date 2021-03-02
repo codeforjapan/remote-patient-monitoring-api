@@ -370,6 +370,7 @@ describe('Nurse user', () => {
     });
     expect(ret.data).toHaveProperty('password');
     expect(ret.data.phone).toBe('090-3293-2333');
+    expect(ret.data).toHaveProperty('statuses');
   });
 
   it('fails to create new patient to the center that is not under my managemenet', async () => {

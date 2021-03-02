@@ -34,7 +34,7 @@ delete:
       content:
         application/json:
           schema:
-            $ref: "../../schemas/Statuses.yaml"
+            $ref: "../../schemas/Patient.yaml"
     400:
       description: Bad Request
       headers:
