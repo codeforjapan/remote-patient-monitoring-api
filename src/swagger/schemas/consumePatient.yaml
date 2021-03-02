@@ -7,3 +7,5 @@ properties:
     type: string
   phone:
     type: string
+  display:
+    type: boolean

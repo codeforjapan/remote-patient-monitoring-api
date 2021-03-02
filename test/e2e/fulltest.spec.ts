@@ -404,6 +404,7 @@ describe('Nurse user', () => {
       phone: '090-3827-1428',
     });
     expect(ret.data).toHaveProperty('password');
+    expect(ret.data).toHaveProperty('display');
     expect(ret.data.phone).toBe('090-3827-1428');
   });
 
@@ -418,6 +419,13 @@ describe('Nurse user', () => {
     patient_item.policy_accepted = datetime;
     const ret = await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id3}`, patient_item);
     expect(ret.data.policy_accepted).toBe(datetime);
+  });
+
+  it('update display flag', async () => {
+    const datetime = new Date().toISOString();
+    patient_item.display = false;
+    const ret = await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id3}`, patient_item);
+    expect(ret.data.display).toBe(false);
   });
 
   it('fails to update existing patient that is not in the managing center', async () => {
