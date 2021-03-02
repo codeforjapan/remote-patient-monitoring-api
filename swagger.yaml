@@ -5273,45 +5273,59 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    statusId:
-                      type: string
-                    patientId:
-                      type: string
-                    centerId:
-                      type: string
-                    created:
-                      type: string
-                      format: date-time
-                    SpO2:
-                      type: integer
-                      format: int32
-                    body_temperature:
-                      type: number
-                      format: float
-                    pulse:
-                      type: integer
-                      format: int32
-                    symptom:
+                type: object
+                properties:
+                  patientId:
+                    type: string
+                  centerId:
+                    type: string
+                  policy_accepted:
+                    type: string
+                    format: date-time
+                  phone:
+                    type: string
+                  display:
+                    type: boolean
+                  statuses:
+                    type: array
+                    items:
                       type: object
                       properties:
-                        symptomId:
+                        statusId:
                           type: string
-                        cough:
-                          type: boolean
-                        phlegm:
-                          type: boolean
-                        suffocation:
-                          type: boolean
-                        headache:
-                          type: boolean
-                        sore_throat:
-                          type: boolean
-                        remarks:
+                        patientId:
                           type: string
+                        centerId:
+                          type: string
+                        created:
+                          type: string
+                          format: date-time
+                        SpO2:
+                          type: integer
+                          format: int32
+                        body_temperature:
+                          type: number
+                          format: float
+                        pulse:
+                          type: integer
+                          format: int32
+                        symptom:
+                          type: object
+                          properties:
+                            symptomId:
+                              type: string
+                            cough:
+                              type: boolean
+                            phlegm:
+                              type: boolean
+                            suffocation:
+                              type: boolean
+                            headache:
+                              type: boolean
+                            sore_throat:
+                              type: boolean
+                            remarks:
+                              type: string
         '400':
           description: Bad Request
           headers:
