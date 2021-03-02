@@ -165,7 +165,8 @@ export namespace Patient {
         ...bodyData,
         display: true,
         policy_accepted: undefined,
-        centerId: event.pathParameters.centerId
+        centerId: event.pathParameters.centerId,
+        statuses:[]
       }
       try {
         await patientTable.postPatient(param);
