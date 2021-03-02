@@ -2434,6 +2434,8 @@ paths:
                   type: string
                 phone:
                   type: string
+                display:
+                  type: boolean
         required: true
       responses:
         '201':
@@ -2770,6 +2772,8 @@ paths:
                   type: string
                 phone:
                   type: string
+                display:
+                  type: boolean
         required: true
       responses:
         '201':
@@ -3052,6 +3056,8 @@ paths:
                   type: string
                 phone:
                   type: string
+                display:
+                  type: boolean
         required: true
       responses:
         '200':
@@ -3415,6 +3421,8 @@ paths:
                   type: string
                 phone:
                   type: string
+                display:
+                  type: boolean
         required: true
       responses:
         '200':
@@ -5564,6 +5572,8 @@ components:
           type: string
         phone:
           type: string
+        display:
+          type: boolean
     Patients:
       type: array
       items:
