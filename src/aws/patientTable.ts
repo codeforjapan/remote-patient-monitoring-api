@@ -173,9 +173,12 @@ export default class PatientTable {
   async deletePatientStatus(patientId: string, statusId: string) {
     try {
       const ret = await this.getPatient(patientId)
-
+      
       const patient = ret as Patient
       if (patient.statuses) {
+        if (patient.statuses.findIndex(item => item.statusId === statusId) === -1) {
+          throw new Error('no status found')
+        }
         patient.statuses.splice(patient.statuses.findIndex(item => item.statusId === statusId), 1)
       }
       const ret2 = await this.putPatient(patientId, patient)

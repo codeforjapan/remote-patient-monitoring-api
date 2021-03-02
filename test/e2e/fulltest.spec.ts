@@ -636,12 +636,21 @@ describe('Patient user', () => {
     await expect(t).rejects.toThrow(/403/);
   });
 
+  it('delete non-existing status', async () => {
+    expect.assertions(1);
+    const t = async () => {
+      const ret = await axios_patient.delete(entry_point + `/api/patient/patients/${patient_id}/statuses/undefined`);
+    }
+    await expect(t).rejects.toThrow(/500/)
+  });
+
   it('delete specified status', async () => {
     const ret = await axios_patient.delete(entry_point + `/api/patient/patients/${patient_id}/statuses/${status_id}`);
     expect(ret.status).toBe(200)
     expect(ret.data.statuses.length).toBe(2);
     expect(ret.data.statuses.findIndex((item: any) => item.status_id === status_id)).toBe(-1)
   });
+
   it('get two statuses', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
     expect(ret.data.length).toBe(2);
