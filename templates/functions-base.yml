@@ -116,6 +116,7 @@ getNurse:
     NURSE_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
     NURSE_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
 postNurse:
   handler: src/lambda/handler.postNurse
   name: "remote-patient-monitoring-postNurse-${self:provider.stage}"

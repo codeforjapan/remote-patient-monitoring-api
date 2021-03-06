@@ -1,7 +1,7 @@
 "use strict";
 import { v4 as uuid } from 'uuid'
 import { AWSError, DynamoDB } from 'aws-sdk'
-
+import {Center} from '../lambda/definitions/types'
 export default class CenterTable {
   client: DynamoDB.DocumentClient;
   constructor(serviceClient: DynamoDB.DocumentClient) {
@@ -25,7 +25,7 @@ export default class CenterTable {
     });
   }
 
-  getCenter(centerId: string): Promise<DynamoDB.DocumentClient.GetItemOutput | AWSError> {
+  getCenter(centerId: string): Promise<Center | AWSError> {
     const params: DynamoDB.DocumentClient.GetItemInput = {
       TableName: process.env.CENTER_TABLE_NAME!,
       Key: {
@@ -39,7 +39,7 @@ export default class CenterTable {
           reject(err);
         } else {
           console.log("getCenter Success!");
-          resolve(data.Item!);
+          resolve(data.Item! as Center);
         }
       });
     });
