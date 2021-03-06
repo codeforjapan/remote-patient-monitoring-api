@@ -16,7 +16,7 @@ export namespace Admin {
       const res = await admin.signIn(bodyData.username, bodyData.password);
       return {
         statusCode: 200,
-        body: JSON.stringify({ username: bodyData.username, idToken: res?.AuthenticationResult?.IdToken! }),
+        body: JSON.stringify({ username: bodyData.username, idToken: res?.AuthenticationResult?.IdToken!, RefreshToken: res?.AuthenticationResult?.RefreshToken! }),
       };
     } catch (err) {
       console.log("putAdminLogin error");
