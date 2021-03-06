@@ -142,6 +142,8 @@ describe('admin user', () => {
   it('read new nurse id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/nurses/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]));
+    expect(ret.data.manageCenters[0].centerId).toBe(center_id)
+    expect(ret.data.manageCenters[0].centerName).toBe('C保健所')
     nurse_item = ret.data;
   });
 
@@ -338,6 +340,7 @@ describe('Nurse user', () => {
   it('read nurse id', async () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/nurses/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]));
+    expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerName:'C保健所' })]));
     nurse_item = ret.data;
   });
 

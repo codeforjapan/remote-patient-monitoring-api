@@ -1,6 +1,7 @@
 "use strict";
-import AWS from "aws-sdk";
+import AWS, { CredentialProviderChain } from "aws-sdk";
 import { APIGatewayProxyHandler } from 'aws-lambda'
+import { NurseOutput, Center } from './definitions/types'
 import { CognitoAdmin, Config } from '../aws/cognito_admin'
 import { loadDynamoDBClient } from '../util/dynamodbclient'
 var docClient = loadDynamoDBClient()
@@ -127,7 +128,9 @@ export namespace Nurse {
   }
 
   export const getNurse: APIGatewayProxyHandler = async (event) => {
+    console.log('getNurse');
     const nurseTable = new NurseTable(docClient);
+    const centerTable = new CenterTable(docClient);
     const validator = new Validator();
 
     if (!event.pathParameters || !event.pathParameters.nurseId) {
@@ -176,6 +179,18 @@ export namespace Nurse {
         };
       }
       console.log(res);
+      let nurse = res as NurseOutput
+      const newCenters = await Promise.all(nurse.manageCenters.map(async (item) => {
+        console.log('***********************getCenter!')
+        console.log(item.centerId);
+        const centerName = await centerTable.getCenter(item.centerId)
+        console.log(centerName)
+        return { 
+          centerName: (centerName as Center).centerName!,
+          centerId: item.centerId,
+        }
+      }))
+      nurse.manageCenters = newCenters
       console.log(JSON.stringify(res));
       return {
         statusCode: 200,
