@@ -276,18 +276,21 @@ describe('admin user', () => {
 
 describe('nurse user login', () => {
   it('get authKey', async () => {
-    expect.assertions(1);
+    expect.assertions(2);
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     expect(ret.data).toHaveProperty('idToken');
+    expect(ret.data).toHaveProperty('RefreshToken');
   });
 });
 describe('patient user login', () => {
   it('get authKey', async () => {
+    expect.assertions(2);
     const ret = await axios.post(entry_point + '/api/patient/login', {
       username: patient_id,
       password: patient_password,
     });
     expect(ret.data).toHaveProperty('idToken');
+    expect(ret.data).toHaveProperty('RefreshToken');
   });
 });
 
