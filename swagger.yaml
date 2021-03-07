@@ -2257,6 +2257,8 @@ paths:
                       format: date-time
                     phone:
                       type: string
+                    memo:
+                      type: string
                     display:
                       type: boolean
                     statuses:
@@ -2439,6 +2441,8 @@ paths:
                   type: string
                 phone:
                   type: string
+                memo:
+                  type: string
                 display:
                   type: boolean
         required: true
@@ -2470,6 +2474,8 @@ paths:
                     type: string
                     format: date-time
                   phone:
+                    type: string
+                  memo:
                     type: string
                   display:
                     type: boolean
@@ -2593,6 +2599,8 @@ paths:
                       type: string
                       format: date-time
                     phone:
+                      type: string
+                    memo:
                       type: string
                     display:
                       type: boolean
@@ -2776,6 +2784,8 @@ paths:
                   type: string
                 phone:
                   type: string
+                memo:
+                  type: string
                 display:
                   type: boolean
         required: true
@@ -2807,6 +2817,8 @@ paths:
                     type: string
                     format: date-time
                   phone:
+                    type: string
+                  memo:
                     type: string
                   display:
                     type: boolean
@@ -2921,6 +2933,8 @@ paths:
                     type: string
                     format: date-time
                   phone:
+                    type: string
+                  memo:
                     type: string
                   display:
                     type: boolean
@@ -3086,6 +3100,8 @@ paths:
                     type: string
                     format: date-time
                   phone:
+                    type: string
+                  memo:
                     type: string
                   display:
                     type: boolean
@@ -3284,6 +3300,8 @@ paths:
                     format: date-time
                   phone:
                     type: string
+                  memo:
+                    type: string
                   display:
                     type: boolean
                   statuses:
@@ -3448,6 +3466,8 @@ paths:
                     type: string
                     format: date-time
                   phone:
+                    type: string
+                  memo:
                     type: string
                   display:
                     type: boolean
@@ -3645,6 +3665,8 @@ paths:
                     type: string
                     format: date-time
                   phone:
+                    type: string
+                  memo:
                     type: string
                   display:
                     type: boolean
@@ -5290,6 +5312,8 @@ paths:
                     format: date-time
                   phone:
                     type: string
+                  memo:
+                    type: string
                   display:
                     type: boolean
                   statuses:
@@ -5663,6 +5687,8 @@ components:
           format: date-time
         phone:
           type: string
+        memo:
+          type: string
         display:
           type: boolean
         statuses:
@@ -5714,6 +5740,8 @@ components:
           type: string
         phone:
           type: string
+        memo:
+          type: string
         display:
           type: boolean
     Patients:
@@ -5729,6 +5757,8 @@ components:
             type: string
             format: date-time
           phone:
+            type: string
+          memo:
             type: string
           display:
             type: boolean
