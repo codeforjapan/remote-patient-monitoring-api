@@ -1,5 +1,5 @@
 "use strict";
-import AWS, { CredentialProviderChain } from "aws-sdk";
+import AWS from "aws-sdk";
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import { NurseOutput, Center } from './definitions/types'
 import { CognitoAdmin, Config } from '../aws/cognito_admin'

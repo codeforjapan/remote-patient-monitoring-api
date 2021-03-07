@@ -12,7 +12,6 @@ const STAGE = process.env.JEST_STAGE || 'dev';
 const config = configsys.readConfig(STAGE);
 beforeAll(async () => {
   entry_point = `https://${config.apiGateway.restApiId}.execute-api.${config.region}.amazonaws.com/${config.apiGateway.stageName}`;
-  console.log(entry_point);
   const db = new TruncateDB(STAGE);
   await db.truncate();
 });
@@ -31,7 +30,6 @@ describe('get Centers', () => {
 describe('admin user login', () => {
   it('get Authkey', async () => {
     expect.assertions(1);
-    console.log(entry_point + '/api/admin/login');
     const ret = await axios.post(entry_point + '/api/admin/login', {
       username: secret.auth_user,
       password: secret.auth_pass,
@@ -67,7 +65,6 @@ describe('admin user', () => {
       password: secret.auth_pass,
     });
     const idToken = ret.data.idToken;
-    console.log(idToken)
     axios_admin = axios.create({
       headers: {
         Authorization: idToken,
@@ -181,6 +178,7 @@ describe('admin user', () => {
   it('read new patient id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/patients/${patient_id}`);
     patient_item = ret.data;
+    expect(ret.data.policy_accepted).toBe(undefined);
     expect(ret.data.phone).toBe(phone);
   });
 
@@ -220,7 +218,7 @@ describe('admin user', () => {
   it('update existing patient', async () => {
     const datetime = new Date().toISOString();
     patient_item.policy_accepted = datetime;
-    const ret = await axios_admin.put(entry_point + `/api/admin/patients/${patient_id}`, patient_item);
+    const ret = await axios_admin.put(entry_point + `/api/admin/patients/${patient_id2}`, patient_item);
     expect(ret.data.policy_accepted).toBe(datetime);
   });
 
@@ -310,7 +308,6 @@ describe('Nurse user', () => {
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     idToken = ret.data.idToken;
     refreshToken = ret.data.refreshToken;
-    console.log(idToken)
     axios_nurse = axios.create({
       headers: {
         Authorization: idToken,
@@ -540,6 +537,14 @@ describe('Patient user', () => {
         Authorization: idToken,
       },
     });
+  });
+
+  it('get policy_accepted', async () => {
+    const ret = await axios.post(entry_point + '/api/patient/login', {
+      username: patient_id,
+      password: patient_password,
+    });
+    expect(ret.data.policy_accepted).toBe(undefined);
   });
 
   it('fails to create new center', async () => {
@@ -775,7 +780,6 @@ describe('Nurse user(again)', () => {
   });
   it('fails to get the patients that does not depend on mine', async () => {
     expect.assertions(1);
-    console.log(entry_point + `/api/nurse/centers/${center_id3}/patients`)
     const t = async () => {
       await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id3}/patients`);
     }
