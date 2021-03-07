@@ -1,7 +1,7 @@
 "use strict";
 import { v4 as uuid } from 'uuid'
 import { AWSError, DynamoDB } from 'aws-sdk'
-import {Center} from '../lambda/definitions/types'
+import {Center, CenterParam} from '../lambda/definitions/types'
 export default class CenterTable {
   client: DynamoDB.DocumentClient;
   constructor(serviceClient: DynamoDB.DocumentClient) {
@@ -39,13 +39,14 @@ export default class CenterTable {
           reject(err);
         } else {
           console.log("getCenter Success!");
+          console.log(data.Item!)
           resolve(data.Item! as Center);
         }
       });
     });
   }
 
-  postCenter(body: { centerName: string }) {
+  postCenter(body: CenterParam) {
     const center = {
       ...body,
       centerId: uuid(),
@@ -70,23 +71,32 @@ export default class CenterTable {
     });
   }
 
-  putCenter(centerId: string, body: { centerName: string }) {
+  putCenter(centerId: string, body: CenterParam) {
     const center = {
       ...body,
       centerId: centerId,
     };
+    const exp = Object.keys(body).reduce((previous:string, current: string) => {
+      if (previous === "") {
+        return `${current} = :${current}`
+      }else{
+        previous =  previous +  `, ${current} = :${current}`
+        return previous
+      }
+    }, "")
+    const expvalues = Object.keys(body).reduce((previous: any, current: string) => {
+      previous[`:${current}`] = (body[current] as string)
+      return previous
+    }, {})
+    console.log(exp)
+    console.log(expvalues)
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.CENTER_TABLE_NAME!,
       Key: {
         centerId: center.centerId
       },
-      UpdateExpression: "set #centerName = :centerName",
-      ExpressionAttributeNames: {
-        "#centerName": "centerName"
-      },
-      ExpressionAttributeValues: {
-        ":centerName": center.centerName
-      },
+      UpdateExpression: "set " + exp,
+      ExpressionAttributeValues: expvalues,
     };
     console.log(params);
     return new Promise((resolve, reject) => {

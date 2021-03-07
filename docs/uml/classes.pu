@@ -11,6 +11,7 @@ Patient o-- "0..*" Notification :通知を送った時に作成(2重送信防止
 class Center {
     String centerId
     String centerName
+    String emergencyPhone
     Nurse[] Nurses
 }
 
