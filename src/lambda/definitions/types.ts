@@ -5,6 +5,7 @@ export interface Center {
 }
 
 export interface CenterParam {
+  [key: string]: any;
   centerName?: string;
   emergencyPhone?: string;
 }

@@ -76,6 +76,7 @@ describe('admin user', () => {
   it('create new center', async () => {
     const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'A保健所', emergencyPhone: "0166-33-2222" });
     expect(ret.data).toHaveProperty('centerId');
+    expect(ret.data.centerName).toBe('A保健所');
     expect(ret.data.emergencyPhone).toBe('0166-33-2222');
     center_id = ret.data.centerId;
   });
@@ -83,7 +84,7 @@ describe('admin user', () => {
   it('read new center id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
     expect(ret.data.centerName).toBe('A保健所');
-    expect(ret.data.emvergency_phone).toBe('0166-33-2222');
+    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
   });
 
   it('update existing center', async () => {
@@ -92,9 +93,21 @@ describe('admin user', () => {
     expect(ret.data.centerName).toBe(center_name);
   });
 
+  it('read updated center id', async () => {
+    const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
+    expect(ret.data.centerName).toBe(center_name);
+    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
+  });
+
   it('update existing center', async () => {
-    const ret = await axios_admin.put(entry_point + `/api/admin/centers/${center_id}`, { emergencyPhone: "0166-33-2222" });
-    expect(ret.data.emergencyPhone).toBe("0166-33-2222" );
+    const ret = await axios_admin.put(entry_point + `/api/admin/centers/${center_id}`, { emergencyPhone: "0166-33-9999" });
+    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
+  });
+
+  it('read updated center id', async () => {
+    const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
+    expect(ret.data.centerName).toBe(center_name);
+    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
   });
 
   it('create another center', async () => {

@@ -84,8 +84,8 @@ export default class CenterTable {
         return previous
       }
     }, "")
-    const expvalues = Object.keys(body).reduce((previous, current) => {
-      previous[`:${current}`] = body[current]
+    const expvalues = Object.keys(body).reduce((previous: any, current: string) => {
+      previous[`:${current}`] = (body[current] as string)
       return previous
     }, {})
     console.log(exp)
