@@ -548,15 +548,16 @@ describe('Patient user', () => {
   });
 
   it('accept policy', async () => {
-    const ret = await axios.post(entry_point + `/api/patient/patients/${patient_id}/accept_policy`);
-    expect(ret.data.policy_accepted).not.toBe(undefined)
+    const ret = await axios_patient.post(entry_point + `/api/patient/patients/${patient_id}/accept_policy`);
+    console.log(ret.data)
+    expect(ret.data.result).toBe('OK')
   });
 
 
   it('can\'t accept another person\'s policy', async () => {
     expect.assertions(1);
     const t = async() => {
-      await axios.post(entry_point + `/api/patient/patients/${patient_id2}/accept_policy`);
+      await axios_patient.post(entry_point + `/api/patient/patients/${patient_id2}/accept_policy`);
     }
     await expect(t).rejects.toThrow(/403/)
   });
