@@ -120,13 +120,11 @@ export default class Validator {
   }
 
   isNurseAPI(event: APIGatewayProxyEvent) {
-    console.log('isNurseAPI called');
     if (!event.path) return false;
     return event.path.startsWith('/api/nurse/');
   }
 
   isPatientAPI(event: APIGatewayProxyEvent) {
-    console.log('isPatientAPI called');
     if (!event.path) return false;
     return event.path.startsWith('/api/patient/');
   }

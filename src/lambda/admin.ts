@@ -20,7 +20,7 @@ export namespace Admin {
       }
       const admin = new CognitoAdmin(config)
       const res = (bodyData.refreshToken) ? await admin.refreshToken(bodyData.refreshToken) : await admin.signIn(bodyData.username, bodyData.password);
-      if (process.env.PATIENT_TABLE_NAME && bodyData.username) {
+      if (validator.isPatientAPI(event) && bodyData.username) {
         // patient テーブルが指定されている場合は、policy_accepted を返す
         const patientTable = new PatientTable(docClient);
         const patient = await patientTable.getPatient(bodyData.username);

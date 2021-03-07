@@ -347,4 +347,46 @@ export namespace Patient {
       };
     }
   }
+
+  export const acceptPolicy: APIGatewayProxyHandler = async (event) => {
+    const patientTable = new PatientTable(docClient);
+    const validator = new Validator();
+    try {
+      if (!event.pathParameters || !event.pathParameters.patientId) {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({
+            errorCode: "RPM00001",
+            errorMessage: 'Not Found'
+          })
+        }
+      }
+      if (!validator.isPatientAPI(event)) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: 'Forbidden'
+          })
+        };
+      }
+      const res = await patientTable.acceptPolicy(
+        event.pathParameters.patientId
+      );
+      return {
+        statusCode: 200,
+        body: JSON.stringify(res),
+      };
+    } catch (err) {
+      console.log("acceptPolicy error");
+      console.log(err)
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: err
+        }),
+      };
+    }
+  }
+
 }

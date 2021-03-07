@@ -43,6 +43,7 @@ export var getPatients = cors(cors_get)(Patient.getPatients);
 export var getPatient = cors(cors_get)(Patient.getPatient);
 export var putPatient = cors(cors_put)(Patient.putPatient);
 export var postPatient = cors(cors_post)(Patient.postPatient);
+export var postAcceptPolicy = cors(cors_post)(Patient.acceptPolicy);
 
 // nurses
 export var getNurses = cors(cors_get)(Nurse.getNurses);

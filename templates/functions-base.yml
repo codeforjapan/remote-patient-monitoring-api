@@ -178,6 +178,15 @@ putPatient:
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
     PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
     PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+postAcceptPolicy:
+  handler: src/lambda/handler.postAcceptPolicy
+  name: "remote-patient-monitoring-postAcceptPolicy-${self:provider.stage}"
+  description: "accept Policy"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
+    PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
 postStatus:
   handler: src/lambda/handler.postStatus
   name: "remote-patient-monitoring-postStatus-${self:provider.stage}"
