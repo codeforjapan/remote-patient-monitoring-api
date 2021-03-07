@@ -565,6 +565,8 @@ paths:
                       type: string
                     centerName:
                       type: string
+                    emergencyPhone:
+                      type: string
         '400':
           description: Bad Request
           headers:
@@ -650,6 +652,8 @@ paths:
               properties:
                 centerName:
                   type: string
+                emergencyPhone:
+                  type: string
         required: true
       responses:
         '200':
@@ -672,6 +676,8 @@ paths:
                   centerId:
                     type: string
                   centerName:
+                    type: string
+                  emergencyPhone:
                     type: string
         '400':
           description: Bad Request
@@ -807,6 +813,8 @@ paths:
                     centerId:
                       type: string
                     centerName:
+                      type: string
+                    emergencyPhone:
                       type: string
         '400':
           description: Bad Request
@@ -947,6 +955,8 @@ paths:
                     type: string
                   centerName:
                     type: string
+                  emergencyPhone:
+                    type: string
         '400':
           description: Bad Request
           headers:
@@ -1040,6 +1050,8 @@ paths:
               properties:
                 centerName:
                   type: string
+                emergencyPhone:
+                  type: string
         required: true
       responses:
         '200':
@@ -1062,6 +1074,8 @@ paths:
                   centerId:
                     type: string
                   centerName:
+                    type: string
+                  emergencyPhone:
                     type: string
         '400':
           description: Bad Request
@@ -1210,6 +1224,8 @@ paths:
                   centerId:
                     type: string
                   centerName:
+                    type: string
+                  emergencyPhone:
                     type: string
         '400':
           description: Bad Request
@@ -1368,6 +1384,8 @@ paths:
                           centerId:
                             type: string
                           centerName:
+                            type: string
+                          emergencyPhone:
                             type: string
         '400':
           description: Bad Request
@@ -1537,6 +1555,8 @@ paths:
                           type: string
                         centerName:
                           type: string
+                        emergencyPhone:
+                          type: string
         '400':
           description: Bad Request
           headers:
@@ -1650,6 +1670,8 @@ paths:
                           centerId:
                             type: string
                           centerName:
+                            type: string
+                          emergencyPhone:
                             type: string
         '400':
           description: Bad Request
@@ -1809,6 +1831,8 @@ paths:
                           type: string
                         centerName:
                           type: string
+                        emergencyPhone:
+                          type: string
         '400':
           description: Bad Request
           headers:
@@ -1936,6 +1960,8 @@ paths:
                         centerId:
                           type: string
                         centerName:
+                          type: string
+                        emergencyPhone:
                           type: string
         '400':
           description: Bad Request
@@ -2093,6 +2119,8 @@ paths:
                         centerId:
                           type: string
                         centerName:
+                          type: string
+                        emergencyPhone:
                           type: string
         '400':
           description: Bad Request
@@ -5629,12 +5657,16 @@ components:
           type: string
         centerName:
           type: string
+        emergencyPhone:
+          type: string
     consumeCenter:
       type: object
       required:
         - centerName
       properties:
         centerName:
+          type: string
+        emergencyPhone:
           type: string
     Centers:
       type: array
@@ -5644,6 +5676,8 @@ components:
           centerId:
             type: string
           centerName:
+            type: string
+          emergencyPhone:
             type: string
     Nurse:
       type: object
@@ -5658,6 +5692,8 @@ components:
               centerId:
                 type: string
               centerName:
+                type: string
+              emergencyPhone:
                 type: string
     Nurses:
       type: array
@@ -5674,6 +5710,8 @@ components:
                 centerId:
                   type: string
                 centerName:
+                  type: string
+                emergencyPhone:
                   type: string
     Patient:
       type: object
