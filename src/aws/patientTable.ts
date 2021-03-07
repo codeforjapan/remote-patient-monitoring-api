@@ -102,6 +102,10 @@ export default class PatientTable {
       updateExpression += ', policy_accepted = :policy_accepted'
       expressionAttributeValues[':policy_accepted'] = patient.policy_accepted
     }
+    if (patient.memo) {
+      updateExpression += ', memo = :memo'
+      expressionAttributeValues[':memo'] = patient.memo
+    }
     if (patient.statuses) {
       updateExpression += ', statuses = :statuses'
       expressionAttributeValues[':statuses'] = patient.statuses

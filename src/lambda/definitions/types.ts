@@ -19,6 +19,7 @@ export interface NurseParam {
 export interface PatientParam {
   patientId: string;
   phone: string;
+  memo: string;
   display?: boolean;
   policy_accepted?: string;
   statuses?: Status[];
@@ -28,6 +29,7 @@ export interface PatientParam {
 export interface Patient {
   patientId: string;
   phone: string;
+  memo: string;
   display?: boolean;
   policy_accepted?: string;
   statuses?: Status[];

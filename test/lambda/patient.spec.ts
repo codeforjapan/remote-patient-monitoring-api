@@ -15,6 +15,7 @@ describe('patient test', () => {
       "patientId": "dc9958a2-bcba-41db-99c1-290b3ed2a074",
       "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269",
       "phone": "090-3333-3333",
+      "memo": "hoge",
       "display": true
     })
   })
@@ -31,12 +32,14 @@ describe('patient test', () => {
       body: {
         "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269",
         "phone": "090-3333-3333",
+        "memo": "メモ2",
         "policy_accepted": datestr,
         "display": true
       }
     }
     const ret = await handler.putPatient(params)
     expect(JSON.parse(ret.body).policy_accepted).toBe(datestr)
+    expect(JSON.parse(ret.body).memo).toBe("メモ2")
   })
   it('create new patient to the center', async () => {
     process.env.SMS_LOGINURL = "https://client.mnt.stopcovid19.jp/login"
@@ -58,12 +61,14 @@ describe('patient test', () => {
       body: {
         "patientId": "halsk",
         "phone": "090-1234-5678",
+        "memo": "メモメモ",
         "display": true
       }
     }
     const ret = await handler.postPatient(params)
     expect(JSON.parse(ret.body).phone).toBe("090-1234-5678")
     expect(JSON.parse(ret.body)).toHaveProperty('loginKey')
+    expect(JSON.parse(ret.body).memo).toBe('メモメモ')
     expect(sms).toHaveBeenCalled()
   });
   it('fails to create patient which has a same phone', async () => {
