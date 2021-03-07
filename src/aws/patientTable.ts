@@ -129,6 +129,31 @@ export default class PatientTable {
     });
   }
 
+  acceptPolicy(patientId: string): Promise<any> {
+    let updateExpression = 'set policy_accepted = :policy_accepted'
+    let expressionAttributeValues: any = {
+      ':policy_accepted': new Date().toISOString()
+    }
+    const params: DynamoDB.DocumentClient.UpdateItemInput = {
+      TableName: process.env.PATIENT_TABLE_NAME!,
+      Key: {
+        patientId: patientId,
+      },
+      UpdateExpression: updateExpression,
+      ExpressionAttributeValues: expressionAttributeValues
+    };
+    return new Promise((resolve, reject) => {
+      this.client.update(params, (err, data) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          console.log(data)
+          resolve({result: "OK"});
+        }
+      });
+    });
+  }
   async postPatientStatus(patientId: string, centerId: string, param: StatusParam): Promise<Status> {
     try {
       console.log(patientId);
