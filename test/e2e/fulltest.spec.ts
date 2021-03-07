@@ -167,11 +167,13 @@ describe('admin user', () => {
   it('create new patient to the center', async () => {
     const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, {
       patientId: patient_id,
+      memo: "患者メモ",
       phone: phone,
     });
     expect(ret.data.patientId).toBe(patient_id);
     expect(ret.data.phone).toBe(phone);
     expect(ret.data.centerId).toBe(center_id);
+    expect(ret.data.centerId).toBe("患者メモ");
     expect(ret.data).toHaveProperty('password');
     patient_password = ret.data.password;
   });
@@ -221,6 +223,13 @@ describe('admin user', () => {
     patient_item.policy_accepted = datetime;
     const ret = await axios_admin.put(entry_point + `/api/admin/patients/${patient_id2}`, patient_item);
     expect(ret.data.policy_accepted).toBe(datetime);
+  });
+
+  it('update existing patient memo', async () => {
+    const datetime = new Date().toISOString();
+    patient_item.memo = "患者メモ2";
+    const ret = await axios_admin.put(entry_point + `/api/admin/patients/${patient_id2}`, patient_item);
+    expect(ret.data.memo).toBe("患者メモ2");
   });
 
   it('create another center for the next test', async () => {
