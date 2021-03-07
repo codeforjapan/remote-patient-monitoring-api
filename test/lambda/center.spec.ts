@@ -6,7 +6,8 @@ describe('center test', () => {
     const ret = await handler.getCenter({ pathParameters: { centerId: "942f71cf-5f19-45d2-846b-4e6609f48269" } })
     expect(JSON.parse(ret.body)).toStrictEqual({
       "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269",
-      "centerName": "A保健所"
+      "centerName": "A保健所",
+      "emergencyPhone": "03-3333-4444"
     })
   })
   it('update Center', async () => {
@@ -20,5 +21,30 @@ describe('center test', () => {
     }
     const ret = await handler.putCenter(params)
     expect(JSON.parse(ret.body).centerName).toBe("new保健所")
+  })
+  it('update Center\'s phone', async () => {
+    const params = {
+      pathParameters: {
+        centerId: "942f71cf-5f19-45d2-846b-4e6609f48269"
+      },
+      body: {
+        emergencyPhone: "03-2222-3333"
+      }
+    }
+    const ret = await handler.putCenter(params)
+    expect(JSON.parse(ret.body).emergencyPhone).toBe("03-2222-3333")
+  })
+  it('create new Center', async () => {
+    const params = {
+      body: {
+        centerId: "newCenterId",
+        centerName: "hugacenter",
+        emergencyPhone: "03-9999-9999"
+      }
+    }
+    const ret = await handler.postCenter(params)
+    expect(JSON.parse(ret.body).centerId).toBe("newCenterId")
+    expect(JSON.parse(ret.body).centerName).toBe("hugacenter")
+    expect(JSON.parse(ret.body).emergencyPhone).toBe("03-9999-9999")
   })
 })
