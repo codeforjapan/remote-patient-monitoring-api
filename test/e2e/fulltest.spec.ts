@@ -30,6 +30,7 @@ describe('get Centers', () => {
 describe('admin user login', () => {
   it('get Authkey', async () => {
     expect.assertions(1);
+    console.log(entry_point)
     const ret = await axios.post(entry_point + '/api/admin/login', {
       username: secret.auth_user,
       password: secret.auth_pass,
