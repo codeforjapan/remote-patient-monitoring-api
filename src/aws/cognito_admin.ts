@@ -77,6 +77,25 @@ export class CognitoAdmin {
     console.log('サインイン完了', JSON.stringify(this.user, null, 4));
     return this.user;
   }
+   /**
+   *  refreshToken でログインし直し
+   *  @param refreshToken refresh token
+   */
+  async refreshToken(refreshToken: string) {
+    const userPoolId = this.config.userPoolId;
+    const clientId = this.config.userPoolClientId;
+    // サインイン
+    this.user = await this.cognito.adminInitiateAuth({
+      UserPoolId: userPoolId,
+      ClientId: clientId,
+      AuthFlow: 'REFRESH_TOKEN_AUTH',
+      AuthParameters: {
+        REFRESH_TOKEN: refreshToken
+      }
+    }).promise();
+    console.log('サインイン完了', JSON.stringify(this.user, null, 4));
+    return this.user;
+  }
   // パスワードを生成する
   makePassword() {
     let pwd = Math.random().toString(36).substr(2, 8)

@@ -279,7 +279,7 @@ describe('nurse user login', () => {
     expect.assertions(2);
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     expect(ret.data).toHaveProperty('idToken');
-    expect(ret.data).toHaveProperty('RefreshToken');
+    expect(ret.data).toHaveProperty('refreshToken');
   });
 });
 describe('patient user login', () => {
@@ -290,7 +290,7 @@ describe('patient user login', () => {
       password: patient_password,
     });
     expect(ret.data).toHaveProperty('idToken');
-    expect(ret.data).toHaveProperty('RefreshToken');
+    expect(ret.data).toHaveProperty('refreshToken');
   });
 });
 
@@ -298,6 +298,7 @@ describe('patient user login', () => {
  * Nurse methods
  */
 let idToken: string;
+let refreshToken: string;
 describe('Nurse user', () => {
   let axios_nurse: any;
   let nurse_item: any;
@@ -306,6 +307,7 @@ describe('Nurse user', () => {
   beforeAll(async () => {
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     idToken = ret.data.idToken;
+    refreshToken = ret.data.refreshToken;
     console.log(idToken)
     axios_nurse = axios.create({
       headers: {
@@ -507,6 +509,15 @@ describe('Nurse user', () => {
   });
 });
 
+describe('refresh Token', () => {
+  it('login with refreshToken', async() => {
+    const ret = await axios.post(entry_point + '/api/nurse/login', {
+      refreshToken: refreshToken
+    });
+    expect(ret.data).toHaveProperty('idToken');
+  });
+});
+
 /*
  * Patient methods
  */
@@ -520,6 +531,7 @@ describe('Patient user', () => {
       password: patient_password,
     });
     idToken = ret.data.idToken;
+    refreshToken = ret.data.refreshToken;
     axios_patient = axios.create({
       headers: {
         Authorization: idToken,
@@ -768,6 +780,14 @@ describe('Nurse user(again)', () => {
   });
 });
 
+describe('refresh Token', () => {
+  it('login with refreshToken', async() => {
+    const ret = await axios.post(entry_point + '/api/patient/login', {
+      refreshToken: refreshToken
+    });
+    expect(ret.data).toHaveProperty('idToken');
+  });
+});
 
 /*
  * Create users for testing
