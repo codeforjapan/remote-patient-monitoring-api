@@ -24,12 +24,12 @@ export default class Validator {
   }
 
   checkCenterBody(res: any) {
-    if (res.hasOwnProperty('centerName')) {
-      console.log('checkCenterBody True');
-      return true;
-    } else {
+    if (!res.hasOwnProperty('centerName') && ! res.hasOwnProperty('emergencyPhone')) {
       console.log('checkCenterBody False');
       return false;
+    } else {
+      console.log('checkCenterBody True');
+      return true;
     }
   }
   checkNurseBody(res: any) {

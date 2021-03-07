@@ -149,6 +149,7 @@ export namespace Center {
           })
         }
       }
+      console.log(bodyData)
       const res = await centerTable.putCenter(
         event.pathParameters.centerId,
         bodyData

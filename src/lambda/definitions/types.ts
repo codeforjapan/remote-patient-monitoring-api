@@ -1,6 +1,12 @@
 export interface Center {
   centerId: string;
+  centerName: string;
+  emergencyPhone: string;
+}
+
+export interface CenterParam {
   centerName?: string;
+  emergencyPhone?: string;
 }
 export interface NurseOutput {
   nurseId: string;
