@@ -1,4 +1,5 @@
 "use strict";
+import { v4 as uuid } from 'uuid'
 import { APIGatewayProxyHandler } from "aws-lambda";
 import AWS, { DynamoDB } from "aws-sdk";
 import { NurseParam, PatientParam } from '../lambda/definitions/types'
@@ -14,6 +15,7 @@ AWS.config.update({
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
+import { SwaggerUIBundle } from "swagger-ui-dist";
 /**
  * A data handler for  Patients
  */
@@ -159,10 +161,12 @@ export namespace Patient {
         };
       }
       console.log('create new user');
-      const newuser = await admin.signUp(bodyData.patientId)
+      const patientId = bodyData.patientId || uuid()
+      const newuser = await admin.signUp(patientId)
       console.log(newuser);
       const param: PatientParam = {
-        ...bodyData,
+        patientId: patientId,
+        phone: bodyData.phone,
         display: true,
         policy_accepted: undefined,
         centerId: event.pathParameters.centerId,

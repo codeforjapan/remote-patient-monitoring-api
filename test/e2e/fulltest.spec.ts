@@ -49,8 +49,8 @@ let center_id_with_no_nurse: string;
 let nurse_password: string;
 
 const patient_id: string = 'testPatient';
-const patient_id2: string = uuid();
-const patient_id_in_another_center: string = uuid();
+let patient_id2: string;
+let patient_id_in_another_center: string;
 let patient_item_in_another_center: any;
 let patient_password: string;
 const phone: string = '090-3333-3333';
@@ -196,10 +196,11 @@ describe('admin user', () => {
 
   it('create new patient to the center', async () => {
     const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, {
-      patientId: patient_id2,
       phone: '090-1111-1111',
     });
+    expect(ret.data).toHaveProperty('patientId');
     expect(ret.data.phone).toBe('090-1111-1111');
+    patient_id2 = ret.data.patientId;
   });
 
   it('create new patient to another center', async () => {
@@ -234,10 +235,11 @@ describe('admin user', () => {
     expect(ret.data).toHaveProperty('centerId');
     center_id3 = ret.data.centerId;
     const ret2 = await axios_admin.post(entry_point + `/api/admin/centers/${center_id3}/patients`, {
-      patientId: patient_id_in_another_center,
       phone: '090-3899-2222',
     });
     expect(ret2.data.phone).toBe('090-3899-2222');
+    expect(ret2.data).toHaveProperty('patientId');
+    patient_id_in_another_center = ret2.data.patientId;
     patient_item_in_another_center = ret2.data;
   });
 
@@ -303,7 +305,7 @@ describe('Nurse user', () => {
   let axios_nurse: any;
   let nurse_item: any;
   let patient_item: any;
-  const patient_id3 = uuid();
+  let patient_id3: string;
   beforeAll(async () => {
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     idToken = ret.data.idToken;
@@ -373,9 +375,10 @@ describe('Nurse user', () => {
 
   it('create new patient to the center', async () => {
     const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, {
-      patientId: patient_id3,
       phone: '090-3293-2333',
     });
+    expect(ret.data).toHaveProperty('patientId');
+    patient_id3 = ret.data.patientId;
     expect(ret.data).toHaveProperty('password');
     expect(ret.data.phone).toBe('090-3293-2333');
     expect(ret.data).toHaveProperty('statuses');

@@ -42,7 +42,7 @@ export default class Validator {
     }
   }
   checkPatientBody(res: any) {
-    if (res.hasOwnProperty('patientId') && res.hasOwnProperty('phone')) {
+    if (res.hasOwnProperty('phone')) {
       console.log('checkPatientBody True');
       return true;
     } else {

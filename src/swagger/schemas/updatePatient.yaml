@@ -2,8 +2,6 @@ type: object
 required:
   - phone
 properties:
-  patientId:
-    type: string
   phone:
     type: string
   display:
