@@ -51,7 +51,9 @@ paths:
                 properties:
                   username:
                     type: string
-                  authKey:
+                  idToken:
+                    type: string
+                  refreshToken:
                     type: string
         '400':
           description: Bad Request
@@ -223,7 +225,9 @@ paths:
                 properties:
                   username:
                     type: string
-                  authKey:
+                  idToken:
+                    type: string
+                  refreshToken:
                     type: string
         '400':
           description: Bad Request
@@ -395,7 +399,9 @@ paths:
                 properties:
                   username:
                     type: string
-                  authKey:
+                  idToken:
+                    type: string
+                  refreshToken:
                     type: string
         '400':
           description: Bad Request
@@ -2427,7 +2433,6 @@ paths:
             schema:
               type: object
               required:
-                - patientId
                 - phone
               properties:
                 patientId:
@@ -2765,7 +2770,6 @@ paths:
             schema:
               type: object
               required:
-                - patientId
                 - phone
               properties:
                 patientId:
@@ -3049,11 +3053,8 @@ paths:
             schema:
               type: object
               required:
-                - patientId
                 - phone
               properties:
-                patientId:
-                  type: string
                 phone:
                   type: string
                 display:
@@ -3414,11 +3415,8 @@ paths:
             schema:
               type: object
               required:
-                - patientId
                 - phone
               properties:
-                patientId:
-                  type: string
                 phone:
                   type: string
                 display:
@@ -5565,7 +5563,6 @@ components:
     consumePatient:
       type: object
       required:
-        - patientId
         - phone
       properties:
         patientId:
