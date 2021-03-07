@@ -2,7 +2,7 @@ type: object
 properties:
   username:
     type: string
-  IdToken:
+  idToken:
     type: string
-  RefreshToken:
+  refreshToken:
     type: string
