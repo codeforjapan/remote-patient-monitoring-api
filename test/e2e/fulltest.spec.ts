@@ -74,20 +74,27 @@ describe('admin user', () => {
   });
 
   it('create new center', async () => {
-    const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'A保健所' });
+    const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'A保健所', emergencyPhone: "0166-33-2222" });
     expect(ret.data).toHaveProperty('centerId');
+    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
     center_id = ret.data.centerId;
   });
 
   it('read new center id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
     expect(ret.data.centerName).toBe('A保健所');
+    expect(ret.data.emvergency_phone).toBe('0166-33-2222');
   });
 
   it('update existing center', async () => {
     center_name = 'C保健所';
     const ret = await axios_admin.put(entry_point + `/api/admin/centers/${center_id}`, { centerName: center_name });
     expect(ret.data.centerName).toBe(center_name);
+  });
+
+  it('update existing center', async () => {
+    const ret = await axios_admin.put(entry_point + `/api/admin/centers/${center_id}`, { emergencyPhone: "0166-33-2222" });
+    expect(ret.data.emergencyPhone).toBe("0166-33-2222" );
   });
 
   it('create another center', async () => {
