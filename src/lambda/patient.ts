@@ -370,6 +370,22 @@ export namespace Patient {
           })
         };
       }
+      const config: Config = {
+        userPoolId: process.env.PATIENT_POOL_ID!,
+        userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!
+      }
+      const admin = new CognitoAdmin(config)
+      const patientId = admin.getUserId(event);
+      // 自分のポリシーしか accept できない
+      if (event.pathParameters.patientId != patientId){
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: 'Forbidden'
+          })
+        };
+      }
       const res = await patientTable.acceptPolicy(
         event.pathParameters.patientId
       );
