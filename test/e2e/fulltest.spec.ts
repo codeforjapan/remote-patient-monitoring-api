@@ -173,7 +173,7 @@ describe('admin user', () => {
     expect(ret.data.patientId).toBe(patient_id);
     expect(ret.data.phone).toBe(phone);
     expect(ret.data.centerId).toBe(center_id);
-    expect(ret.data.centerId).toBe("患者メモ");
+    expect(ret.data.memo).toBe("患者メモ");
     expect(ret.data).toHaveProperty('password');
     patient_password = ret.data.password;
   });

@@ -3,42 +3,49 @@
         "patientId": "dc9958a2-bcba-41db-99c1-290b3ed2a074",
         "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269",
         "phone": "090-3333-3333",
+        "memo": "hoge",
         "display": true
     },
     {
         "patientId": "e8b7365b-6739-441c-8955-11f676e9ae33",
         "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269",
         "phone": "090-1111-1111",
+        "memo": "hoge",
         "display": true
     },
     {
         "patientId": "hoge",
         "centerId": "942f71cf-5f19-45d3-846b-4e6609f48269",
         "phone": "090-2222-2222",
+        "memo": "hoge",
         "display": false
     },
     {
         "patientId": "test-status-dummy-patient-1",
         "centerId": "test-status-dummy-center",
         "phone": "090-2222-2222",
+        "memo": "hoge",
         "display": false
     },
     {
         "patientId": "test-status-dummy-patient-2",
         "centerId": "test-status-dummy-center",
         "phone": "090-2222-2222",
+        "memo": "hoge",
         "display": false
     },
     {
         "patientId": "test-status-dummy-patient-3",
         "centerId": "test-status-dummy-center",
         "phone": "090-2222-2222",
+        "memo": "hoge",
         "display": false
     },
     {
         "patientId": "test-status-dummy-patient-4",
         "centerId": "test-status-dummy-center",
         "phone": "090-2222-2222",
+        "memo": "hoge",
         "display": false
     }
 ]

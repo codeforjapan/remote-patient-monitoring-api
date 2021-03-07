@@ -6,5 +6,7 @@ properties:
     type: string
   phone:
     type: string
+  memo:
+    type: string
   display:
     type: boolean

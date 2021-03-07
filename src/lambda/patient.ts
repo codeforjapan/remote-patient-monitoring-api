@@ -167,6 +167,7 @@ export namespace Patient {
         patientId: patientId,
         phone: bodyData.phone,
         display: true,
+        memo: bodyData.memo || "",
         policy_accepted: undefined,
         centerId: event.pathParameters.centerId,
         statuses:[]
