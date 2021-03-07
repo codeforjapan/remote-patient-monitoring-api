@@ -127,6 +127,13 @@ Resources:
         - ALLOW_CUSTOM_AUTH
         - ALLOW_USER_SRP_AUTH
         - ALLOW_REFRESH_TOKEN_AUTH
+      RefreshTokenValidity: 365
+      IdTokenValidity: 1
+      AccessTokenValidity: 1
+      TokenValidityUnits:
+        RefreshToken : "days"
+        AccessToken : "days"
+        IdToken : "days"
 
   RPMNurseIdentityProvider:
     Type: AWS::Cognito::IdentityPool
@@ -215,6 +222,13 @@ Resources:
         - ALLOW_CUSTOM_AUTH
         - ALLOW_USER_SRP_AUTH
         - ALLOW_REFRESH_TOKEN_AUTH
+      RefreshTokenValidity: 365
+      IdTokenValidity: 1
+      AccessTokenValidity: 1
+      TokenValidityUnits:
+        RefreshToken : "days"
+        AccessToken : "days"
+        IdToken : "days"
 
   RPMPatientIdentityProvider:
     Type: AWS::Cognito::IdentityPool
