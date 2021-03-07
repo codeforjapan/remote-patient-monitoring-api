@@ -183,6 +183,7 @@ describe('admin user', () => {
     patient_item = ret.data;
     expect(ret.data.policy_accepted).toBe(undefined);
     expect(ret.data.phone).toBe(phone);
+    expect(ret.data.memo).toBe("患者メモ");
   });
 
   it('fails to create new patient with existing phone', async () => {
