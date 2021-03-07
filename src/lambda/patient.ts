@@ -15,7 +15,6 @@ AWS.config.update({
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
-import { SwaggerUIBundle } from "swagger-ui-dist";
 /**
  * A data handler for  Patients
  */

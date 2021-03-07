@@ -34,7 +34,7 @@ postPatientLogin:
   description: "post Patient login"
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPostAdminLoginRole-${self:provider.stage}"
   environment:
-    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
     USER_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
     USER_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
   #! BEGIN ONLY:LOCAL
