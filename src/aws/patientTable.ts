@@ -98,11 +98,11 @@ export default class PatientTable {
       ':centerId': patient.centerId,
       ":statuses": patient.statuses
     }
-    if (patient.policy_accepted) {
+    if (patient.policy_accepted !== undefined) {
       updateExpression += ', policy_accepted = :policy_accepted'
       expressionAttributeValues[':policy_accepted'] = patient.policy_accepted
     }
-    if (patient.memo) {
+    if (patient.memo !== undefined) {
       updateExpression += ', memo = :memo'
       expressionAttributeValues[':memo'] = patient.memo
     }

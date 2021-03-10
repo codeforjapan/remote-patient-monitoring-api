@@ -247,10 +247,18 @@ describe('admin user', () => {
   });
 
   it('update existing patient memo', async () => {
-    const datetime = new Date().toISOString();
     patient_item.memo = "患者メモ2";
     const ret = await axios_admin.put(entry_point + `/api/admin/patients/${patient_id2}`, patient_item);
     expect(ret.data.memo).toBe("患者メモ2");
+  });
+
+  it('remove existing patient memo', async () => {
+    patient_item.memo = "";
+    const ret = await axios_admin.put(entry_point + `/api/admin/patients/${patient_id2}`, patient_item);
+    expect(ret.data.memo).toBe("");
+    const ret2 = await axios_admin.get(entry_point + `/api/admin/patients/${patient_id2}`);
+    patient_item = ret2.data;
+    expect(ret2.data.memo).toBe("");
   });
 
   it('create another center for the next test', async () => {
