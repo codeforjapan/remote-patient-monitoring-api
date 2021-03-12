@@ -1,9 +1,12 @@
-'use strict';
-import { APIGatewayProxyEvent } from 'aws-lambda';
+"use strict";
+import { APIGatewayProxyEvent } from "aws-lambda";
 
 export default class Validator {
+  hasProperty = (obj: any, key: string): boolean => {
+    return !!obj && Object.prototype.hasOwnProperty.call(obj, key);
+  };
   jsonBody(bodyData: any) {
-    if (typeof bodyData === 'string') {
+    if (typeof bodyData === "string") {
       return JSON.parse(bodyData);
     } else {
       return bodyData;
@@ -24,53 +27,56 @@ export default class Validator {
   }
 
   checkCenterBody(res: any) {
-    if (!res.hasOwnProperty('centerName') && ! res.hasOwnProperty('emergencyPhone')) {
-      console.log('checkCenterBody False');
+    if (
+      !this.hasProperty(res, "centerName") &&
+      !this.hasProperty(res, "emergencyPhone")
+    ) {
+      console.log("checkCenterBody False");
       return false;
     } else {
-      console.log('checkCenterBody True');
+      console.log("checkCenterBody True");
       return true;
     }
   }
   checkNurseBody(res: any) {
-    if (res.hasOwnProperty('nurseId')) {
-      console.log('checkNurseId True');
+    if (this.hasProperty(res, "nurseId")) {
+      console.log("checkNurseId True");
       return true;
     } else {
-      console.log('checkNurseId False');
+      console.log("checkNurseId False");
       return false;
     }
   }
   checkPatientBody(res: any) {
-    if (res.hasOwnProperty('phone')) {
-      console.log('checkPatientBody True');
+    if (this.hasProperty(res, "phone")) {
+      console.log("checkPatientBody True");
       return true;
     } else {
-      console.log('checkPatientBody False');
+      console.log("checkPatientBody False");
       return false;
     }
   }
   checkPatientPutBody(res: any) {
-    if (res.hasOwnProperty('phone')) {
-      console.log('checkPatientBody True');
+    if (this.hasProperty(res, "phone")) {
+      console.log("checkPatientBody True");
       return true;
     } else {
-      console.log('checkPatientBody False');
+      console.log("checkPatientBody False");
       return false;
     }
   }
 
   checkPatientStatusBody(res: any) {
-    if (res == null || typeof res !== 'object') {
+    if (res == null || typeof res !== "object") {
       return false;
     }
     // 必須パラメータのチェック
     const requiredParams = [
-      { name: 'SpO2', type: 'number' },
-      { name: 'body_temperature', type: 'number' },
-      { name: 'pulse', type: 'number' },
+      { name: "SpO2", type: "number" },
+      { name: "body_temperature", type: "number" },
+      { name: "pulse", type: "number" },
     ];
-    console.log('validate post status');
+    console.log("validate post status");
     return this.checkRequestBody(res, requiredParams);
   }
 
@@ -79,31 +85,34 @@ export default class Validator {
     if (res == null) {
       return true;
     }
-    if (res != null && typeof res !== 'object') {
-      console.log('symptom invalid type');
+    if (res != null && typeof res !== "object") {
+      console.log("symptom invalid type");
       return false;
     }
 
     // 任意パラメータのチェック
     const remarks = res.remarks;
-    if (remarks != null && typeof remarks !== 'string') {
-      console.log('remarks invalid type');
+    if (remarks != null && typeof remarks !== "string") {
+      console.log("remarks invalid type");
       return false;
     }
 
-    //　必須パラメータのチェック
+    // 必須パラメータのチェック
     const requiredParams: { name: string; type: string }[] = [
-      { name: 'cough', type: 'boolean' },
-      { name: 'phlegm', type: 'boolean' },
-      { name: 'suffocation', type: 'boolean' },
-      { name: 'headache', type: 'boolean' },
-      { name: 'sore_throat', type: 'boolean' },
+      { name: "cough", type: "boolean" },
+      { name: "phlegm", type: "boolean" },
+      { name: "suffocation", type: "boolean" },
+      { name: "headache", type: "boolean" },
+      { name: "sore_throat", type: "boolean" },
     ];
-    console.log('validate post status.symptom');
+    console.log("validate post status.symptom");
     return this.checkRequestBody(res, requiredParams);
   }
 
-  checkRequestBody(res: { [key: string]: string }, requiredParams: { name: string; type: string }[]): boolean {
+  checkRequestBody(
+    res: { [key: string]: string },
+    requiredParams: { name: string; type: string }[]
+  ): boolean {
     for (let i = 0; i < requiredParams.length; i++) {
       const name = requiredParams[i].name;
       const type = requiredParams[i].type;
@@ -121,11 +130,11 @@ export default class Validator {
 
   isNurseAPI(event: APIGatewayProxyEvent) {
     if (!event.path) return false;
-    return event.path.startsWith('/api/nurse/');
+    return event.path.startsWith("/api/nurse/");
   }
 
   isPatientAPI(event: APIGatewayProxyEvent) {
     if (!event.path) return false;
-    return event.path.startsWith('/api/patient/');
+    return event.path.startsWith("/api/patient/");
   }
 }
