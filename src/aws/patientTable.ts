@@ -102,17 +102,19 @@ export default class PatientTable {
   putPatient(patientId: string, patient: PatientParam) {
     let updateExpression =
       "set phone = :phone, display = :display, centerId = :centerId";
+
     const expressionAttributeValues: any = {
       ":phone": patient.phone,
       ":display": patient.display,
       ":centerId": patient.centerId,
       ":statuses": patient.statuses,
     };
-    if (patient.policy_accepted) {
+
+    if (patient.policy_accepted !== undefined) {
       updateExpression += ", policy_accepted = :policy_accepted";
       expressionAttributeValues[":policy_accepted"] = patient.policy_accepted;
     }
-    if (patient.memo) {
+    if (patient.memo !== undefined) {
       updateExpression += ", memo = :memo";
       expressionAttributeValues[":memo"] = patient.memo;
     }

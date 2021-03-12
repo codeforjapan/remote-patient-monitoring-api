@@ -130,11 +130,11 @@ export default class Validator {
 
   isNurseAPI(event: APIGatewayProxyEvent) {
     if (!event.path) return false;
-    return event.path.startsWith("/api/nurse/");
+    return event.path.startsWith('/api/nurse/') || event.path.startsWith('/stg/api/nurse/');
   }
 
   isPatientAPI(event: APIGatewayProxyEvent) {
     if (!event.path) return false;
-    return event.path.startsWith("/api/patient/");
+    return event.path.startsWith('/api/patient/') || event.path.startsWith('/stg/api/patient/');
   }
 }
