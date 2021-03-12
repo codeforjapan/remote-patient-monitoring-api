@@ -75,7 +75,7 @@ export default class PatientTable {
       });
     });
   }
-  async postPatient(patient: PatientParam) {
+  async postPatient(patient: PatientParam): Promise<PatientParam | AWSError> {
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Item: patient,
@@ -99,7 +99,7 @@ export default class PatientTable {
     });
   }
 
-  putPatient(patientId: string, patient: PatientParam) {
+  putPatient(patientId: string, patient: PatientParam): Promise<PatientParam | AWSError>  {
     let updateExpression =
       "set phone = :phone, display = :display, centerId = :centerId";
 
@@ -216,7 +216,7 @@ export default class PatientTable {
       throw err;
     }
   }
-  async deletePatientStatus(patientId: string, statusId: string) {
+  async deletePatientStatus(patientId: string, statusId: string): Promise<PatientParam | AWSError>  {
     try {
       const ret = await this.getPatient(patientId);
 

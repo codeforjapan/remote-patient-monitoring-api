@@ -12,9 +12,11 @@ const docClient = loadDynamoDBClient();
 AWS.config.update({
   region: process.env.region,
 });
+import CenterTable from "../aws/centerTable";
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
+import {Center} from "./definitions/types"
 /**
  * A data handler for  Patients
  */
@@ -233,6 +235,7 @@ export namespace Patient {
 
   export const getPatient: APIGatewayProxyHandler = async (event) => {
     const patientTable = new PatientTable(docClient);
+    const centerTable = new CenterTable(docClient);
     const validator = new Validator();
     if (!event.pathParameters || !event.pathParameters.patientId) {
       return {
@@ -293,10 +296,10 @@ export namespace Patient {
         }
       }
       const patient = sliceStatus(res as PatientParam, 20);
-
+      const center: Center = (await centerTable.getCenter(patient.centerId)) as Center
       return {
         statusCode: 200,
-        body: JSON.stringify(patient),
+        body: JSON.stringify({...patient, centerId: center.centerId, centerName: center.centerName, emergencyPhone: center.emergencyPhone})
       };
     } catch (err) {
       console.log("getPatientTable-index error");

@@ -152,6 +152,7 @@ getPatient:
   description: "get Patient"
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
   environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
 postPatient:
