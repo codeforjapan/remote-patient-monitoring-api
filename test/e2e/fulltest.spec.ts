@@ -204,7 +204,7 @@ describe('admin user', () => {
     expect(ret.data.policy_accepted).toBe(undefined);
     expect(ret.data.centerId).toBe(center_id);
     expect(ret.data.centerName).toBe(center_name);
-    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
+    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
     expect(ret.data.phone).toBe(phone);
     expect(ret.data.memo).toBe("患者メモ");
   });
@@ -616,8 +616,8 @@ describe('Patient user', () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}`);
     patient_item = ret.data;
     expect(ret.data.centerId).toBe(center_id);
-    expect(ret.data.centerName).toBe('B保健所');
-    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
+    expect(ret.data.centerName).toBe('C保健所');
+    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
     expect(ret.data.phone).toBe(phone);
   });
 
