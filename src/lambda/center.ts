@@ -1,11 +1,11 @@
 "use strict";
 import AWS from "aws-sdk";
-import { APIGatewayProxyHandler } from 'aws-lambda'
-import { loadDynamoDBClient } from '../util/dynamodbclient'
+import { APIGatewayProxyHandler } from "aws-lambda";
+import { loadDynamoDBClient } from "../util/dynamodbclient";
 AWS.config.update({
-  region: process.env.region
+  region: process.env.region,
 });
-var docClient = loadDynamoDBClient()
+const docClient = loadDynamoDBClient();
 
 import CenterTable from "../aws/centerTable";
 import Validator from "../util/validator";
@@ -37,14 +37,14 @@ export namespace Center {
       return {
         statusCode: 500,
         body: JSON.stringify({
-          error: err
+          error: err,
         }),
       };
     }
-  }
+  };
 
   export const postCenter: APIGatewayProxyHandler = async (event) => {
-    console.log('called postCenter');
+    console.log("called postCenter");
     const centerTable = new CenterTable(docClient);
     const validator = new Validator();
     console.log(event.body);
@@ -72,11 +72,11 @@ export namespace Center {
       return {
         statusCode: 500,
         body: JSON.stringify({
-          error: err
+          error: err,
         }),
       };
     }
-  }
+  };
 
   export const getCenter: APIGatewayProxyHandler = async (event) => {
     const centerTable = new CenterTable(docClient);
@@ -86,11 +86,11 @@ export namespace Center {
         statusCode: 404,
         body: JSON.stringify({
           errorCode: "RPM00001",
-          errorMessage: 'Not Found'
-        })
-      }
+          errorMessage: "Not Found",
+        }),
+      };
     }
-    console.log('call getCenter with ' + event.pathParameters.centerId);
+    console.log("call getCenter with " + event.pathParameters.centerId);
     try {
       const res = await centerTable.getCenter(event.pathParameters.centerId);
       console.log(res);
@@ -117,11 +117,11 @@ export namespace Center {
       return {
         statusCode: 500,
         body: JSON.stringify({
-          error: err
+          error: err,
         }),
       };
     }
-  }
+  };
 
   export const putCenter: APIGatewayProxyHandler = async (event) => {
     const centerTable = new CenterTable(docClient);
@@ -145,10 +145,11 @@ export namespace Center {
           statusCode: 404,
           body: JSON.stringify({
             errorCode: "RPM00001",
-            errorMessage: 'Not Found'
-          })
-        }
+            errorMessage: "Not Found",
+          }),
+        };
       }
+      console.log(bodyData);
       const res = await centerTable.putCenter(
         event.pathParameters.centerId,
         bodyData
@@ -162,9 +163,9 @@ export namespace Center {
       return {
         statusCode: 500,
         body: JSON.stringify({
-          error: err
+          error: err,
         }),
       };
     }
-  }
+  };
 }

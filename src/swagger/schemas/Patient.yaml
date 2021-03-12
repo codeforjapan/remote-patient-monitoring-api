@@ -9,6 +9,8 @@ properties:
     format: date-time
   phone:
     type: string
+  memo:
+    type: string
   display:
     type: boolean
   statuses:

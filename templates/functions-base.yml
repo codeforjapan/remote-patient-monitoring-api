@@ -34,7 +34,7 @@ postPatientLogin:
   description: "post Patient login"
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPostAdminLoginRole-${self:provider.stage}"
   environment:
-    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
     USER_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
     USER_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
   #! BEGIN ONLY:LOCAL
@@ -116,6 +116,7 @@ getNurse:
     NURSE_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
     NURSE_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
 postNurse:
   handler: src/lambda/handler.postNurse
   name: "remote-patient-monitoring-postNurse-${self:provider.stage}"
@@ -161,6 +162,10 @@ postPatient:
   environment:
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    STAGE: ${self:provider.stage}
+    SMS_LOGINURL: "https://client.mnt.stopcovid19.jp/login/"
+    SMS_ENDPOINT: "localhost"
+    SMS_APIKEY: "apikey"
     PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
     PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
 putPatient:
@@ -170,6 +175,15 @@ putPatient:
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
   environment:
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
+    PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+postAcceptPolicy:
+  handler: src/lambda/handler.postAcceptPolicy
+  name: "remote-patient-monitoring-postAcceptPolicy-${self:provider.stage}"
+  description: "accept Policy"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
     PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
     PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY

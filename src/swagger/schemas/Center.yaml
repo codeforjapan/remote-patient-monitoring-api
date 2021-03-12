@@ -4,3 +4,5 @@ properties:
     type: string
   centerName:
     type: string
+  emergencyPhone:
+    type: string

@@ -12,7 +12,6 @@ const STAGE = process.env.JEST_STAGE || 'dev';
 const config = configsys.readConfig(STAGE);
 beforeAll(async () => {
   entry_point = `https://${config.apiGateway.restApiId}.execute-api.${config.region}.amazonaws.com/${config.apiGateway.stageName}`;
-  console.log(entry_point);
   const db = new TruncateDB(STAGE);
   await db.truncate();
 });
@@ -31,7 +30,7 @@ describe('get Centers', () => {
 describe('admin user login', () => {
   it('get Authkey', async () => {
     expect.assertions(1);
-    console.log(entry_point + '/api/admin/login');
+    console.log(entry_point)
     const ret = await axios.post(entry_point + '/api/admin/login', {
       username: secret.auth_user,
       password: secret.auth_pass,
@@ -49,8 +48,8 @@ let center_id_with_no_nurse: string;
 let nurse_password: string;
 
 const patient_id: string = 'testPatient';
-const patient_id2: string = uuid();
-const patient_id_in_another_center: string = uuid();
+let patient_id2: string;
+let patient_id_in_another_center: string;
 let patient_item_in_another_center: any;
 let patient_password: string;
 const phone: string = '090-3333-3333';
@@ -67,7 +66,6 @@ describe('admin user', () => {
       password: secret.auth_pass,
     });
     const idToken = ret.data.idToken;
-    console.log(idToken)
     axios_admin = axios.create({
       headers: {
         Authorization: idToken,
@@ -76,20 +74,40 @@ describe('admin user', () => {
   });
 
   it('create new center', async () => {
-    const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'A保健所' });
+    const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'A保健所', emergencyPhone: "0166-33-2222" });
     expect(ret.data).toHaveProperty('centerId');
+    expect(ret.data.centerName).toBe('A保健所');
+    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
     center_id = ret.data.centerId;
   });
 
   it('read new center id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
     expect(ret.data.centerName).toBe('A保健所');
+    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
   });
 
   it('update existing center', async () => {
     center_name = 'C保健所';
     const ret = await axios_admin.put(entry_point + `/api/admin/centers/${center_id}`, { centerName: center_name });
     expect(ret.data.centerName).toBe(center_name);
+  });
+
+  it('read updated center id', async () => {
+    const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
+    expect(ret.data.centerName).toBe(center_name);
+    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
+  });
+
+  it('update existing center', async () => {
+    const ret = await axios_admin.put(entry_point + `/api/admin/centers/${center_id}`, { emergencyPhone: "0166-33-9999" });
+    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
+  });
+
+  it('read updated center id', async () => {
+    const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
+    expect(ret.data.centerName).toBe(center_name);
+    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
   });
 
   it('create another center', async () => {
@@ -142,6 +160,8 @@ describe('admin user', () => {
   it('read new nurse id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/nurses/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]));
+    expect(ret.data.manageCenters[0].centerId).toBe(center_id)
+    expect(ret.data.manageCenters[0].centerName).toBe('C保健所')
     nurse_item = ret.data;
   });
 
@@ -167,11 +187,13 @@ describe('admin user', () => {
   it('create new patient to the center', async () => {
     const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, {
       patientId: patient_id,
+      memo: "患者メモ",
       phone: phone,
     });
     expect(ret.data.patientId).toBe(patient_id);
     expect(ret.data.phone).toBe(phone);
     expect(ret.data.centerId).toBe(center_id);
+    expect(ret.data.memo).toBe("患者メモ");
     expect(ret.data).toHaveProperty('password');
     patient_password = ret.data.password;
   });
@@ -179,7 +201,9 @@ describe('admin user', () => {
   it('read new patient id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/patients/${patient_id}`);
     patient_item = ret.data;
+    expect(ret.data.policy_accepted).toBe(undefined);
     expect(ret.data.phone).toBe(phone);
+    expect(ret.data.memo).toBe("患者メモ");
   });
 
   it('fails to create new patient with existing phone', async () => {
@@ -194,10 +218,11 @@ describe('admin user', () => {
 
   it('create new patient to the center', async () => {
     const ret = await axios_admin.post(entry_point + `/api/admin/centers/${center_id}/patients`, {
-      patientId: patient_id2,
       phone: '090-1111-1111',
     });
+    expect(ret.data).toHaveProperty('patientId');
     expect(ret.data.phone).toBe('090-1111-1111');
+    patient_id2 = ret.data.patientId;
   });
 
   it('create new patient to another center', async () => {
@@ -217,8 +242,23 @@ describe('admin user', () => {
   it('update existing patient', async () => {
     const datetime = new Date().toISOString();
     patient_item.policy_accepted = datetime;
-    const ret = await axios_admin.put(entry_point + `/api/admin/patients/${patient_id}`, patient_item);
+    const ret = await axios_admin.put(entry_point + `/api/admin/patients/${patient_id2}`, patient_item);
     expect(ret.data.policy_accepted).toBe(datetime);
+  });
+
+  it('update existing patient memo', async () => {
+    patient_item.memo = "患者メモ2";
+    const ret = await axios_admin.put(entry_point + `/api/admin/patients/${patient_id2}`, patient_item);
+    expect(ret.data.memo).toBe("患者メモ2");
+  });
+
+  it('remove existing patient memo', async () => {
+    patient_item.memo = "";
+    const ret = await axios_admin.put(entry_point + `/api/admin/patients/${patient_id2}`, patient_item);
+    expect(ret.data.memo).toBe("");
+    const ret2 = await axios_admin.get(entry_point + `/api/admin/patients/${patient_id2}`);
+    patient_item = ret2.data;
+    expect(ret2.data.memo).toBe("");
   });
 
   it('create another center for the next test', async () => {
@@ -232,10 +272,11 @@ describe('admin user', () => {
     expect(ret.data).toHaveProperty('centerId');
     center_id3 = ret.data.centerId;
     const ret2 = await axios_admin.post(entry_point + `/api/admin/centers/${center_id3}/patients`, {
-      patientId: patient_id_in_another_center,
       phone: '090-3899-2222',
     });
     expect(ret2.data.phone).toBe('090-3899-2222');
+    expect(ret2.data).toHaveProperty('patientId');
+    patient_id_in_another_center = ret2.data.patientId;
     patient_item_in_another_center = ret2.data;
   });
 
@@ -274,18 +315,21 @@ describe('admin user', () => {
 
 describe('nurse user login', () => {
   it('get authKey', async () => {
-    expect.assertions(1);
+    expect.assertions(2);
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     expect(ret.data).toHaveProperty('idToken');
+    expect(ret.data).toHaveProperty('refreshToken');
   });
 });
 describe('patient user login', () => {
   it('get authKey', async () => {
+    expect.assertions(2);
     const ret = await axios.post(entry_point + '/api/patient/login', {
       username: patient_id,
       password: patient_password,
     });
     expect(ret.data).toHaveProperty('idToken');
+    expect(ret.data).toHaveProperty('refreshToken');
   });
 });
 
@@ -293,15 +337,16 @@ describe('patient user login', () => {
  * Nurse methods
  */
 let idToken: string;
+let refreshToken: string;
 describe('Nurse user', () => {
   let axios_nurse: any;
   let nurse_item: any;
   let patient_item: any;
-  const patient_id3 = uuid();
+  let patient_id3: string;
   beforeAll(async () => {
     const ret = await axios.post(entry_point + '/api/nurse/login', { username: nurse_id, password: nurse_password });
     idToken = ret.data.idToken;
-    console.log(idToken)
+    refreshToken = ret.data.refreshToken;
     axios_nurse = axios.create({
       headers: {
         Authorization: idToken,
@@ -338,6 +383,7 @@ describe('Nurse user', () => {
   it('read nurse id', async () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/nurses/${nurse_id}`);
     expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerId: center_id })]));
+    expect(ret.data.manageCenters).toEqual(expect.arrayContaining([expect.objectContaining({ centerName:'C保健所' })]));
     nurse_item = ret.data;
   });
 
@@ -365,11 +411,13 @@ describe('Nurse user', () => {
 
   it('create new patient to the center', async () => {
     const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, {
-      patientId: patient_id3,
       phone: '090-3293-2333',
     });
+    expect(ret.data).toHaveProperty('patientId');
+    patient_id3 = ret.data.patientId;
     expect(ret.data).toHaveProperty('password');
     expect(ret.data.phone).toBe('090-3293-2333');
+    expect(ret.data).toHaveProperty('statuses');
   });
 
   it('fails to create new patient to the center that is not under my managemenet', async () => {
@@ -403,6 +451,7 @@ describe('Nurse user', () => {
       phone: '090-3827-1428',
     });
     expect(ret.data).toHaveProperty('password');
+    expect(ret.data).toHaveProperty('display');
     expect(ret.data.phone).toBe('090-3827-1428');
   });
 
@@ -417,6 +466,13 @@ describe('Nurse user', () => {
     patient_item.policy_accepted = datetime;
     const ret = await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id3}`, patient_item);
     expect(ret.data.policy_accepted).toBe(datetime);
+  });
+
+  it('update display flag', async () => {
+    const datetime = new Date().toISOString();
+    patient_item.display = false;
+    const ret = await axios_nurse.put(entry_point + `/api/nurse/patients/${patient_id3}`, patient_item);
+    expect(ret.data.display).toBe(false);
   });
 
   it('fails to update existing patient that is not in the managing center', async () => {
@@ -492,6 +548,15 @@ describe('Nurse user', () => {
   });
 });
 
+describe('refresh Token', () => {
+  it('login with refreshToken', async() => {
+    const ret = await axios.post(entry_point + '/api/nurse/login', {
+      refreshToken: refreshToken
+    });
+    expect(ret.data).toHaveProperty('idToken');
+  });
+});
+
 /*
  * Patient methods
  */
@@ -505,11 +570,35 @@ describe('Patient user', () => {
       password: patient_password,
     });
     idToken = ret.data.idToken;
+    refreshToken = ret.data.refreshToken;
     axios_patient = axios.create({
       headers: {
         Authorization: idToken,
       },
     });
+  });
+
+  it('get policy_accepted', async () => {
+    const ret = await axios.post(entry_point + '/api/patient/login', {
+      username: patient_id,
+      password: patient_password,
+    });
+    expect(ret.data.policy_accepted).toBe(undefined);
+  });
+
+  it('accept policy', async () => {
+    const ret = await axios_patient.post(entry_point + `/api/patient/patients/${patient_id}/accept_policy`);
+    console.log(ret.data)
+    expect(ret.data.result).toBe('OK')
+  });
+
+
+  it('can\'t accept another person\'s policy', async () => {
+    expect.assertions(1);
+    const t = async() => {
+      await axios_patient.post(entry_point + `/api/patient/patients/${patient_id2}/accept_policy`);
+    }
+    await expect(t).rejects.toThrow(/403/)
   });
 
   it('fails to create new center', async () => {
@@ -627,12 +716,21 @@ describe('Patient user', () => {
     await expect(t).rejects.toThrow(/403/);
   });
 
+  it('delete non-existing status', async () => {
+    expect.assertions(1);
+    const t = async () => {
+      const ret = await axios_patient.delete(entry_point + `/api/patient/patients/${patient_id}/statuses/undefined`);
+    }
+    await expect(t).rejects.toThrow(/500/)
+  });
+
   it('delete specified status', async () => {
     const ret = await axios_patient.delete(entry_point + `/api/patient/patients/${patient_id}/statuses/${status_id}`);
     expect(ret.status).toBe(200)
     expect(ret.data.statuses.length).toBe(2);
     expect(ret.data.statuses.findIndex((item: any) => item.status_id === status_id)).toBe(-1)
   });
+
   it('get two statuses', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
     expect(ret.data.length).toBe(2);
@@ -736,7 +834,6 @@ describe('Nurse user(again)', () => {
   });
   it('fails to get the patients that does not depend on mine', async () => {
     expect.assertions(1);
-    console.log(entry_point + `/api/nurse/centers/${center_id3}/patients`)
     const t = async () => {
       await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id3}/patients`);
     }
@@ -744,6 +841,14 @@ describe('Nurse user(again)', () => {
   });
 });
 
+describe('refresh Token', () => {
+  it('login with refreshToken', async() => {
+    const ret = await axios.post(entry_point + '/api/patient/login', {
+      refreshToken: refreshToken
+    });
+    expect(ret.data).toHaveProperty('idToken');
+  });
+});
 
 /*
  * Create users for testing

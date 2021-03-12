@@ -23,6 +23,16 @@ Resources:
                   - cognito-idp:*
                 Resource:
                   - "*"
+        - PolicyName: "GetPatientPolicy-${self:provider.stage}"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - dynamodb:GetItem
+                Resource:
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}/index/*"
   RPMGetCentersRole:
     Type: AWS::IAM::Role
     Properties:

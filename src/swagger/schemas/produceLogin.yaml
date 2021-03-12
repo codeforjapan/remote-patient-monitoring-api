@@ -2,5 +2,7 @@ type: object
 properties:
   username:
     type: string
-  authKey:
+  idToken:
+    type: string
+  refreshToken:
     type: string

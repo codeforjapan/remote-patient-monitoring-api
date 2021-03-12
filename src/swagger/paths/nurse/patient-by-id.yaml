@@ -105,7 +105,7 @@ put:
     content:
       application/json:
         schema:
-          $ref: "../../schemas/consumePatient.yaml"
+          $ref: "../../schemas/updatePatient.yaml"
     required: true
   responses:
     200:

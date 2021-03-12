@@ -87,6 +87,12 @@ Resources:
       FunctionName: "remote-patient-monitoring-postPatient-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "apigateway.amazonaws.com"
+  PostAcceptPolicyApiPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "remote-patient-monitoring-postAcceptPolicy-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
   PutPatientApiPermission:
     Type: "AWS::Lambda::Permission"
     Properties:

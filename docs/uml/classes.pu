@@ -11,17 +11,19 @@ Patient o-- "0..*" Notification :通知を送った時に作成(2重送信防止
 class Center {
     String centerId
     String centerName
+    String emergencyPhone
     Nurse[] Nurses
 }
 
 class Nurse {
     String nurseId
-    Center[] Centers
+    Center[] manageCenters
 }
 
 class Patient {
     String patientId
     String phone
+    String memo
     Boolean display
     DateTime policy_accepted
     Status[] Statuses

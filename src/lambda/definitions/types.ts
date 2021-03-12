@@ -1,7 +1,22 @@
 export interface Center {
   centerId: string;
-  centerName?: string;
+  centerName: string;
+  emergencyPhone: string;
 }
+
+export interface CenterParam {
+  [key: string]: any;
+  centerName?: string;
+  emergencyPhone?: string;
+}
+export interface NurseOutput {
+  nurseId: string;
+  manageCenters: {
+    centerName: string;
+    centerId: string;
+  }[];
+}
+
 export interface NurseParam {
   nurseId: string;
   manageCenters: {
@@ -11,6 +26,7 @@ export interface NurseParam {
 export interface PatientParam {
   patientId: string;
   phone: string;
+  memo: string;
   display?: boolean;
   policy_accepted?: string;
   statuses?: Status[];
@@ -20,6 +36,7 @@ export interface PatientParam {
 export interface Patient {
   patientId: string;
   phone: string;
+  memo: string;
   display?: boolean;
   policy_accepted?: string;
   statuses?: Status[];

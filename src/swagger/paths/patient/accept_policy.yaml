@@ -1,26 +1,20 @@
-delete:
+post:
   tags:
-    - Status
-  summary: 病状報告の削除
-  description: (自分の症状のみ操作可能)指定されたstatusIdの症状報告情報を削除します。成功したら、responseCode 200 と、削除後のステータス一覧 を返します。
+    - Patient
+  summary: 利用規約への同意
+  description: 指定されたPatientIdの policy_accepted を現在時間で更新します。ログインした本人しか利用できません。
   security:
     - APIGatewayPatientAuthorizer: []
   parameters:
     - name: patientId
       in: path
-      description: 削除したい症状報告を持っている患者のID
-      required: true
-      schema:
-        type: string
-    - name: statusId
-      in: path
-      description: 削除したい症状報告のID
+      description: 更新したい療養者のID
       required: true
       schema:
         type: string
   responses:
     200:
-      description: DELETED
+      description: OK
       headers:
         Access-Control-Allow-Origin:
           schema:
@@ -32,9 +26,9 @@ delete:
           schema:
             type: string
       content:
-        application/json:
+        text/plain:
           schema:
-            $ref: "../../schemas/Patient.yaml"
+            type: string
     400:
       description: Bad Request
       headers:
@@ -88,7 +82,7 @@ delete:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-deleteStatus-#{SERVERLESS::Stage}/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postAcceptPolicy-#{SERVERLESS::Stage}/invocations
     passthroughBehavior: when_no_match
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
@@ -102,13 +96,7 @@ options:
   parameters:
     - name: patientId
       in: path
-      description: 削除したい症状報告を持っている患者のID
-      required: true
-      schema:
-        type: string
-    - name: statusId
-      in: path
-      description: 取得したい病状報告のID
+      description: 取得したい療養者のID
       required: true
       schema:
         type: string

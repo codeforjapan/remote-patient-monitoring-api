@@ -1,7 +1,7 @@
 "use strict";
-import { AWSError, DynamoDB } from 'aws-sdk'
-import { NurseParam } from '../lambda/definitions/types'
-import { Center } from '../lambda/definitions/types'
+import { AWSError, DynamoDB } from "aws-sdk";
+import { NurseParam } from "../lambda/definitions/types";
+import { Center } from "../lambda/definitions/types";
 
 export default class NurseTable {
   client: DynamoDB.DocumentClient;
@@ -10,7 +10,7 @@ export default class NurseTable {
   }
   getNurses(centerId: string) {
     const params: DynamoDB.ScanInput = {
-      TableName: process.env.NURSE_TABLE_NAME!
+      TableName: process.env.NURSE_TABLE_NAME!,
     };
     return new Promise((resolve, reject) => {
       this.client.scan(params, (err, data) => {
@@ -19,21 +19,28 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("getNurse Success!");
-          const filtered = data.Items!.filter(item => item.manageCenters.findIndex((center: Center) => center.centerId === centerId) > -1);
+          const filtered = data.Items!.filter(
+            (item) =>
+              item.manageCenters.findIndex(
+                (center: Center) => center.centerId === centerId
+              ) > -1
+          );
           resolve({ Count: filtered.length, Items: filtered });
         }
       });
     });
   }
 
-  getNurse(nurseId: string): Promise<DynamoDB.DocumentClient.GetItemOutput | AWSError> {
+  getNurse(
+    nurseId: string
+  ): Promise<DynamoDB.DocumentClient.GetItemOutput | AWSError> {
     const params: DynamoDB.DocumentClient.GetItemInput = {
       TableName: process.env.NURSE_TABLE_NAME!,
       Key: {
-        "nurseId": nurseId
-      }
+        nurseId: nurseId,
+      },
     };
-    console.log(params)
+    console.log(params);
     return new Promise((resolve, reject) => {
       this.client.get(params, (err, data) => {
         if (err) {
@@ -41,7 +48,7 @@ export default class NurseTable {
           reject(err);
         } else {
           console.log("getNurse Success!");
-          console.log(data.Item)
+          console.log(data.Item);
           resolve(data.Item!);
         }
       });
@@ -72,11 +79,11 @@ export default class NurseTable {
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.NURSE_TABLE_NAME!,
       Key: {
-        nurseId: nurseId
+        nurseId: nurseId,
       },
       UpdateExpression: "set manageCenters = :c",
       ExpressionAttributeValues: {
-        ":c": body.manageCenters
+        ":c": body.manageCenters,
       },
     };
     console.log(params);
@@ -93,4 +100,4 @@ export default class NurseTable {
       });
     });
   }
-};
+}
