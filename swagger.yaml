@@ -2473,6 +2473,8 @@ paths:
                   type: string
                 display:
                   type: boolean
+                sendSMS:
+                  type: boolean
         required: true
       responses:
         '201':
@@ -2815,6 +2817,8 @@ paths:
                 memo:
                   type: string
                 display:
+                  type: boolean
+                sendSMS:
                   type: boolean
         required: true
       responses:
@@ -5781,6 +5785,8 @@ components:
         memo:
           type: string
         display:
+          type: boolean
+        sendSMS:
           type: boolean
     Patients:
       type: array
