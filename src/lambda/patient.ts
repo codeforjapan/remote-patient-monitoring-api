@@ -198,6 +198,7 @@ export namespace Patient {
         await patientTable.postPatient(param);
         // send login url via SMS
         if (process.env.SMS_ENDPOINT) {
+          console.log("SEND SMS");
           // getIdToken using new user id/password
           const endpoint = process.env.SMS_ENDPOINT!;
           const logininfo: LoginInfo = {
@@ -211,14 +212,19 @@ export namespace Patient {
           // send SMS if parameter was set
           if (bodyData.sendSMS && bodyData.sendSMS === true) {
             const smsSender = new SMSSender(endpoint, logininfo);
+            console.log("Call SEND SMS");
             const res = await smsSender.sendSMS(
               param.phone,
               `体調入力URL: ${loginURL + loginKey}`
             );
-            if (res.status != "100") {
+            if (res.status !== "100") {
+              console.log("SMS Failed")
               return {
                 statusCode: 400,
-                body: "SMS failed",
+                body: JSON.stringify({
+                  errorCode: "RPM00104",
+                  errorMessage: "User was created but sending SMS failed",
+                }),
               };
             }
           }
@@ -232,6 +238,8 @@ export namespace Patient {
           }),
         };
       } catch (err) {
+        console.log("error occurred")
+        console.log(err)
         return {
           statusCode: 400,
           body: err,
@@ -239,6 +247,7 @@ export namespace Patient {
       }
     } catch (err) {
       console.log("postPatientTable-index error");
+      console.log(err)
       return {
         statusCode: 500,
         body: JSON.stringify({

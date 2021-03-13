@@ -4,7 +4,10 @@ export interface RequestToSendSMS {
   [key: string]: any;
   Token: string;
   To: string;
-  Message: string;
+  DocomoMessage: string;
+  SoftbankMessage: string;
+  AuMessage: string;
+  RakutenMessage: string;
   SecurityCode: string;
   ShorturlFlg: "0" | "1";
 }
@@ -33,7 +36,10 @@ export class SMSSender {
       const params: RequestToSendSMS = {
         Token: this.loigninfo.accessKey,
         To: to,
-        Message: text,
+        DocomoMessage: text,
+        SoftbankMessage: text,
+        AuMessage: text,
+        RakutenMessage: text,
         SecurityCode: this.loigninfo.securityKey,
         ShorturlFlg: "1",
       };
@@ -46,6 +52,7 @@ export class SMSSender {
           }
         },""
       );
+      console.log(`call SMS to ${this.endpoint} with ${query}`)
       const ret = await axios.post(this.endpoint, query);
       return new Promise((resolve, reject) => {
         if (ret.data.status === "100") {
