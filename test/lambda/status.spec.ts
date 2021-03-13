@@ -635,6 +635,7 @@ describe('status test', () => {
   });
   it('get 53 statuses', async () => {
     const handler = require('../../src/lambda/handler');
+    process.env.CENTER_TABLE_NAME = 'RemotePatientMonitoring-CenterTable-dev';
     process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
     const dummyPatientId = 'test-status-dummy-patient-3';
     const params = {
@@ -655,6 +656,7 @@ describe('status test', () => {
   });
   it('get latest 20 statuses', async () => {
     const handler = require('../../src/lambda/handler');
+    process.env.CENTER_TABLE_NAME = 'RemotePatientMonitoring-CenterTable-dev';
     process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev';
     const dummyPatientId = 'test-status-dummy-patient-3';
     const params = {

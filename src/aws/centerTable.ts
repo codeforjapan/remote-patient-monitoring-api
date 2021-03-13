@@ -81,7 +81,7 @@ export default class CenterTable {
         if (previous === "") {
           return `${current} = :${current}`;
         } else {
-          previous = previous + `, ${current} = :${current}`;
+          previous = previous + ", " + current + " = :" + current;
           return previous;
         }
       },

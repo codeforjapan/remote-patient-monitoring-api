@@ -6,6 +6,7 @@ import { ResolvePlugin } from 'webpack';
 
 describe('patient test', () => {
   const handler = require('../../src/lambda/handler')
+  process.env.CENTER_TABLE_NAME = 'RemotePatientMonitoring-CenterTable-dev'
   process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev'
 
   it('return Patient', async () => {
@@ -14,6 +15,8 @@ describe('patient test', () => {
     expect(JSON.parse(ret.body)).toStrictEqual({
       "patientId": "dc9958a2-bcba-41db-99c1-290b3ed2a074",
       "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269",
+      "centerName": "A保健所",
+      "emergencyPhone": "03-3333-4444",
       "phone": "090-3333-3333",
       "memo": "hoge",
       "display": true
@@ -50,9 +53,15 @@ describe('patient test', () => {
       console.log(password)
       return { username: username, password: 'hoge', user: {} }
     })
+    const signIn = jest.spyOn(CognitoAdmin.prototype, "signIn").mockImplementation(async (username: string, password: string) => {
+      console.log(username,password)
+      return {AuthenticationResult: {IdToken: "hoge"}}
+    })
     const sms = jest.spyOn(SMSSender.prototype, "sendSMS").mockImplementation((to: string, text: string) => {
       console.log(to, text)
-      return true
+      return new Promise((resolve) => {
+        resolve({messageId: "", status: "100"})
+      })
     })
     const params = {
       pathParameters: {
@@ -62,7 +71,8 @@ describe('patient test', () => {
         "patientId": "halsk",
         "phone": "090-1234-5678",
         "memo": "メモメモ",
-        "display": true
+        "display": true,
+        "sendSMS": true
       }
     }
     const ret = await handler.postPatient(params)
