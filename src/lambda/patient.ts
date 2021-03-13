@@ -311,7 +311,6 @@ export namespace Patient {
         }
       }
       const patient = sliceStatus(res as PatientParam, 20);
-      console.log('************************' + patient.centerId)
       const center: Center = (await centerTable.getCenter(
         patient.centerId
       )) as Center;

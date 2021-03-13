@@ -26,8 +26,6 @@ export class SMSSender {
   }
   public async sendSMS(to: string, text: string): Promise<SendSMSResult> {
     if (this.endpoint == "") {
-      console.log(`******** send SMS to ${to} ************`);
-      console.log(text);
       return new Promise((resolve) => {
         resolve({ status: "100" });
       });
@@ -41,8 +39,12 @@ export class SMSSender {
       };
       const query = Object.keys(params).reduce(
         (acc: string, val: string): string => {
-          return acc + "&" + val + "=" + (params[val] as string);
-        }
+          if (acc === "") {
+            return val + "=" + encodeURI(params[val] as string);
+          }else{
+            return acc + "&" + val + "=" + encodeURI(params[val] as string);
+          }
+        },""
       );
       const ret = await axios.post(this.endpoint, query);
       return new Promise((resolve, reject) => {
