@@ -55,6 +55,10 @@ provider:
     AuthNurseUserPoolDomain: ${file(config/${self:provider.stage}.json):AuthNurseUserPoolDomain}
     AuthPatientUserPoolDomain: ${file(config/${self:provider.stage}.json):AuthPatientUserPoolDomain}
     DBPrefix: ${file(config/${self:provider.stage}.json):DBPrefix}
+    SMS_ENDPOINT: ${file(config/${self:provider.stage}.json):SMS_ENDPOINT}
+    SMS_SECURITYKEY: ${file(config/${self:provider.stage}.json):SMS_SECURITYKEY}
+    SMS_ACCESSKEY: ${file(config/${self:provider.stage}.json):SMS_ACCESSKEY}
+    LOGINURL: ${file(config/${self:provider.stage}.json):LOGINURL}
     IS_OFFLINE: ${opt:offline, ''}
 custom:
   defaultStage: dev

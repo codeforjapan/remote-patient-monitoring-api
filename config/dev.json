@@ -6,5 +6,9 @@
   "OauthSignoutURL": "https://dev.remotepatientmonitoring.jp",
   "Bucket": "remote-patient-monitoring-dev",
   "DebugMode": "on",
-  "DBPrefix": "RemotePatientMonitoring-"
+  "DBPrefix": "RemotePatientMonitoring-",
+  "SMS_ENDPOINT":"",
+  "SMS_SECURITYKEY": "",
+  "SMS_ACCESSKEY": "",
+  "LOGINURL": "http://localhost:8080/login/"
 }
