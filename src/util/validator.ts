@@ -18,7 +18,6 @@ export default class Validator {
     return false;
   }
   checkDyanmoQueryResultEmpty(res: any) {
-    console.log(res.Items);
     if (!Object.keys(res.Items).length) {
       return true;
     } else {
@@ -31,37 +30,29 @@ export default class Validator {
       !this.hasProperty(res, "centerName") &&
       !this.hasProperty(res, "emergencyPhone")
     ) {
-      console.log("checkCenterBody False");
       return false;
     } else {
-      console.log("checkCenterBody True");
       return true;
     }
   }
   checkNurseBody(res: any) {
     if (this.hasProperty(res, "nurseId")) {
-      console.log("checkNurseId True");
       return true;
     } else {
-      console.log("checkNurseId False");
       return false;
     }
   }
   checkPatientBody(res: any) {
     if (this.hasProperty(res, "phone")) {
-      console.log("checkPatientBody True");
       return true;
     } else {
-      console.log("checkPatientBody False");
       return false;
     }
   }
   checkPatientPutBody(res: any) {
     if (this.hasProperty(res, "phone")) {
-      console.log("checkPatientBody True");
       return true;
     } else {
-      console.log("checkPatientBody False");
       return false;
     }
   }
@@ -76,7 +67,6 @@ export default class Validator {
       { name: "body_temperature", type: "number" },
       { name: "pulse", type: "number" },
     ];
-    console.log("validate post status");
     return this.checkRequestBody(res, requiredParams);
   }
 
@@ -86,14 +76,12 @@ export default class Validator {
       return true;
     }
     if (res != null && typeof res !== "object") {
-      console.log("symptom invalid type");
       return false;
     }
 
     // 任意パラメータのチェック
     const remarks = res.remarks;
     if (remarks != null && typeof remarks !== "string") {
-      console.log("remarks invalid type");
       return false;
     }
 
@@ -105,7 +93,6 @@ export default class Validator {
       { name: "headache", type: "boolean" },
       { name: "sore_throat", type: "boolean" },
     ];
-    console.log("validate post status.symptom");
     return this.checkRequestBody(res, requiredParams);
   }
 
