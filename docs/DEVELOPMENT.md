@@ -194,6 +194,17 @@ serverless invoke local --function putCenter --data '{ "pathParameters": {"cente
 npm run deploy:gateway
 ```
 
+## ステージング環境の構築
+
+stg.json ファイルを作る
+
+`cp config/stg.json.sample config/stg.json`
+
+必要な設定をする
+
+`vi config/stg.json`
+
+deploy する
 ## アンインストール
 
 ### 全て削除

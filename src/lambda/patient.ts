@@ -5,7 +5,7 @@ import AWS, { DynamoDB } from "aws-sdk";
 import { NurseParam, PatientParam } from "../lambda/definitions/types";
 import { CognitoAdmin, Config } from "../aws/cognito_admin";
 import { loadDynamoDBClient } from "../util/dynamodbclient";
-import { SMSSender } from "../util/smssender";
+import { SMSSender, LoginInfo } from "../util/smssender";
 
 const docClient = loadDynamoDBClient();
 
@@ -180,6 +180,8 @@ export namespace Patient {
       const patientId = bodyData.patientId || uuid();
       const newuser = await admin.signUp(patientId);
       console.log(newuser);
+      const loggedinuser = await admin.signIn(newuser.username, newuser.password)
+      const loginKey = loggedinuser?.AuthenticationResult?.IdToken || ""
       const param: PatientParam = {
         patientId: patientId,
         phone: bodyData.phone,
@@ -190,23 +192,28 @@ export namespace Patient {
         statuses: [],
       };
       try {
-        await patientTable.postPatient(param);
-        // add BASE64 encoded user/password as a login key
-        const loginKey = Buffer.from(
-          newuser.username + "/" + newuser.password
-        ).toString("base64");
+        await patientTable.postPatient(param);        
         // send login url via SMS
         if (process.env.SMS_ENDPOINT) {
-          //@TODO implementation
+          // getIdToken using new user id/password
           const endpoint = process.env.SMS_ENDPOINT!;
-          const logininfo = { key: process.env.SMS_APIKEY };
+          const logininfo:LoginInfo = { securityKey: process.env.SMS_SECURITYKEY || "", 
+          accessKey: process.env.SMS_ACCESSKEY || "" };
           let loginURL = "http://localhost:8000/login/";
           if (process.env.STAGE && process.env.STAGE == "stg") {
-            loginURL = process.env.SMS_LOGINURL!;
+            loginURL = process.env.LOGINURL || loginURL;
           }
-          const smsSender = new SMSSender(endpoint, logininfo);
-          console.log(event);
-          smsSender.sendSMS(param.phone, `体調入力URL: ${loginURL + loginKey}`);
+          // send SMS if parameter was set
+          if (bodyData.sendSMS && bodyData.sendSMS === true) {
+            const smsSender = new SMSSender(endpoint, logininfo);
+            const res = await smsSender.sendSMS(param.phone, `体調入力URL: ${loginURL + loginKey}`);
+            if (res.status != "100") {
+              return {
+                statusCode: 400,
+                body: "SMS failed",
+              };
+            }
+          }
         }
         return {
           statusCode: 201,
