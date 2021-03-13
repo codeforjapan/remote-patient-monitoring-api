@@ -16,7 +16,7 @@ import CenterTable from "../aws/centerTable";
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
-import {Center} from "./definitions/types"
+import { Center } from "./definitions/types";
 /**
  * A data handler for  Patients
  */
@@ -180,8 +180,11 @@ export namespace Patient {
       const patientId = bodyData.patientId || uuid();
       const newuser = await admin.signUp(patientId);
       console.log(newuser);
-      const loggedinuser = await admin.signIn(newuser.username, newuser.password)
-      const loginKey = loggedinuser?.AuthenticationResult?.IdToken || ""
+      const loggedinuser = await admin.signIn(
+        newuser.username,
+        newuser.password
+      );
+      const loginKey = loggedinuser?.AuthenticationResult?.IdToken || "";
       const param: PatientParam = {
         patientId: patientId,
         phone: bodyData.phone,
@@ -192,13 +195,15 @@ export namespace Patient {
         statuses: [],
       };
       try {
-        await patientTable.postPatient(param);        
+        await patientTable.postPatient(param);
         // send login url via SMS
         if (process.env.SMS_ENDPOINT) {
           // getIdToken using new user id/password
           const endpoint = process.env.SMS_ENDPOINT!;
-          const logininfo:LoginInfo = { securityKey: process.env.SMS_SECURITYKEY || "", 
-          accessKey: process.env.SMS_ACCESSKEY || "" };
+          const logininfo: LoginInfo = {
+            securityKey: process.env.SMS_SECURITYKEY || "",
+            accessKey: process.env.SMS_ACCESSKEY || "",
+          };
           let loginURL = "http://localhost:8000/login/";
           if (process.env.STAGE && process.env.STAGE == "stg") {
             loginURL = process.env.LOGINURL || loginURL;
@@ -206,7 +211,10 @@ export namespace Patient {
           // send SMS if parameter was set
           if (bodyData.sendSMS && bodyData.sendSMS === true) {
             const smsSender = new SMSSender(endpoint, logininfo);
-            const res = await smsSender.sendSMS(param.phone, `体調入力URL: ${loginURL + loginKey}`);
+            const res = await smsSender.sendSMS(
+              param.phone,
+              `体調入力URL: ${loginURL + loginKey}`
+            );
             if (res.status != "100") {
               return {
                 statusCode: 400,
@@ -303,13 +311,22 @@ export namespace Patient {
         }
       }
       const patient = sliceStatus(res as PatientParam, 20);
-      const center: Center = (await centerTable.getCenter(patient.centerId)) as Center
+      console.log('************************' + patient.centerId)
+      const center: Center = (await centerTable.getCenter(
+        patient.centerId
+      )) as Center;
       return {
         statusCode: 200,
-        body: JSON.stringify({...patient, centerId: center.centerId, centerName: center.centerName, emergencyPhone: center.emergencyPhone})
+        body: JSON.stringify({
+          ...patient,
+          centerId: center.centerId,
+          centerName: center.centerName,
+          emergencyPhone: center.emergencyPhone,
+        }),
       };
     } catch (err) {
       console.log("getPatientTable-index error");
+      console.log(err)
       return {
         statusCode: 500,
         body: JSON.stringify({

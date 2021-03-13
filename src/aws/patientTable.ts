@@ -25,7 +25,6 @@ export default class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("getPatient Success!");
           const filtered = data.Items!.filter(
             (item) => item.centerId === centerId
           );
@@ -48,7 +47,6 @@ export default class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("getPatient Success!");
           resolve(data.Item! as Patient);
         }
       });
@@ -63,7 +61,6 @@ export default class PatientTable {
       ExpressionAttributeValues: { ":phone": phone },
       ProjectionExpression: "patientId",
     };
-    console.log(query);
     return new Promise((resolve) => {
       this.client.query(query, (err, data) => {
         if (err) {
@@ -85,13 +82,11 @@ export default class PatientTable {
       if (ret) {
         reject({ message: "phone already exists" });
       } else {
-        this.client.put(params, (err, data) => {
-          console.log(data);
+        this.client.put(params, (err) => {
           if (err) {
             console.log(err);
             reject(err);
           } else {
-            console.log("postPatient Success!");
             resolve(patient);
           }
         });
@@ -99,7 +94,10 @@ export default class PatientTable {
     });
   }
 
-  putPatient(patientId: string, patient: PatientParam): Promise<PatientParam | AWSError>  {
+  putPatient(
+    patientId: string,
+    patient: PatientParam
+  ): Promise<PatientParam | AWSError> {
     let updateExpression =
       "set phone = :phone, display = :display, centerId = :centerId";
 
@@ -138,7 +136,6 @@ export default class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("putPatient Success!");
           resolve(patient);
         }
       });
@@ -159,12 +156,11 @@ export default class PatientTable {
       ExpressionAttributeValues: expressionAttributeValues,
     };
     return new Promise((resolve, reject) => {
-      this.client.update(params, (err, data) => {
+      this.client.update(params, (err) => {
         if (err) {
           console.log(err);
           reject(err);
         } else {
-          console.log(data);
           resolve({ result: "OK" });
         }
       });
@@ -176,9 +172,6 @@ export default class PatientTable {
     param: StatusParam
   ): Promise<Status> {
     try {
-      console.log(patientId);
-      console.log(centerId);
-      console.log(param);
       const requestBody: Status = {
         patientId: patientId,
         statusId: uuid(),
@@ -216,7 +209,10 @@ export default class PatientTable {
       throw err;
     }
   }
-  async deletePatientStatus(patientId: string, statusId: string): Promise<PatientParam | AWSError>  {
+  async deletePatientStatus(
+    patientId: string,
+    statusId: string
+  ): Promise<PatientParam | AWSError> {
     try {
       const ret = await this.getPatient(patientId);
 
