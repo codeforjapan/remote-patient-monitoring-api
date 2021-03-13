@@ -16,6 +16,7 @@ util/config.json
 util/.secret.json
 templates/swagger.yaml
 dist/**
+config/stg.json
 src/gh-swagger-ui/swagger.yaml
 templates/functions-.yml
 templates/functions-true.yml
