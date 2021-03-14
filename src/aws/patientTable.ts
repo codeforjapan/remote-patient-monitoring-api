@@ -67,10 +67,10 @@ export default class PatientTable {
           console.log(err);
           resolve(undefined);
         } else {
-          if (data.Count! > 0){
+          if (data.Count! > 0) {
             resolve(data.Items![0].patientId);
           } else {
-            resolve(undefined)
+            resolve(undefined);
           }
         }
       });

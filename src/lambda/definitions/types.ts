@@ -90,5 +90,5 @@ export interface TempLoginParam {
 export interface TempLoginResult {
   phone: string;
   token: string;
-  created: string
+  created: string;
 }

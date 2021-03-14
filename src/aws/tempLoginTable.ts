@@ -1,9 +1,7 @@
 "use strict";
 import { AWSError, DynamoDB } from "aws-sdk";
 import { v4 as uuid } from "uuid";
-import {
-  TempLoginParam, TempLoginResult
-} from "../lambda/definitions/types";
+import { TempLoginParam, TempLoginResult } from "../lambda/definitions/types";
 export default class TempLoginTable {
   client: DynamoDB.DocumentClient;
   constructor(serviceClient: DynamoDB.DocumentClient) {
@@ -24,9 +22,13 @@ export default class TempLoginTable {
           reject(err);
         } else {
           if (!data.Item) {
-            resolve(undefined)
+            resolve(undefined);
           } else {
-            resolve({phone: phone, token: data.Item.token, created: data.Item.created});
+            resolve({
+              phone: phone,
+              token: data.Item.token,
+              created: data.Item.created,
+            });
           }
         }
       });
@@ -47,11 +49,11 @@ export default class TempLoginTable {
           console.log(err);
           resolve(undefined);
         } else {
-          if (data.Count! > 0){
-            const item = data.Items![0]
-            resolve({phone: item.phone, token: token, created: item.created} );
+          if (data.Count! > 0) {
+            const item = data.Items![0];
+            resolve({ phone: item.phone, token: token, created: item.created });
           } else {
-            resolve(undefined)
+            resolve(undefined);
           }
         }
       });
@@ -61,16 +63,16 @@ export default class TempLoginTable {
   async postToken(item: TempLoginParam): Promise<TempLoginParam | AWSError> {
     const token = await this.getToken(item.phone);
     if (token) {
-      const putret = await this.deleteToken(item.phone)
+      const putret = await this.deleteToken(item.phone);
       if (!putret) {
-        throw new Error("token already exists but we couldn't delte it")
+        throw new Error("token already exists but we couldn't delte it");
       }
     }
     const newitem = {
       phone: item.phone,
       token: uuid(),
       created: new Date().toISOString(),
-    }
+    };
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.TEMPLOGIN_TABLE_NAME!,
       Item: newitem,
@@ -85,20 +87,16 @@ export default class TempLoginTable {
         }
       });
     });
-
   }
 
-  putToken(
-    item: TempLoginParam
-  ): Promise<TempLoginParam | AWSError> {
+  putToken(item: TempLoginParam): Promise<TempLoginParam | AWSError> {
     if (!item.token) {
-      throw new Error("token is not set")
+      throw new Error("token is not set");
     }
-    const updateExpression =
-      "set token = :token";
+    const updateExpression = "set token = :token";
 
     const expressionAttributeValues: any = {
-      ":token": item.token
+      ":token": item.token,
     };
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.TEMPLOGIN_TABLE_NAME!,
@@ -122,29 +120,27 @@ export default class TempLoginTable {
     });
   }
 
-  async deleteToken(
-    phone: string
-  ): Promise<boolean | AWSError> {
+  async deleteToken(phone: string): Promise<boolean | AWSError> {
     const token = await this.getToken(phone);
     if (!token) {
-      return Promise.resolve(false)
-    }else {
+      return Promise.resolve(false);
+    } else {
       const params: DynamoDB.DocumentClient.DeleteItemInput = {
         TableName: process.env.TEMPLOGIN_TABLE_NAME!,
         Key: {
           phone: phone,
-        }
+        },
       };
       return new Promise((resolve, reject) => {
         this.client.delete(params, (err) => {
           if (err) {
             console.log(err);
-            reject(err)
-          }else {
-            resolve(true)
+            reject(err);
+          } else {
+            resolve(true);
           }
-        })
-      })
+        });
+      });
     }
   }
 }

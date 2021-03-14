@@ -2,7 +2,12 @@
 import { v4 as uuid } from "uuid";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import AWS, { DynamoDB } from "aws-sdk";
-import { NurseParam, PatientParam, TempLoginParam, TempLoginResult } from "../lambda/definitions/types";
+import {
+  NurseParam,
+  PatientParam,
+  TempLoginParam,
+  TempLoginResult,
+} from "../lambda/definitions/types";
 import { CognitoAdmin, Config } from "../aws/cognito_admin";
 import { loadDynamoDBClient } from "../util/dynamodbclient";
 import { SMSSender, LoginInfo } from "../util/smssender";
@@ -19,8 +24,10 @@ import NurseTable from "../aws/nurseTable";
 import { Center } from "./definitions/types";
 import TempLoginTable from "../aws/tempLoginTable";
 
-
-const sendLoginURLSMS = async (param:{phone: string, loginKey: string}):Promise<{status: string, messageId?: string}> => {
+const sendLoginURLSMS = async (param: {
+  phone: string;
+  loginKey: string;
+}): Promise<{ status: string; messageId?: string }> => {
   // getIdToken using new user id/password
   const endpoint = process.env.SMS_ENDPOINT!;
   const logininfo: LoginInfo = {
@@ -33,13 +40,10 @@ const sendLoginURLSMS = async (param:{phone: string, loginKey: string}):Promise<
   }
   const smsSender = new SMSSender(endpoint, logininfo);
   console.log("Call SEND SMS");
-  const url = loginURL + param.loginKey
-  const res = await smsSender.sendSMS(
-    param.phone,
-    `体調入力URL: ${url}`
-  );
-  return Promise.resolve(res)
-}
+  const url = loginURL + param.loginKey;
+  const res = await smsSender.sendSMS(param.phone, `体調入力URL: ${url}`);
+  return Promise.resolve(res);
+};
 
 /**
  * A data handler for  Patients
@@ -231,7 +235,10 @@ export namespace Patient {
           console.log("SEND SMS");
           // send SMS if parameter was set
           if (bodyData.sendSMS && bodyData.sendSMS === true) {
-            const res = await sendLoginURLSMS({phone: bodyData.phone, loginKey: loginKey})
+            const res = await sendLoginURLSMS({
+              phone: bodyData.phone,
+              loginKey: loginKey,
+            });
             if (res.status !== "100") {
               console.log("SMS Failed");
               return {
@@ -241,7 +248,7 @@ export namespace Patient {
                   errorMessage: "User was created but sending SMS failed",
                 }),
               };
-            }    
+            }
           }
         }
         return {
@@ -551,7 +558,7 @@ export namespace Patient {
     const patientTable = new PatientTable(docClient);
     const tmpLoginTable = new TempLoginTable(docClient);
     const validator = new Validator();
-    const bodyData:TempLoginParam = validator.jsonBody(event.body);
+    const bodyData: TempLoginParam = validator.jsonBody(event.body);
     try {
       if (!validator.isPatientAPI(event)) {
         return {
@@ -571,7 +578,7 @@ export namespace Patient {
           }),
         };
       }
-      const patientId = await patientTable.searchPhone(bodyData.phone)
+      const patientId = await patientTable.searchPhone(bodyData.phone);
       if (!patientId) {
         return {
           statusCode: 404,
@@ -581,8 +588,8 @@ export namespace Patient {
           }),
         };
       }
-      const ret = await tmpLoginTable.postToken(bodyData)
-      if (!ret){
+      const ret = await tmpLoginTable.postToken(bodyData);
+      if (!ret) {
         return {
           statusCode: 500,
           body: JSON.stringify({
@@ -591,7 +598,10 @@ export namespace Patient {
           }),
         };
       }
-      const res = await sendLoginURLSMS({phone: bodyData.phone, loginKey: (ret as TempLoginResult).token})
+      const res = await sendLoginURLSMS({
+        phone: bodyData.phone,
+        loginKey: (ret as TempLoginResult).token,
+      });
       if (res.status !== "100") {
         console.log("SMS Failed");
         return {
@@ -601,10 +611,13 @@ export namespace Patient {
             errorMessage: "User was created but sending SMS failed",
           }),
         };
-      }    
+      }
       return {
         statusCode: 200,
-        body: JSON.stringify(user),
+        body: JSON.stringify({
+          phone: bodyData.phone,
+          loginKey: (ret as TempLoginResult).token,
+        }),
       };
     } catch (err) {
       console.log("acceptPolicy error");

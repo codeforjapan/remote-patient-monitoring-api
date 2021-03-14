@@ -51,6 +51,10 @@ provider:
     Bucket: ${file(config/${self:provider.stage}.json):Bucket}
     DebugMode: ${file(config/${self:provider.stage}.json):DebugMode}
     DBPrefix: ${file(./config/${self:provider.stage}.json):DBPrefix}
+    SMS_ENDPOINT: ${file(config/${self:provider.stage}.json):SMS_ENDPOINT}
+    SMS_SECURITYKEY: ${file(config/${self:provider.stage}.json):SMS_SECURITYKEY}
+    SMS_ACCESSKEY: ${file(config/${self:provider.stage}.json):SMS_ACCESSKEY}
+    LOGINURL: ${file(config/${self:provider.stage}.json):LOGINURL}
 
 # you can add packaging information here
 package:
