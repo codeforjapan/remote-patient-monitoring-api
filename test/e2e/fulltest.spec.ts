@@ -576,6 +576,18 @@ describe('initialize user', () => {
     const ret = await axios_patient.post(entry_point + `/api/patient/patients/${patient_to_initialize}/initialize`)
     expect(ret.data).toHaveProperty('refreshToken')
   })
+  it('fails to initialize with idToken of another user', async() => {
+    expect.assertions(1);
+    const axios_patient = axios.create({
+      headers: {
+        Authorization: newIdToken,
+      },
+    });
+    const t = async () => {
+      await axios_patient.post(entry_point + `/api/patient/patients/${patient_id_in_another_center}/initialize`)
+    }
+    await expect(t).rejects.toThrow(/403/)
+  })
 })
 /*
  * Patient methods
