@@ -2,7 +2,7 @@
 import { v4 as uuid } from "uuid";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import AWS, { DynamoDB } from "aws-sdk";
-import { NurseParam, PatientParam } from "../lambda/definitions/types";
+import { NurseParam, PatientParam, TempLoginParam, TempLoginResult } from "../lambda/definitions/types";
 import { CognitoAdmin, Config } from "../aws/cognito_admin";
 import { loadDynamoDBClient } from "../util/dynamodbclient";
 import { SMSSender, LoginInfo } from "../util/smssender";
@@ -17,6 +17,30 @@ import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
 import { Center } from "./definitions/types";
+import TempLoginTable from "../aws/tempLoginTable";
+
+
+const sendLoginURLSMS = async (param:{phone: string, loginKey: string}):Promise<{status: string, messageId?: string}> => {
+  // getIdToken using new user id/password
+  const endpoint = process.env.SMS_ENDPOINT!;
+  const logininfo: LoginInfo = {
+    securityKey: process.env.SMS_SECURITYKEY || "",
+    accessKey: process.env.SMS_ACCESSKEY || "",
+  };
+  let loginURL = "http://localhost:8000/#/login/";
+  if (process.env.STAGE && process.env.STAGE == "stg") {
+    loginURL = process.env.LOGINURL || loginURL;
+  }
+  const smsSender = new SMSSender(endpoint, logininfo);
+  console.log("Call SEND SMS");
+  const url = loginURL + param.loginKey
+  const res = await smsSender.sendSMS(
+    param.phone,
+    `体調入力URL: ${url}`
+  );
+  return Promise.resolve(res)
+}
+
 /**
  * A data handler for  Patients
  */
@@ -205,24 +229,9 @@ export namespace Patient {
         // send login url via SMS
         if (process.env.SMS_ENDPOINT) {
           console.log("SEND SMS");
-          // getIdToken using new user id/password
-          const endpoint = process.env.SMS_ENDPOINT!;
-          const logininfo: LoginInfo = {
-            securityKey: process.env.SMS_SECURITYKEY || "",
-            accessKey: process.env.SMS_ACCESSKEY || "",
-          };
-          let loginURL = "http://localhost:8000/#/login/";
-          if (process.env.STAGE && process.env.STAGE == "stg") {
-            loginURL = process.env.LOGINURL || loginURL;
-          }
           // send SMS if parameter was set
           if (bodyData.sendSMS && bodyData.sendSMS === true) {
-            const smsSender = new SMSSender(endpoint, logininfo);
-            console.log("Call SEND SMS");
-            const res = await smsSender.sendSMS(
-              param.phone,
-              `体調入力URL: ${loginURL + loginKey}`
-            );
+            const res = await sendLoginURLSMS({phone: bodyData.phone, loginKey: loginKey})
             if (res.status !== "100") {
               console.log("SMS Failed");
               return {
@@ -232,7 +241,7 @@ export namespace Patient {
                   errorMessage: "User was created but sending SMS failed",
                 }),
               };
-            }
+            }    
           }
         }
         return {
@@ -540,8 +549,9 @@ export namespace Patient {
   };
   export const sendLoginURL: APIGatewayProxyHandler = async (event) => {
     const patientTable = new PatientTable(docClient);
+    const tmpLoginTable = new TempLoginTable(docClient);
     const validator = new Validator();
-    const bodyData = validator.jsonBody(event.body);
+    const bodyData:TempLoginParam = validator.jsonBody(event.body);
     try {
       if (!validator.isPatientAPI(event)) {
         return {
@@ -571,22 +581,27 @@ export namespace Patient {
           }),
         };
       }
-      const config: Config = {
-        userPoolId: process.env.PATIENT_POOL_ID!,
-        userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!,
-      };
-      const admin = new CognitoAdmin(config);
-      // 自分のポリシーしか accept できない
-      if (event.pathParameters.patientId != patientId) {
+      const ret = await tmpLoginTable.postToken(bodyData)
+      if (!ret){
         return {
-          statusCode: 403,
+          statusCode: 500,
           body: JSON.stringify({
-            errorCode: "RPM00101",
-            errorMessage: "Forbidden",
+            errorCode: "RPM00999",
+            errorMessage: "Something errro occurred",
           }),
         };
       }
-      const user = await admin.initialize(patientId);
+      const res = await sendLoginURLSMS({phone: bodyData.phone, loginKey: (ret as TempLoginResult).token})
+      if (res.status !== "100") {
+        console.log("SMS Failed");
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            errorCode: "RPM00104",
+            errorMessage: "User was created but sending SMS failed",
+          }),
+        };
+      }    
       return {
         statusCode: 200,
         body: JSON.stringify(user),
