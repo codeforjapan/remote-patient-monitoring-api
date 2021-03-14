@@ -5,6 +5,7 @@ import { PatientParam, Status, StatusParam } from '../../src/lambda/definitions/
 import { secret } from '../lib/secret';
 import { v4 as uuid } from 'uuid';
 import { AxiosInstance } from 'axios'
+
 const axios = require('axios');
 let entry_point: string;
 
@@ -342,6 +343,7 @@ describe('patient user login', () => {
 let idToken: string;
 let refreshToken: string;
 let patient_to_initialize = uuid();
+let password_to_initialize: string;
 let newIdToken: string
 describe('Nurse user', () => {
   let axios_nurse: any;
@@ -453,12 +455,13 @@ describe('Nurse user', () => {
   it('create new patient to the center', async () => {
     const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, {
       patientId: patient_to_initialize,
-      phone: '090-3827-1428',
+      phone: '090-3827-1428'
     });
     expect(ret.data).toHaveProperty('password');
+    expect(ret.data).toHaveProperty('idToken');
     expect(ret.data).toHaveProperty('display');
     expect(ret.data.phone).toBe('090-3827-1428');
-    newIdToken = ret.data.idToken
+    newIdToken = ret.data.idToken;
   });
 
   it('get 4 patients from the center', async () => {
@@ -570,7 +573,7 @@ describe('initialize user', () => {
         Authorization: newIdToken,
       },
     });
-    const ret = await axios_patient.post(entry_point + `/api/patient/patients/${patient_to_initialize}`)
+    const ret = await axios_patient.post(entry_point + `/api/patient/patients/${patient_to_initialize}/initialize`)
     expect(ret.data).toHaveProperty('refreshToken')
   })
 })

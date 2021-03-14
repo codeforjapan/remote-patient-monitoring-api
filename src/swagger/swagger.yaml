@@ -58,6 +58,8 @@ paths:
     $ref: ./paths/patient/status-by-id.yaml
   /api/patient/patients/{patientId}/accept_policy:
     $ref: ./paths/patient/accept_policy.yaml
+  /api/patient/patients/{patientId}/initialize:
+    $ref: ./paths/patient/initialize.yaml
 components:
   schemas:
     $ref: "./schemas/index.yaml"

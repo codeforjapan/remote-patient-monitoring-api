@@ -2,6 +2,7 @@
 
 import { APIGatewayProxyEvent } from "aws-lambda";
 import AWS, { CognitoIdentityServiceProvider } from "aws-sdk";
+import { LoginResult } from "../lambda/definitions/types";
 
 export interface Config {
   userPoolId: string;
@@ -71,7 +72,10 @@ export class CognitoAdmin {
    *  @param username user name
    *  @param password password
    */
-  async signIn(username: string, password: string): Promise<CognitoIdentityServiceProvider.AdminInitiateAuthResponse> {
+  async signIn(
+    username: string,
+    password: string
+  ): Promise<CognitoIdentityServiceProvider.AdminInitiateAuthResponse> {
     const userPoolId = this.config.userPoolId;
     const clientId = this.config.userPoolClientId;
     // サインイン
@@ -93,7 +97,9 @@ export class CognitoAdmin {
    *  refreshToken でログインし直し
    *  @param refreshToken refresh token
    */
-  async refreshToken(refreshToken: string): Promise<CognitoIdentityServiceProvider.AdminInitiateAuthResponse> {
+  async refreshToken(
+    refreshToken: string
+  ): Promise<CognitoIdentityServiceProvider.AdminInitiateAuthResponse> {
     const userPoolId = this.config.userPoolId;
     const clientId = this.config.userPoolClientId;
     // サインイン
@@ -123,12 +129,53 @@ export class CognitoAdmin {
     return pwd;
   }
   /**
+   * Signup
+   * @param username user name
+   */
+  async initialize(patientId: string): Promise<LoginResult> {
+    if (!patientId) {
+      throw new Error("user id is not set");
+    }
+    const userPoolId = this.config.userPoolId;
+    // パスワードをセット
+    const password = this.makePassword();
+    await this.cognito
+      .adminSetUserPassword({
+        UserPoolId: userPoolId,
+        Username: patientId,
+        Password: password,
+        Permanent: true,
+      })
+      .promise();
+    console.log("パスワード変更完了");
+    const user = await this.signIn(patientId, password);
+    if (
+      !user.AuthenticationResult?.IdToken ||
+      !user.AuthenticationResult?.RefreshToken
+    ) {
+      throw new Error("login failed");
+    }
+    return {
+      username: patientId,
+      idToken: user.AuthenticationResult?.IdToken,
+      refreshToken: user.AuthenticationResult.RefreshToken,
+    };
+  }
+  /**
    * return UserID from Authorization header striing
    * @param authHeader Authorization: header
    */
-  getUserId(event: APIGatewayProxyEvent): string {
+  getUserId(event: APIGatewayProxyEvent): string | null {
     if (!event.headers["Authorization"]) return null;
     const authHeader = event.headers["Authorization"];
+    return this.getUserIdFromHeader(authHeader);
+  }
+  /**
+   * return UserID from Authorization header striing
+   * @param authHeader Authorization: header
+   */
+  getUserIdFromHeader(header: string): string | null {
+    const authHeader = header;
     const payload = Buffer.from(authHeader.split(".")[1], "base64").toString(
       "ascii"
     );

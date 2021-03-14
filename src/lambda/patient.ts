@@ -76,6 +76,9 @@ export namespace Patient {
         };
         const admin = new CognitoAdmin(config);
         const nurseId = admin.getUserId(event);
+        if (!nurseId) {
+          throw new Error("nurseId is not found");
+        }
         if (
           !(await isCenterManagedByNurse(
             nurseId,
@@ -151,6 +154,9 @@ export namespace Patient {
       // check if the center is managable by this user
       if (validator.isNurseAPI(event)) {
         const nurseId = admin.getUserId(event);
+        if (!nurseId) {
+          throw new Error("nurseId is not found");
+        }
         if (
           !(await isCenterManagedByNurse(
             nurseId,
@@ -218,7 +224,7 @@ export namespace Patient {
               `体調入力URL: ${loginURL + loginKey}`
             );
             if (res.status !== "100") {
-              console.log("SMS Failed")
+              console.log("SMS Failed");
               return {
                 statusCode: 400,
                 body: JSON.stringify({
@@ -234,12 +240,12 @@ export namespace Patient {
           body: JSON.stringify({
             ...param,
             password: newuser.password,
-            loginKey: loginKey,
+            idToken: loginKey,
           }),
         };
       } catch (err) {
-        console.log("error occurred")
-        console.log(err)
+        console.log("error occurred");
+        console.log(err);
         return {
           statusCode: 400,
           body: err,
@@ -247,7 +253,7 @@ export namespace Patient {
       }
     } catch (err) {
       console.log("postPatientTable-index error");
-      console.log(err)
+      console.log(err);
       return {
         statusCode: 500,
         body: JSON.stringify({
@@ -304,6 +310,9 @@ export namespace Patient {
       if (validator.isNurseAPI(event)) {
         const nurseId = admin.getUserId(event);
 
+        if (!nurseId) {
+          throw new Error("nurseId is not found");
+        }
         if (
           !(await isCenterManagedByNurse(
             nurseId,
@@ -334,7 +343,7 @@ export namespace Patient {
       };
     } catch (err) {
       console.log("getPatientTable-index error");
-      console.log(err)
+      console.log(err);
       return {
         statusCode: 500,
         body: JSON.stringify({
@@ -380,7 +389,9 @@ export namespace Patient {
         const res = await patientTable.getPatient(
           event.pathParameters.patientId
         );
-
+        if (!nurseId) {
+          throw new Error("nurseId is not found");
+        }
         if (
           !(await isCenterManagedByNurse(
             nurseId,
@@ -461,6 +472,60 @@ export namespace Patient {
       return {
         statusCode: 200,
         body: JSON.stringify(res),
+      };
+    } catch (err) {
+      console.log("acceptPolicy error");
+      console.log(err);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: err,
+        }),
+      };
+    }
+  };
+
+  export const initialize: APIGatewayProxyHandler = async (event) => {
+    const validator = new Validator();
+    try {
+      if (!event.pathParameters || !event.pathParameters.patientId) {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({
+            errorCode: "RPM00001",
+            errorMessage: "Not Found",
+          }),
+        };
+      }
+      if (!validator.isPatientAPI(event)) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      const config: Config = {
+        userPoolId: process.env.PATIENT_POOL_ID!,
+        userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!,
+      };
+      const admin = new CognitoAdmin(config);
+      const patientId = admin.getUserId(event);
+      // 自分のポリシーしか accept できない
+      if (event.pathParameters.patientId != patientId) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      const user = await admin.initialize(patientId);
+      return {
+        statusCode: 200,
+        body: JSON.stringify(user),
       };
     } catch (err) {
       console.log("acceptPolicy error");

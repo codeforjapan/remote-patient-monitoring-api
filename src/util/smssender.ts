@@ -47,12 +47,13 @@ export class SMSSender {
         (acc: string, val: string): string => {
           if (acc === "") {
             return val + "=" + encodeURI(params[val] as string);
-          }else{
+          } else {
             return acc + "&" + val + "=" + encodeURI(params[val] as string);
           }
-        },""
+        },
+        ""
       );
-      console.log(`call SMS to ${this.endpoint} with ${query}`)
+      console.log(`call SMS to ${this.endpoint} with ${query}`);
       const ret = await axios.post(this.endpoint, query);
       return new Promise((resolve, reject) => {
         if (ret.data.status === "100") {
