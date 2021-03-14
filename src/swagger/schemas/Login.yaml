@@ -4,3 +4,5 @@ properties:
     type: string
   password:
     type: string
+  refreshToken:
+    type: string

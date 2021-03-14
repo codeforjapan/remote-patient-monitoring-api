@@ -76,3 +76,9 @@ export interface StatusParam {
   pulse: number;
   symptom?: Symptom;
 }
+
+export interface LoginResult {
+  username: string;
+  idToken: string;
+  refreshToken: string;
+}
