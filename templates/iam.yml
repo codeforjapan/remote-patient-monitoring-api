@@ -196,6 +196,8 @@ Resources:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}"
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}"
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}/index/RemotePatientMonitoringPatientTableGSIPhone"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}"
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}/index/RemotePatientMonitoringTempLoginTableGSIToken"
               - Effect: "Allow"
                 Action:
                   - cognito-idp:*

@@ -538,4 +538,68 @@ export namespace Patient {
       };
     }
   };
+  export const sendLoginURL: APIGatewayProxyHandler = async (event) => {
+    const patientTable = new PatientTable(docClient);
+    const validator = new Validator();
+    const bodyData = validator.jsonBody(event.body);
+    try {
+      if (!validator.isPatientAPI(event)) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      if (!bodyData.phone) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      const patientId = await patientTable.searchPhone(bodyData.phone)
+      if (!patientId) {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({
+            errorCode: "RPM00001",
+            errorMessage: "Patient Not Found",
+          }),
+        };
+      }
+      const config: Config = {
+        userPoolId: process.env.PATIENT_POOL_ID!,
+        userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!,
+      };
+      const admin = new CognitoAdmin(config);
+      // 自分のポリシーしか accept できない
+      if (event.pathParameters.patientId != patientId) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      const user = await admin.initialize(patientId);
+      return {
+        statusCode: 200,
+        body: JSON.stringify(user),
+      };
+    } catch (err) {
+      console.log("acceptPolicy error");
+      console.log(err);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: err,
+        }),
+      };
+    }
+  };
 }

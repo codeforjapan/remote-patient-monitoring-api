@@ -82,3 +82,13 @@ export interface LoginResult {
   idToken: string;
   refreshToken: string;
 }
+
+export interface TempLoginParam {
+  phone: string;
+  token?: string;
+}
+export interface TempLoginResult {
+  phone: string;
+  token: string;
+  created: string
+}

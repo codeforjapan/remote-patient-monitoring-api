@@ -53,7 +53,7 @@ export default class PatientTable {
     });
   }
 
-  searchPhone(phone: string): Promise<boolean> {
+  searchPhone(phone: string): Promise<string | undefined> {
     const query: DynamoDB.DocumentClient.QueryInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       IndexName: "RemotePatientMonitoringPatientTableGSIPhone",
@@ -65,9 +65,13 @@ export default class PatientTable {
       this.client.query(query, (err, data) => {
         if (err) {
           console.log(err);
-          resolve(false);
+          resolve(undefined);
         } else {
-          resolve(data.Count! > 0);
+          if (data.Count! > 0){
+            resolve(data.Items![0].patientId);
+          } else {
+            resolve(undefined)
+          }
         }
       });
     });
