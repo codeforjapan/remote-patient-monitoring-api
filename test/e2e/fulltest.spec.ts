@@ -341,6 +341,8 @@ describe('patient user login', () => {
  */
 let idToken: string;
 let refreshToken: string;
+let patient_to_initialize = uuid();
+let newIdToken: string
 describe('Nurse user', () => {
   let axios_nurse: any;
   let nurse_item: any;
@@ -450,12 +452,13 @@ describe('Nurse user', () => {
 
   it('create new patient to the center', async () => {
     const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, {
-      patientId: uuid(),
+      patientId: patient_to_initialize,
       phone: '090-3827-1428',
     });
     expect(ret.data).toHaveProperty('password');
     expect(ret.data).toHaveProperty('display');
     expect(ret.data.phone).toBe('090-3827-1428');
+    newIdToken = ret.data.idToken
   });
 
   it('get 4 patients from the center', async () => {
@@ -560,6 +563,17 @@ describe('refresh Token', () => {
   });
 });
 
+describe('initialize user', () => {
+  it('initialize with idToken', async() => {
+    const axios_patient = axios.create({
+      headers: {
+        Authorization: newIdToken,
+      },
+    });
+    const ret = await axios_patient.post(entry_point + `/api/patient/patients/${patient_to_initialize}`)
+    expect(ret.data).toHaveProperty('refreshToken')
+  })
+})
 /*
  * Patient methods
  */
