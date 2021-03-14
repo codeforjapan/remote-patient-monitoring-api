@@ -5,6 +5,7 @@ import { PatientParam, Status, StatusParam } from '../../src/lambda/definitions/
 import { secret } from '../lib/secret';
 import { v4 as uuid } from 'uuid';
 import { AxiosInstance } from 'axios'
+import { SMSSender } from '../../src/util/smssender'
 
 const axios = require('axios');
 let entry_point: string;
@@ -882,6 +883,37 @@ describe('refresh Token', () => {
       refreshToken: refreshToken
     });
     expect(ret.data).toHaveProperty('idToken');
+  });
+});
+
+let loginKey: string
+describe('add temporary token', () => {
+  it('fails by sending with no pararm', async() => {
+    const t = async () => {
+      const ret = await axios.post(entry_point + '/api/patient/getloginurl');
+    }
+    await expect(t).rejects.toThrow(/500/)
+  });
+  it('fails by sending with no registered phone', async() => {
+    const t = async () => {
+      const ret = await axios.post(entry_point + '/api/patient/getloginurl', {phone: '03-3333-9393'});
+    }
+    await expect(t).rejects.toThrow(/404/)
+  });
+  it('request passcode to my phone', async() => {
+    const sms = jest.spyOn(SMSSender.prototype, "sendSMS").mockImplementation((to: string, text: string) => {
+      console.log(to, text)
+      return new Promise((resolve) => {
+        resolve({messageId: "", status: "100"})
+      })
+    })
+    const ret = await axios.post(entry_point + '/api/patient/getloginurl', {
+      phone: phone
+    });
+    console.log(ret.data)
+    expect(ret.data.phone).toBe(phone)
+    expect(ret.data).toHaveProperty('loginKey')
+    loginKey = ret.data.loginKey
   });
 });
 

@@ -37,12 +37,14 @@ const sendLoginURLSMS = async (param: {
   let loginURL = "http://localhost:8000/#/login/";
   if (process.env.STAGE && process.env.STAGE == "stg") {
     loginURL = process.env.LOGINURL || loginURL;
+    const smsSender = new SMSSender(endpoint, logininfo);
+    console.log("Call SEND SMS");
+    const url = loginURL + param.loginKey;
+    const res = await smsSender.sendSMS(param.phone, `体調入力URL: ${url}`);
+    return Promise.resolve(res);
+  } else {
+    return Promise.resolve({status: "100", messageid:param.loginKey})
   }
-  const smsSender = new SMSSender(endpoint, logininfo);
-  console.log("Call SEND SMS");
-  const url = loginURL + param.loginKey;
-  const res = await smsSender.sendSMS(param.phone, `体調入力URL: ${url}`);
-  return Promise.resolve(res);
 };
 
 /**
@@ -598,6 +600,7 @@ export namespace Patient {
           }),
         };
       }
+
       const res = await sendLoginURLSMS({
         phone: bodyData.phone,
         loginKey: (ret as TempLoginResult).token,
