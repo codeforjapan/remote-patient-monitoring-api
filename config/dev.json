@@ -10,5 +10,5 @@
   "SMS_ENDPOINT":"",
   "SMS_SECURITYKEY": "",
   "SMS_ACCESSKEY": "",
-  "LOGINURL": "http://localhost:8080/login/"
+  "LOGINURL": "http://localhost:8080/#/login/"
 }

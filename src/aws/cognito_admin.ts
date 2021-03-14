@@ -71,7 +71,7 @@ export class CognitoAdmin {
    *  @param username user name
    *  @param password password
    */
-  async signIn(username: string, password: string) {
+  async signIn(username: string, password: string): Promise<CognitoIdentityServiceProvider.AdminInitiateAuthResponse> {
     const userPoolId = this.config.userPoolId;
     const clientId = this.config.userPoolClientId;
     // サインイン
@@ -93,7 +93,7 @@ export class CognitoAdmin {
    *  refreshToken でログインし直し
    *  @param refreshToken refresh token
    */
-  async refreshToken(refreshToken: string) {
+  async refreshToken(refreshToken: string): Promise<CognitoIdentityServiceProvider.AdminInitiateAuthResponse> {
     const userPoolId = this.config.userPoolId;
     const clientId = this.config.userPoolClientId;
     // サインイン
@@ -111,7 +111,7 @@ export class CognitoAdmin {
     return this.user;
   }
   // パスワードを生成する
-  makePassword() {
+  makePassword(): string {
     let pwd = Math.random().toString(36).substr(2, 8);
     let count = 0;
     // 数字とアルファベット両方入っているかチェックする
@@ -126,7 +126,7 @@ export class CognitoAdmin {
    * return UserID from Authorization header striing
    * @param authHeader Authorization: header
    */
-  getUserId(event: APIGatewayProxyEvent) {
+  getUserId(event: APIGatewayProxyEvent): string {
     if (!event.headers["Authorization"]) return null;
     const authHeader = event.headers["Authorization"];
     const payload = Buffer.from(authHeader.split(".")[1], "base64").toString(

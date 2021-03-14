@@ -205,7 +205,7 @@ export namespace Patient {
             securityKey: process.env.SMS_SECURITYKEY || "",
             accessKey: process.env.SMS_ACCESSKEY || "",
           };
-          let loginURL = "http://localhost:8000/login/";
+          let loginURL = "http://localhost:8000/#/login/";
           if (process.env.STAGE && process.env.STAGE == "stg") {
             loginURL = process.env.LOGINURL || loginURL;
           }
