@@ -541,12 +541,12 @@ export namespace Patient {
         };
       }
       let created = new Date(loginResult.created);
-      created = new Date(created.getDate() + 1);
-      if (created < new Date()) {
+      created = new Date(created.getTime() + 24 * 60 * 60 * 1000);
+      if (created.getTime() < new Date().getTime()) {
         return {
           statusCode: 403,
           body: JSON.stringify({
-            errorCode: "RPM00103",
+            errorCode: "RPM00103" + created.toISOString(),
             errorMessage: "Forbidden",
           }),
         };

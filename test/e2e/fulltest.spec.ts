@@ -603,6 +603,7 @@ describe('initialize user', () => {
   it('initialize with newLoginKey', async() => {
     console.log("****************" + newLoginKey)
     const ret = await axios.post(entry_point + "/api/patient/initialize", {loginKey: newLoginKey})
+    console.log(ret)
     expect(ret.data).toHaveProperty('refreshToken')
   })
   it('fails to initialize with idToken of another user', async() => {
@@ -856,7 +857,6 @@ describe('Patient user', () => {
   });
   it('get latest 20 statuses by patient', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}`);
-    console.log(ret.data.statuses)
     expect(ret.data.statuses.length).toBe(20);
     expect(ret.data.statuses![0].symptom!.remarks).toBe('latest one');
     expect(Date.parse(ret.data.statuses![0].created)).toBeGreaterThan(Date.parse(ret.data.statuses![1].created))
