@@ -5,6 +5,37 @@ import { PatientParam, Status, StatusParam } from '../../src/lambda/definitions/
 import { secret } from '../lib/secret';
 import { v4 as uuid } from 'uuid';
 import { AxiosInstance } from 'axios'
+
+const dummy_statuses = [
+[36.7,69,91],
+[36.7,60,98],
+[36.7,63,90],
+[38.3,85,89],
+[39.1,102,86],
+[39.4,112,93],
+[39.5,102,90],
+[37.6,90,96],
+[37.1,71,97],
+[37.6,76,98],
+[36.1,63,98],
+[35.6,57,98],
+[35.7,60,96],
+[35.8,60,98],
+[37.9,70,98],
+[36.8,67,98],
+[35.9,50,93],
+[36.0,60,98],
+[35.6,58,98],
+[36.4,65,98],
+[35.5,57,94],
+[36.5,51,98],
+[35.5,60,98],
+[35.9,53,98],
+[36.2,52,98],
+[35.7,59,98],
+[35.8,61,98],
+[35.7,51,98]
+];
 const axios = require('axios');
 let entry_point: string;
 
@@ -53,6 +84,7 @@ let patient_id_in_another_center: string;
 let patient_item_in_another_center: any;
 let patient_password: string;
 const phone: string = '090-3333-3333';
+let status_to_be_deleted: string[] = []
 
 describe('admin user', () => {
   let axios_admin: any;
@@ -513,7 +545,7 @@ describe('Nurse user', () => {
         remarks: 'dummy',
       },
     };
-    const ret = await axios_nurse.post(`${entry_point}/api/nurse/patients/${patient_id3}/statuses`, dummyPostData);
+    const ret = await axios_nurse.post(`${entry_point}/api/nurse/patients/${patient_id2}/statuses`, dummyPostData);
     const result = ret.data;
     expect(result.statusId).not.toBe(null);
     expect(result.SpO2).toBe(dummyPostData.SpO2);
@@ -573,6 +605,7 @@ describe('Patient user', () => {
       password: patient_password,
     });
     idToken = ret.data.idToken;
+    console.log(idToken)
     refreshToken = ret.data.refreshToken;
     axios_patient = axios.create({
       headers: {
@@ -663,6 +696,7 @@ describe('Patient user', () => {
     const ret = await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData);
     const result: Status = ret.data;
     expect(result.statusId).not.toBe(null);
+    status_to_be_deleted.push(result.statusId)
     expect(result.SpO2).toBe(dummyPostData.SpO2);
     expect(result.body_temperature).toBe(dummyPostData.body_temperature);
     expect(result.pulse).toBe(dummyPostData.pulse);
@@ -694,6 +728,7 @@ describe('Patient user', () => {
     const ret = await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData);
     const result = ret.data;
     expect(result.statusId).not.toBe(null);
+    status_to_be_deleted.push(result.statusId)
     expect(result.SpO2).toBe(dummyPostData.SpO2);
     expect(result.body_temperature).toBe(dummyPostData.body_temperature);
     expect(result.pulse).toBe(dummyPostData.pulse);
@@ -778,19 +813,23 @@ describe('Patient user', () => {
         remarks: 'dummy',
       },
     };
-    await Promise.all([...Array(50)].map(async () => {
-      dummyPostData.SpO2 = 90 + Math.random() * 10
-      dummyPostData.pulse = 70 + Math.random() * 20
-      dummyPostData.body_temperature = 35 + Math.random() * 5
+    const now = new Date();
+    await Promise.all(dummy_statuses.map(async (item, index) => {
+      const created = new Date(now.getTime() - (dummy_statuses.length - index) * 12 * 60 * 60 * 1000)
+      dummyPostData.SpO2 = item[2]
+      dummyPostData.pulse = item[1]
+      dummyPostData.body_temperature = item[0]
+      dummyPostData.created = created.toISOString()
       await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
     }
     ))
     dummyPostData.symptom!.remarks = 'latest one'
-    await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
+    const result = await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
+    status_to_be_deleted.push(result.data.statusId)
   });
-  it('get 53 statuses', async () => {
+  it('get 31 statuses', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
-    expect(ret.data.length).toBe(53);
+    expect(ret.data.length).toBe(dummy_statuses.length + 3);
     expect(Date.parse(ret.data[0].created)).toBeGreaterThan(Date.parse(ret.data[1].created))
   });
   it('get latest 20 statuses by patient', async () => {
@@ -799,6 +838,15 @@ describe('Patient user', () => {
     expect(ret.data.statuses![0].symptom!.remarks).toBe('latest one');
     expect(Date.parse(ret.data.statuses![0].created)).toBeGreaterThan(Date.parse(ret.data.statuses![1].created))
   });
+  it('delete statuses', async () =>{
+    console.log(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[0]}`)
+    console.log(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[1]}`)
+    console.log(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[2]}`)
+    const ret = await axios_patient.delete(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[0]}`)
+    console.log(ret)
+    await axios_patient.delete(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[1]}`)
+    await axios_patient.delete(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[2]}`)
+  })
 });
 
 /*
