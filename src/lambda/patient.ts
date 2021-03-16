@@ -21,7 +21,7 @@ import CenterTable from "../aws/centerTable";
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
-import { Center } from "./definitions/types";
+import { Center, Status } from "./definitions/types";
 import TempLoginTable from "../aws/tempLoginTable";
 
 const sendLoginURLSMS = async (param: {
@@ -54,11 +54,19 @@ export namespace Patient {
   const sliceStatus = (patient: PatientParam, limit = -1): PatientParam => {
     // ステータスを指定した件数に絞る
     if (patient.statuses) {
+      patient.statuses = sortStatus(patient.statuses)
       if (limit > -1 && patient.statuses.length > limit) {
         patient.statuses.splice(limit, patient.statuses.length - limit);
       }
     }
     return patient;
+  };
+  export const sortStatus = (statuses: Status[]): Status[] => {
+    // ステータスを指定した件数に絞る
+    statuses.sort((a, b) => {
+      return new Date(b.created).getTime() - new Date(a.created).getTime()
+    })
+    return statuses
   };
   const isCenterManagedByNurse = async (
     nurseId: string,

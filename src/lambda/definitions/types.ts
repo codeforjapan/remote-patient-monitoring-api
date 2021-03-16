@@ -75,6 +75,7 @@ export interface StatusParam {
   body_temperature: number;
   pulse: number;
   symptom?: Symptom;
+  created?: string;
 }
 
 export interface LoginResult {

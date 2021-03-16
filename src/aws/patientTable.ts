@@ -180,7 +180,7 @@ export default class PatientTable {
         patientId: patientId,
         statusId: uuid(),
         centerId: centerId,
-        created: new Date().toISOString(),
+        created: param.created || new Date().toISOString(),
         SpO2: param.SpO2,
         body_temperature: param.body_temperature,
         pulse: param.pulse,
