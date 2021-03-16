@@ -43,7 +43,7 @@ const sendLoginURLSMS = async (param: {
     const res = await smsSender.sendSMS(param.phone, `体調入力URL: ${url}`);
     return Promise.resolve(res);
   } else {
-    return Promise.resolve({status: "100", messageid:param.loginKey})
+    return Promise.resolve({ status: "100", messageid: param.loginKey });
   }
 };
 
@@ -149,6 +149,7 @@ export namespace Patient {
   export const postPatient: APIGatewayProxyHandler = async (event) => {
     console.log("called postPatient");
     const patientTable = new PatientTable(docClient);
+    const tmpLoginTable = new TempLoginTable(docClient);
     const validator = new Validator();
     const bodyData = validator.jsonBody(event.body);
 
@@ -216,11 +217,6 @@ export namespace Patient {
       const patientId = bodyData.patientId || uuid();
       const newuser = await admin.signUp(patientId);
       console.log(newuser);
-      const loggedinuser = await admin.signIn(
-        newuser.username,
-        newuser.password
-      );
-      const loginKey = loggedinuser?.AuthenticationResult?.IdToken || "";
       const param: PatientParam = {
         patientId: patientId,
         phone: bodyData.phone,
@@ -232,33 +228,41 @@ export namespace Patient {
       };
       try {
         await patientTable.postPatient(param);
-        // send login url via SMS
-        if (process.env.SMS_ENDPOINT) {
-          console.log("SEND SMS");
-          // send SMS if parameter was set
-          if (bodyData.sendSMS && bodyData.sendSMS === true) {
-            const res = await sendLoginURLSMS({
-              phone: bodyData.phone,
-              loginKey: loginKey,
-            });
-            if (res.status !== "100") {
-              console.log("SMS Failed");
-              return {
-                statusCode: 400,
-                body: JSON.stringify({
-                  errorCode: "RPM00104",
-                  errorMessage: "User was created but sending SMS failed",
-                }),
-              };
-            }
-          }
+        // テンポラリのログインコードを発行しSMSで送信する
+        const ret = await tmpLoginTable.postToken({
+          patientId: patientId,
+          loginKey: uuid(),
+          phone: bodyData.phone,
+        });
+        if (!ret) {
+          return {
+            statusCode: 500,
+            body: JSON.stringify({
+              errorCode: "RPM00999",
+              errorMessage: "Something error occurred",
+            }),
+          };
+        }
+        const res = await sendLoginURLSMS({
+          phone: bodyData.phone,
+          loginKey: (ret as TempLoginResult).loginKey,
+        });
+        if (res.status !== "100") {
+          console.log("SMS Failed");
+          return {
+            statusCode: 400,
+            body: JSON.stringify({
+              errorCode: "RPM00104",
+              errorMessage: "User was created but sending SMS failed",
+            }),
+          };
         }
         return {
           statusCode: 201,
           body: JSON.stringify({
             ...param,
             password: newuser.password,
-            idToken: loginKey,
+            loginKey: (ret as TempLoginResult).loginKey,
           }),
         };
       } catch (err) {
@@ -504,17 +508,9 @@ export namespace Patient {
   };
 
   export const initialize: APIGatewayProxyHandler = async (event) => {
+    const tempLoginTable = new TempLoginTable(docClient);
     const validator = new Validator();
     try {
-      if (!event.pathParameters || !event.pathParameters.patientId) {
-        return {
-          statusCode: 404,
-          body: JSON.stringify({
-            errorCode: "RPM00001",
-            errorMessage: "Not Found",
-          }),
-        };
-      }
       if (!validator.isPatientAPI(event)) {
         return {
           statusCode: 403,
@@ -524,23 +520,35 @@ export namespace Patient {
           }),
         };
       }
+      // ログインキーが保存されているか確認する
+      const bodyParam: { loginKey: string } = validator.jsonBody(event.body);
+      const loginResult = await tempLoginTable.searchPhone(bodyParam.loginKey);
+      if (!loginResult) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00102",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      let created = new Date(loginResult.created);
+      created = new Date(created.getDate() + 1);
+      if (created < new Date()) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00103",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
       const config: Config = {
         userPoolId: process.env.PATIENT_POOL_ID!,
         userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!,
       };
       const admin = new CognitoAdmin(config);
-      const patientId = admin.getUserId(event);
-      // 自分のポリシーしか accept できない
-      if (event.pathParameters.patientId != patientId) {
-        return {
-          statusCode: 403,
-          body: JSON.stringify({
-            errorCode: "RPM00101",
-            errorMessage: "Forbidden",
-          }),
-        };
-      }
-      const user = await admin.initialize(patientId);
+      const user = await admin.initialize(loginResult.patientId);
       return {
         statusCode: 200,
         body: JSON.stringify(user),
@@ -590,7 +598,11 @@ export namespace Patient {
           }),
         };
       }
-      const ret = await tmpLoginTable.postToken(bodyData);
+      const ret = await tmpLoginTable.postToken({
+        patientId: patientId,
+        loginKey: uuid(),
+        phone: bodyData.phone,
+      });
       if (!ret) {
         return {
           statusCode: 500,
@@ -603,7 +615,7 @@ export namespace Patient {
 
       const res = await sendLoginURLSMS({
         phone: bodyData.phone,
-        loginKey: (ret as TempLoginResult).token,
+        loginKey: (ret as TempLoginResult).loginKey,
       });
       if (res.status !== "100") {
         console.log("SMS Failed");
@@ -619,7 +631,7 @@ export namespace Patient {
         statusCode: 200,
         body: JSON.stringify({
           phone: bodyData.phone,
-          loginKey: (ret as TempLoginResult).token,
+          loginKey: (ret as TempLoginResult).loginKey,
         }),
       };
     } catch (err) {

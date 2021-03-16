@@ -85,10 +85,16 @@ export interface LoginResult {
 
 export interface TempLoginParam {
   phone: string;
-  token?: string;
+  loginKey?: string;
+}
+export interface TempLoginInput {
+  patientId: string;
+  phone: string;
+  loginKey: string;
 }
 export interface TempLoginResult {
+  patientId: string;
   phone: string;
-  token: string;
+  loginKey: string;
   created: string;
 }

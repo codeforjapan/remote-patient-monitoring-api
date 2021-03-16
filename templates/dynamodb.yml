@@ -51,12 +51,12 @@ Resources:
       AttributeDefinitions:
         - AttributeName: phone
           AttributeType: S
-        - AttributeName: token
+        - AttributeName: loginKey
           AttributeType: S
       GlobalSecondaryIndexes:
         - IndexName: RemotePatientMonitoringTempLoginTableGSIToken
           KeySchema:
-            - AttributeName: token
+            - AttributeName: loginKey
               KeyType: HASH
           Projection:
             ProjectionType: ALL

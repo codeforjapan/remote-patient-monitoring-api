@@ -18,6 +18,8 @@ paths:
     $ref: ./paths/nurse/login.yaml
   /api/patient/login:
     $ref: ./paths/patient/login.yaml
+  /api/patient/initialize:
+    $ref: ./paths/patient/initialize.yaml
   /api/patient/getloginurl:
     $ref: ./paths/patient/getlogincode.yaml
   /api/admin/centers/:
@@ -60,8 +62,6 @@ paths:
     $ref: ./paths/patient/status-by-id.yaml
   /api/patient/patients/{patientId}/accept_policy:
     $ref: ./paths/patient/accept_policy.yaml
-  /api/patient/patients/{patientId}/initialize:
-    $ref: ./paths/patient/initialize.yaml
 components:
   schemas:
     $ref: "./schemas/index.yaml"

@@ -1,7 +1,6 @@
 "use strict";
 import { AWSError, DynamoDB } from "aws-sdk";
-import { v4 as uuid } from "uuid";
-import { TempLoginParam, TempLoginResult } from "../lambda/definitions/types";
+import { TempLoginInput, TempLoginResult } from "../lambda/definitions/types";
 export default class TempLoginTable {
   client: DynamoDB.DocumentClient;
   constructor(serviceClient: DynamoDB.DocumentClient) {
@@ -25,8 +24,9 @@ export default class TempLoginTable {
             resolve(undefined);
           } else {
             resolve({
+              patientId: data.Item.patientId,
               phone: phone,
-              token: data.Item.token,
+              loginKey: data.Item.loginKey,
               created: data.Item.created,
             });
           }
@@ -35,13 +35,13 @@ export default class TempLoginTable {
     });
   }
 
-  searchPhone(token: string): Promise<TempLoginResult | undefined> {
+  searchPhone(loginKey: string): Promise<TempLoginResult | undefined> {
     const query: DynamoDB.DocumentClient.QueryInput = {
       TableName: process.env.TEMPLOGIN_TABLE_NAME!,
       IndexName: "RemotePatientMonitoringTempLoginTableGSIToken",
-      KeyConditionExpression: "token = :token",
-      ExpressionAttributeValues: { ":token": token },
-      ProjectionExpression: "phone, created",
+      KeyConditionExpression: "loginKey = :loginKey",
+      ExpressionAttributeValues: { ":loginKey": loginKey },
+      ProjectionExpression: "patientId, phone, created",
     };
     return new Promise((resolve) => {
       this.client.query(query, (err, data) => {
@@ -51,7 +51,12 @@ export default class TempLoginTable {
         } else {
           if (data.Count! > 0) {
             const item = data.Items![0];
-            resolve({ phone: item.phone, token: token, created: item.created });
+            resolve({
+              patientId: item.patientId,
+              phone: item.phone,
+              loginKey: loginKey,
+              created: item.created,
+            });
           } else {
             resolve(undefined);
           }
@@ -60,7 +65,7 @@ export default class TempLoginTable {
     });
   }
 
-  async postToken(item: TempLoginParam): Promise<TempLoginParam | AWSError> {
+  async postToken(item: TempLoginInput): Promise<TempLoginResult | AWSError> {
     const token = await this.getToken(item.phone);
     if (token) {
       const putret = await this.deleteToken(item.phone);
@@ -69,8 +74,9 @@ export default class TempLoginTable {
       }
     }
     const newitem = {
+      patientId: item.patientId,
       phone: item.phone,
-      token: uuid(),
+      loginKey: item.loginKey,
       created: new Date().toISOString(),
     };
     const params: DynamoDB.DocumentClient.PutItemInput = {
@@ -84,37 +90,6 @@ export default class TempLoginTable {
           reject(err);
         } else {
           resolve(newitem);
-        }
-      });
-    });
-  }
-
-  putToken(item: TempLoginParam): Promise<TempLoginParam | AWSError> {
-    if (!item.token) {
-      throw new Error("token is not set");
-    }
-    const updateExpression = "set token = :token";
-
-    const expressionAttributeValues: any = {
-      ":token": item.token,
-    };
-    const params: DynamoDB.DocumentClient.UpdateItemInput = {
-      TableName: process.env.TEMPLOGIN_TABLE_NAME!,
-      Key: {
-        phone: item.phone,
-      },
-      UpdateExpression: updateExpression,
-      ExpressionAttributeValues: expressionAttributeValues,
-    };
-    console.log(params);
-    return new Promise((resolve, reject) => {
-      this.client.update(params, (err, data) => {
-        console.log(data);
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          resolve(item);
         }
       });
     });

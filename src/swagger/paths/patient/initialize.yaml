@@ -1,20 +1,20 @@
 post:
   tags:
     - Patient
-  summary: IdToken によるユーザ初期化
-  description: 指定された IdToken を元に、新規にパスワードを発行して refreshToken と共に返却する。IdToken を持つユーザ（自分自身）のものしか更新できない。
-  security:
-    - APIGatewayPatientAuthorizer: []
-  parameters:
-    - name: patientId
-      in: path
-      description: 更新したい療養者のID
-      required: true
-      schema:
-        type: object
-        properties:
-          result:
-            type: string
+  summary: loginKey によるユーザ初期化
+  description: 指定された loginKey を確認し、存在していれば新規にパスワードを発行して refreshToken と共に返却する。IdToken を持つユーザ（自分自身）のものしか更新できない。
+  requestBody:
+    description: loginKey
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - loginKey
+          properties:
+            loginKey:
+              type: string
+    required: true
   responses:
     200:
       description: OK
