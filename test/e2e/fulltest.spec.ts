@@ -39,6 +39,7 @@ const dummy_statuses = [
 ];
 const axios = require('axios');
 let entry_point: string;
+jest.setTimeout(30000);
 
 const STAGE = process.env.JEST_STAGE || 'dev';
 const config = configsys.readConfig(STAGE);
@@ -558,7 +559,7 @@ describe('Nurse user', () => {
     expect(result.body_temperature).toBe(dummyPostData.body_temperature);
     expect(result.pulse).toBe(dummyPostData.pulse);
     expect(result.centerId).toBe(center_id);
-    expect(result.patientId).toBe(patient_id3);
+    expect(result.patientId).toBe(patient_id2);
     expect(result.created).not.toBe(null);
     expect(result.symptom!.cough).toBe(dummyPostData.symptom!.cough);
     expect(result.symptom!.phlegm).toBe(dummyPostData.symptom!.phlegm);
@@ -835,7 +836,7 @@ describe('Patient user', () => {
     };
     const now = new Date();
     await Promise.all(dummy_statuses.map(async (item, index) => {
-      const created = new Date(now.getTime() - (dummy_statuses.length - index) * 12 * 60 * 60 * 1000)
+      const created = new Date(now.getTime() - (dummy_statuses.length - index + 1) * 12 * 60 * 60 * 1000)
       dummyPostData.SpO2 = item[2]
       dummyPostData.pulse = item[1]
       dummyPostData.body_temperature = item[0]
@@ -843,6 +844,7 @@ describe('Patient user', () => {
       await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
     }
     ))
+    dummyPostData.created = new Date().toISOString();
     dummyPostData.symptom!.remarks = 'latest one'
     const result = await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
     status_to_be_deleted.push(result.data.statusId)
@@ -854,6 +856,7 @@ describe('Patient user', () => {
   });
   it('get latest 20 statuses by patient', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}`);
+    console.log(ret.data.statuses)
     expect(ret.data.statuses.length).toBe(20);
     expect(ret.data.statuses![0].symptom!.remarks).toBe('latest one');
     expect(Date.parse(ret.data.statuses![0].created)).toBeGreaterThan(Date.parse(ret.data.statuses![1].created))
@@ -862,8 +865,7 @@ describe('Patient user', () => {
     console.log(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[0]}`)
     console.log(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[1]}`)
     console.log(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[2]}`)
-    const ret = await axios_patient.delete(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[0]}`)
-    console.log(ret)
+    await axios_patient.delete(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[0]}`)
     await axios_patient.delete(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[1]}`)
     await axios_patient.delete(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[2]}`)
   })
@@ -889,12 +891,12 @@ describe('Nurse user(again)', () => {
   it('get latest 20 statuses by patient', async () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id}`);
     expect(ret.data.statuses.length).toBe(20);
-    expect(ret.data.statuses![0].symptom!.remarks).toBe('latest one');
+    expect(ret.data.statuses![0].symptom!.remarks).toBe('dummy');
   });
 
   it('get full statuses by patient', async () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id}/statuses`);
-    expect(ret.data.length).toBe(53);
+    expect(ret.data.length).toBe(28);
   });
 
   it('get list of patients and statuses by center', async () => {
