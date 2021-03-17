@@ -601,9 +601,7 @@ describe('refresh Token', () => {
 
 describe('initialize user', () => {
   it('initialize with newLoginKey', async() => {
-    console.log("****************" + newLoginKey)
     const ret = await axios.post(entry_point + "/api/patient/initialize", {loginKey: newLoginKey})
-    console.log(ret)
     expect(ret.data).toHaveProperty('refreshToken')
   })
   it('fails to initialize with idToken of another user', async() => {
