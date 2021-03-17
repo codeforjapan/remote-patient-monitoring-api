@@ -136,7 +136,8 @@ export class APIcaller {
       memo: '',
       display: true,
       statuses: [],
-      centerId: centerId
+      centerId: centerId,
+      policy_accepted: new Date().toISOString()
     }
     try{
         // 存在しているかどうか確かめる
@@ -174,7 +175,15 @@ export class APIcaller {
       SpO2: parseInt(status.spo2),
       body_temperature: parseInt(status.temperature),
       pulse: parseInt(status.pulse),
-      created: new Date(status.created).toISOString()
+      created: new Date(status.created).toISOString(),
+      symptom: {
+        cough: false,
+        phlegm: false,
+        suffocation: false,
+        headache: false,
+        sore_throat: false,
+        remarks: ""
+      }
     }
     await this.axios_admin.post(this.entry_point + `/api/admin/patients/${status.patientId}/statuses`, param);
   }
