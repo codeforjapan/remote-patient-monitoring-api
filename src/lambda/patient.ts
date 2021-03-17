@@ -535,7 +535,7 @@ export namespace Patient {
         return {
           statusCode: 403,
           body: JSON.stringify({
-            errorCode: "RPM00102",
+            errorCode: "RPM00101",
             errorMessage: "Forbidden",
           }),
         };
@@ -546,7 +546,7 @@ export namespace Patient {
         return {
           statusCode: 403,
           body: JSON.stringify({
-            errorCode: "RPM00103" + created.toISOString(),
+            errorCode: "RPM00101",
             errorMessage: "Forbidden",
           }),
         };
