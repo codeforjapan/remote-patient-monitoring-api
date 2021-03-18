@@ -11,7 +11,7 @@ import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
 import { CognitoAdmin, Config } from "../aws/cognito_admin";
 import { Patient } from "./definitions/types";
-import * as PatientFunc from "./patient"
+import * as PatientFunc from "./patient";
 const docClient = loadDynamoDBClient();
 
 AWS.config.update({

@@ -1,6 +1,6 @@
 "use strict"
 import * as fs from 'fs';
-import csvSync = require('csv-parse/lib/sync');
+import csvSync from 'csv-parse/lib/sync';
 import * as configsys from '../src/webpack/config';
 import { AxiosInstance } from 'axios'
 import axios from 'axios';
@@ -51,7 +51,7 @@ export class Importer {
         spo2: item[4]
       }
       console.log(`load ${status.patientId}, ${status.created}`)
-      if (!this.loadedIDs[status.patientId]){
+      if (this.loadedIDs.indexOf(status.patientId) === -1){
         const data = await this.api.putPatient(center.centerId, status.patientId)
         if (!data.patientId) {
           throw new Error('creating patient failed')
@@ -86,6 +86,7 @@ export class APIcaller {
   private axios_admin: AxiosInstance;
   constructor(config: configsys.Config ){
     this.entry_point = `https://${config.apiGateway.restApiId}.execute-api.${config.region}.amazonaws.com/${config.apiGateway.stageName}`;
+    this.axios_admin = axios.create()
   }
   /**
    * ログイン処理

@@ -200,6 +200,11 @@ Resources:
                   - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}/index/RemotePatientMonitoringTempLoginTableGSIToken"
               - Effect: "Allow"
                 Action:
+                  - dynamodb:DeleteItem
+                Resource:
+                  - "arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}"
+              - Effect: "Allow"
+                Action:
                   - cognito-idp:*
                 Resource:
                   - "*"
