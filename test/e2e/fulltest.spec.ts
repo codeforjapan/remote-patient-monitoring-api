@@ -939,14 +939,9 @@ describe('add temporary token', () => {
     await expect(t).rejects.toThrow(/404/)
   });
   it('request passcode to my phone', async() => {
-    const sms = jest.spyOn(SMSSender.prototype, "sendSMS").mockImplementation((to: string, text: string) => {
-      console.log(to, text)
-      return new Promise((resolve) => {
-        resolve({messageId: "", status: "100"})
-      })
-    })
     const ret = await axios.post(entry_point + '/api/patient/getloginurl', {
-      phone: phone
+      phone: phone,
+      test: true
     });
     console.log(ret.data)
     expect(ret.data.phone).toBe(phone)

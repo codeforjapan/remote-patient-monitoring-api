@@ -620,20 +620,21 @@ export namespace Patient {
           }),
         };
       }
-
-      const res = await sendLoginURLSMS({
-        phone: bodyData.phone,
-        loginKey: (ret as TempLoginResult).loginKey,
-      });
-      if (res.status !== "100") {
-        console.log("SMS Failed");
-        return {
-          statusCode: 400,
-          body: JSON.stringify({
-            errorCode: "RPM00104",
-            errorMessage: "User was created but sending SMS failed",
-          }),
-        };
+      if (bodyData.test !== true) {
+        const res = await sendLoginURLSMS({
+          phone: bodyData.phone,
+          loginKey: (ret as TempLoginResult).loginKey,
+        });
+        if (res.status !== "100") {
+          console.log("SMS Failed");
+          return {
+            statusCode: 400,
+            body: JSON.stringify({
+              errorCode: "RPM00104",
+              errorMessage: "User was created but sending SMS failed",
+            }),
+          };
+        }
       }
       return {
         statusCode: 200,
