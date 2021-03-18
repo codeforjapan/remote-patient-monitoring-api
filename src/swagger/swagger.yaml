@@ -12,33 +12,37 @@ info:
 servers:
   - url: https://monitoring.stopcovid19.jp/stg/
 paths:
-  /api/admin/login: # implemented
+  /api/admin/login:
     $ref: ./paths/admin/login.yaml
-  /api/nurse/login: # implemented
+  /api/nurse/login:
     $ref: ./paths/nurse/login.yaml
-  /api/patient/login: # implemented
+  /api/patient/login:
     $ref: ./paths/patient/login.yaml
-  /api/admin/centers/: # implemented
+  /api/patient/initialize:
+    $ref: ./paths/patient/initialize.yaml
+  /api/patient/getloginurl:
+    $ref: ./paths/patient/getlogincode.yaml
+  /api/admin/centers/:
     $ref: ./paths/admin/centers.yaml
-  /api/nurse/centers/: # implemented
+  /api/nurse/centers/:
     $ref: ./paths/nurse/centers.yaml
-  /api/admin/centers/{centerId}: # implemented
+  /api/admin/centers/{centerId}:
     $ref: ./paths/admin/center-by-id.yaml
-  /api/nurse/centers/{centerId}: # implemented
+  /api/nurse/centers/{centerId}:
     $ref: ./paths/nurse/center-by-id.yaml
-  /api/admin/centers/{centerId}/nurses/: # implemented
+  /api/admin/centers/{centerId}/nurses/:
     $ref: ./paths/admin/nurses-by-center-id.yaml
-  /api/nurse/centers/{centerId}/nurses/: # implemented
+  /api/nurse/centers/{centerId}/nurses/:
     $ref: ./paths/nurse/nurses-by-center-id.yaml
-  /api/admin/nurses/{nurseId}: # implemented
+  /api/admin/nurses/{nurseId}:
     $ref: ./paths/admin/nurse-by-id.yaml
   /api/nurse/nurses/{nurseId}:
     $ref: ./paths/nurse/nurse-by-id.yaml
-  /api/admin/centers/{centerId}/patients/: # implemented
+  /api/admin/centers/{centerId}/patients/:
     $ref: ./paths/admin/patients-by-center-id.yaml
   /api/nurse/centers/{centerId}/patients/:
     $ref: ./paths/nurse/patients-by-center-id.yaml
-  /api/admin/patients/{patientId}: # implemented
+  /api/admin/patients/{patientId}:
     $ref: ./paths/admin/patient-by-id.yaml
   /api/nurse/patients/{patientId}:
     $ref: ./paths/nurse/patient-by-id.yaml
@@ -58,8 +62,6 @@ paths:
     $ref: ./paths/patient/status-by-id.yaml
   /api/patient/patients/{patientId}/accept_policy:
     $ref: ./paths/patient/accept_policy.yaml
-  /api/patient/patients/{patientId}/initialize:
-    $ref: ./paths/patient/initialize.yaml
 components:
   schemas:
     $ref: "./schemas/index.yaml"

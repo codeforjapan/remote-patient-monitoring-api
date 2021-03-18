@@ -163,6 +163,7 @@ postPatient:
   environment:
     NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    TEMPLOGIN_TABLE_NAME: ${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}
     STAGE: ${self:provider.stage}
     SMS_ENDPOINT: ${self:provider.environment.SMS_ENDPOINT}
     SMS_SECURITYKEY: ${self:provider.environment.SMS_SECURITYKEY}
@@ -195,6 +196,17 @@ postInitializePatient:
   description: "initialize Patient"
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
   environment:
+    TEMPLOGIN_TABLE_NAME: ${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
+    PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+postSendLoginURLPolicy:
+  handler: src/lambda/handler.postSendLoginURL
+  name: "remote-patient-monitoring-postSendLoginURL-${self:provider.stage}"
+  description: "send login URL to specified phone number"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    TEMPLOGIN_TABLE_NAME: ${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
     PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
     PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY

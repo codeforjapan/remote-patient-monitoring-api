@@ -75,10 +75,28 @@ export interface StatusParam {
   body_temperature: number;
   pulse: number;
   symptom?: Symptom;
+  created?: string;
 }
 
 export interface LoginResult {
   username: string;
   idToken: string;
   refreshToken: string;
+}
+
+export interface TempLoginParam {
+  phone: string;
+  loginKey?: string;
+  test?: boolean;
+}
+export interface TempLoginInput {
+  patientId: string;
+  phone: string;
+  loginKey: string;
+}
+export interface TempLoginResult {
+  patientId: string;
+  phone: string;
+  loginKey: string;
+  created: string;
 }
