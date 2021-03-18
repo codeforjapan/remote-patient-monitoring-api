@@ -541,6 +541,318 @@ paths:
             responseTemplates:
               application/json: |
                 {}
+  /api/patient/initialize:
+    post:
+      tags:
+        - Patient
+      summary: loginKey によるユーザ初期化
+      description: >-
+        指定された loginKey を確認し、存在していれば新規にパスワードを発行して refreshToken と共に返却する。IdToken
+        を持つユーザ（自分自身）のものしか更新できない。
+      requestBody:
+        description: loginKey
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - loginKey
+              properties:
+                loginKey:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  idToken:
+                    type: string
+                  refreshToken:
+                    type: string
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postInitializePatient-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: patientId
+          in: path
+          description: 更新したい療養者のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
+  /api/patient/getloginurl:
+    post:
+      tags:
+        - Patient
+      summary: ログインURLを指定された携帯電話番号に送信する
+      description: 指定された電話番号に、IdToken つきのログイン用URLを送信する
+      requestBody:
+        description: phone number of user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  description: 電話番号
+                  type: string
+                  example: 09033333333
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  idToken:
+                    type: string
+                  refreshToken:
+                    type: string
+        '400':
+          description: Bad Request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+        '500':
+          description: Internal error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                  errorMessage:
+                    type: string
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          BAD.*:
+            statusCode: '400'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+          INT.*:
+            statusCode: '500'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        uri: >-
+          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postSendLoginURL-dev/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+      x-codegen-request-body-name: body
+    options:
+      tags:
+        - CORS
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      parameters:
+        - name: patientId
+          in: path
+          description: 更新したい療養者のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
   /api/admin/centers/:
     get:
       tags:
@@ -5627,163 +5939,6 @@ paths:
         - name: patientId
           in: path
           description: 取得したい療養者のID
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Default response for CORS method
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-            Access-Control-Allow-Headers:
-              schema:
-                type: string
-          content: {}
-      x-amazon-apigateway-integration:
-        type: mock
-        requestTemplates:
-          application/json: |
-            {
-              "statusCode" : 200
-            }
-        responses:
-          default:
-            statusCode: '200'
-            responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
-            responseTemplates:
-              application/json: |
-                {}
-  '/api/patient/patients/{patientId}/initialize':
-    post:
-      tags:
-        - Patient
-      summary: IdToken によるユーザ初期化
-      description: >-
-        指定された IdToken を元に、新規にパスワードを発行して refreshToken と共に返却する。IdToken
-        を持つユーザ（自分自身）のものしか更新できない。
-      security:
-        - APIGatewayPatientAuthorizer: []
-      parameters:
-        - name: patientId
-          in: path
-          description: 更新したい療養者のID
-          required: true
-          schema:
-            type: object
-            properties:
-              result:
-                type: string
-      responses:
-        '200':
-          description: OK
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-            Access-Control-Allow-Headers:
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  username:
-                    type: string
-                  idToken:
-                    type: string
-                  refreshToken:
-                    type: string
-        '400':
-          description: Bad Request
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-            Access-Control-Allow-Headers:
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
-        '500':
-          description: Internal error
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-            Access-Control-Allow-Headers:
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errorCode:
-                    type: string
-                  errorMessage:
-                    type: string
-      x-amazon-apigateway-integration:
-        type: aws_proxy
-        responses:
-          default:
-            statusCode: '200'
-            responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
-          BAD.*:
-            statusCode: '400'
-            responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
-          INT.*:
-            statusCode: '500'
-            responseParameters:
-              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
-              method.response.header.Access-Control-Allow-Methods: '''*'''
-              method.response.header.Access-Control-Allow-Origin: '''*'''
-        uri: >-
-          arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postInitializePatient-dev/invocations
-        passthroughBehavior: when_no_match
-        httpMethod: POST
-        contentHandling: CONVERT_TO_TEXT
-      x-codegen-request-body-name: body
-    options:
-      tags:
-        - CORS
-      summary: CORS support
-      description: |
-        Enable CORS by returning correct headers
-      parameters:
-        - name: patientId
-          in: path
-          description: 更新したい療養者のID
           required: true
           schema:
             type: string
