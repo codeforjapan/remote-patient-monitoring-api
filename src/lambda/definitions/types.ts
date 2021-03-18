@@ -86,7 +86,6 @@ export interface LoginResult {
 
 export interface TempLoginParam {
   phone: string;
-  loginKey?: string;
   test?: boolean;
 }
 export interface TempLoginInput {

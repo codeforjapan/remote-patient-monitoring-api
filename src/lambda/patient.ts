@@ -636,13 +636,23 @@ export namespace Patient {
           };
         }
       }
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          phone: bodyData.phone,
-          loginKey: (ret as TempLoginResult).loginKey,
-        }),
-      };
+      // 本番環境の場合、loginKey は返さない
+      if (process.env.STAGE && process.env.STAGE == "prd") {
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            phone: bodyData.phone
+          }),
+        };
+      }else{
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            phone: bodyData.phone,
+            loginKey: (ret as TempLoginResult).loginKey
+          }),
+        };
+      }
     } catch (err) {
       console.log("acceptPolicy error");
       console.log(err);
