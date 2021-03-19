@@ -160,7 +160,7 @@ export namespace Patient {
     const tmpLoginTable = new TempLoginTable(docClient);
     const validator = new Validator();
     const bodyData: PatientParam = validator.jsonBody(event.body);
-
+    bodyData.phone = validator.normalizePhone(bodyData.phone)
     if (!event.pathParameters || !event.pathParameters.centerId) {
       return {
         statusCode: 404,
@@ -389,6 +389,7 @@ export namespace Patient {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
     const bodyData: PatientParam = validator.jsonBody(event.body);
+    bodyData.phone = validator.normalizePhone(bodyData.phone)
     try {
       if (!event.body || !validator.checkPatientPutBody(bodyData)) {
         const errorModel = {
@@ -578,7 +579,20 @@ export namespace Patient {
     const patientTable = new PatientTable(docClient);
     const tmpLoginTable = new TempLoginTable(docClient);
     const validator = new Validator();
+    if (!event.body) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          errorCode: "RPM00999",
+          errorMessage: "Something errro occurred",
+        }),
+      };
+    
+    }
     const bodyData: TempLoginParam = validator.jsonBody(event.body);
+    if (bodyData.phone) {
+      bodyData.phone = validator.normalizePhone(bodyData.phone)
+    }
     try {
       if (!validator.isPatientAPI(event)) {
         return {
@@ -656,7 +670,7 @@ export namespace Patient {
         };
       }
     } catch (err) {
-      console.log("acceptPolicy error");
+      console.log("send login url error");
       console.log(err);
       return {
         statusCode: 500,
