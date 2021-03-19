@@ -2,7 +2,7 @@
 import AWS from "aws-sdk";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import { loadDynamoDBClient } from "../util/dynamodbclient";
-import { CenterParam } from './definitions/types'
+import { CenterParam } from "./definitions/types";
 AWS.config.update({
   region: process.env.region,
 });
@@ -51,7 +51,9 @@ export namespace Center {
     console.log(event.body);
     const bodyData: CenterParam = validator.jsonBody(event.body);
     if (bodyData.emergencyPhone) {
-      bodyData.emergencyPhone = validator.normalizePhone(bodyData.emergencyPhone)
+      bodyData.emergencyPhone = validator.normalizePhone(
+        bodyData.emergencyPhone
+      );
     }
     try {
       if (!validator.checkCenterBody(bodyData)) {
@@ -132,7 +134,11 @@ export namespace Center {
     const validator = new Validator();
     const bodyData: CenterParam = validator.jsonBody(event.body);
     if (bodyData.emergencyPhone) {
-      bodyData.emergencyPhone = validator.replaceAll(bodyData.emergencyPhone, '-', '')
+      bodyData.emergencyPhone = validator.replaceAll(
+        bodyData.emergencyPhone,
+        "-",
+        ""
+      );
     }
     try {
       if (!validator.checkCenterBody(bodyData)) {

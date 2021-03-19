@@ -643,15 +643,15 @@ export namespace Patient {
         return {
           statusCode: 200,
           body: JSON.stringify({
-            phone: bodyData.phone
+            phone: bodyData.phone,
           }),
         };
-      }else{
+      } else {
         return {
           statusCode: 200,
           body: JSON.stringify({
             phone: bodyData.phone,
-            loginKey: (ret as TempLoginResult).loginKey
+            loginKey: (ret as TempLoginResult).loginKey,
           }),
         };
       }
