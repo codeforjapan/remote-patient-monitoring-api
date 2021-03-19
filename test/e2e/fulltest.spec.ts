@@ -940,8 +940,7 @@ describe('add temporary token', () => {
   });
   it('request passcode to my phone', async() => {
     const ret = await axios.post(entry_point + '/api/patient/getloginurl', {
-      phone: phone,
-      test: true
+      phone: phone
     });
     console.log(ret.data)
     expect(ret.data.phone).toBe(phone)

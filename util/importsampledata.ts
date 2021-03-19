@@ -134,7 +134,7 @@ export class APIcaller {
     const param:PatientParam = {
       patientId: patientId,
       phone: '03-1239-333' + patientId,
-      memo: '',
+      memo: '患者' + patientId,
       display: true,
       statuses: [],
       centerId: centerId,

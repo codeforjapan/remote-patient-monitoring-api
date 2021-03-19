@@ -159,7 +159,7 @@ export namespace Patient {
     const patientTable = new PatientTable(docClient);
     const tmpLoginTable = new TempLoginTable(docClient);
     const validator = new Validator();
-    const bodyData = validator.jsonBody(event.body);
+    const bodyData: PatientParam = validator.jsonBody(event.body);
 
     if (!event.pathParameters || !event.pathParameters.centerId) {
       return {
@@ -251,19 +251,21 @@ export namespace Patient {
             }),
           };
         }
-        const res = await sendLoginURLSMS({
-          phone: bodyData.phone,
-          loginKey: (ret as TempLoginResult).loginKey,
-        });
-        if (res.status !== "100") {
-          console.log("SMS Failed");
-          return {
-            statusCode: 400,
-            body: JSON.stringify({
-              errorCode: "RPM00104",
-              errorMessage: "User was created but sending SMS failed",
-            }),
-          };
+        if (bodyData.sendSMS === true) {
+          const res = await sendLoginURLSMS({
+            phone: bodyData.phone,
+            loginKey: (ret as TempLoginResult).loginKey,
+          });
+          if (res.status !== "100") {
+            console.log("SMS Failed");
+            return {
+              statusCode: 400,
+              body: JSON.stringify({
+                errorCode: "RPM00104",
+                errorMessage: "User was created but sending SMS failed",
+              }),
+            };
+          }
         }
         return {
           statusCode: 201,
@@ -620,7 +622,7 @@ export namespace Patient {
           }),
         };
       }
-      if (bodyData.test !== true) {
+      if (bodyData.sendSMS === true) {
         const res = await sendLoginURLSMS({
           phone: bodyData.phone,
           loginKey: (ret as TempLoginResult).loginKey,

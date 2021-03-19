@@ -31,6 +31,7 @@ export interface PatientParam {
   policy_accepted?: string;
   statuses?: Status[];
   centerId: string;
+  sendSMS?: boolean;
 }
 
 export interface Patient {
@@ -86,7 +87,7 @@ export interface LoginResult {
 
 export interface TempLoginParam {
   phone: string;
-  test?: boolean;
+  sendSMS?: boolean;
 }
 export interface TempLoginInput {
   patientId: string;
