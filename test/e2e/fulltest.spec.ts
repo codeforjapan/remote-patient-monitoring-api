@@ -41,6 +41,10 @@ const axios = require('axios');
 let entry_point: string;
 jest.setTimeout(30000);
 
+const replaceAll = (string: string, search: string, replace: string):string => {
+  return string.split(search).join(replace);
+}  
+
 const STAGE = process.env.JEST_STAGE || 'dev';
 const config = configsys.readConfig(STAGE);
 beforeAll(async () => {
@@ -111,14 +115,14 @@ describe('admin user', () => {
     const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'A保健所', emergencyPhone: "0166-33-2222" });
     expect(ret.data).toHaveProperty('centerId');
     expect(ret.data.centerName).toBe('A保健所');
-    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
+    expect(ret.data.emergencyPhone).toBe('0166332222');
     center_id = ret.data.centerId;
   });
 
   it('read new center id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
     expect(ret.data.centerName).toBe('A保健所');
-    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
+    expect(ret.data.emergencyPhone).toBe('0166332222');
   });
 
   it('update existing center', async () => {
@@ -130,18 +134,18 @@ describe('admin user', () => {
   it('read updated center id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
     expect(ret.data.centerName).toBe(center_name);
-    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
+    expect(ret.data.emergencyPhone).toBe('0166332222');
   });
 
   it('update existing center', async () => {
     const ret = await axios_admin.put(entry_point + `/api/admin/centers/${center_id}`, { emergencyPhone: "0166-33-9999" });
-    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
+    expect(ret.data.emergencyPhone).toBe('0166339999');
   });
 
   it('read updated center id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
     expect(ret.data.centerName).toBe(center_name);
-    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
+    expect(ret.data.emergencyPhone).toBe('0166339999');
   });
 
   it('create another center', async () => {
@@ -225,7 +229,7 @@ describe('admin user', () => {
       phone: phone,
     });
     expect(ret.data.patientId).toBe(patient_id);
-    expect(ret.data.phone).toBe(phone);
+    expect(ret.data.phone).toBe(replaceAll(phone,'-',''));
     expect(ret.data.centerId).toBe(center_id);
     expect(ret.data.memo).toBe("患者メモ");
     expect(ret.data).toHaveProperty('password');
@@ -238,8 +242,8 @@ describe('admin user', () => {
     expect(ret.data.policy_accepted).toBe(undefined);
     expect(ret.data.centerId).toBe(center_id);
     expect(ret.data.centerName).toBe(center_name);
-    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
-    expect(ret.data.phone).toBe(phone);
+    expect(ret.data.emergencyPhone).toBe('0166339999');
+    expect(ret.data.phone).toBe(replaceAll(phone,'-',''));
     expect(ret.data.memo).toBe("患者メモ");
   });
 
@@ -258,7 +262,7 @@ describe('admin user', () => {
       phone: '090-1111-1111',
     });
     expect(ret.data).toHaveProperty('patientId');
-    expect(ret.data.phone).toBe('090-1111-1111');
+    expect(ret.data.phone).toBe('09011111111');
     patient_id2 = ret.data.patientId;
   });
 
@@ -267,7 +271,7 @@ describe('admin user', () => {
       patientId: uuid(),
       phone: '090-2222-2222',
     });
-    expect(ret.data.phone).toBe('090-2222-2222');
+    expect(ret.data.phone).toBe('09022222222');
   });
 
   it('get two patients from the center', async () => {
@@ -311,7 +315,7 @@ describe('admin user', () => {
     const ret2 = await axios_admin.post(entry_point + `/api/admin/centers/${center_id3}/patients`, {
       phone: '090-3899-2222',
     });
-    expect(ret2.data.phone).toBe('090-3899-2222');
+    expect(ret2.data.phone).toBe('09038992222');
     expect(ret2.data).toHaveProperty('patientId');
     patient_id_in_another_center = ret2.data.patientId;
     patient_item_in_another_center = ret2.data;
@@ -456,7 +460,7 @@ describe('Nurse user', () => {
     expect(ret.data).toHaveProperty('patientId');
     patient_id3 = ret.data.patientId;
     expect(ret.data).toHaveProperty('password');
-    expect(ret.data.phone).toBe('090-3293-2333');
+    expect(ret.data.phone).toBe('09032932333');
     expect(ret.data).toHaveProperty('statuses');
   });
 
@@ -474,7 +478,7 @@ describe('Nurse user', () => {
   it('read new patient id', async () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id3}`);
     patient_item = ret.data;
-    expect(ret.data.phone).toBe('090-3293-2333');
+    expect(ret.data.phone).toBe('09032932333');
   });
 
   it("can't read patient which is not related to a managing center", async () => {
@@ -493,7 +497,7 @@ describe('Nurse user', () => {
     expect(ret.data).toHaveProperty('password');
     expect(ret.data).toHaveProperty('loginKey');
     expect(ret.data).toHaveProperty('display');
-    expect(ret.data.phone).toBe('090-3827-1428');
+    expect(ret.data.phone).toBe('09038271428');
     newLoginKey = ret.data.loginKey;
   });
 
@@ -670,8 +674,8 @@ describe('Patient user', () => {
     patient_item = ret.data;
     expect(ret.data.centerId).toBe(center_id);
     expect(ret.data.centerName).toBe('C保健所');
-    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
-    expect(ret.data.phone).toBe(phone);
+    expect(ret.data.emergencyPhone).toBe('0166339999');
+    expect(ret.data.phone).toBe(replaceAll(phone,'-',''));
   });
 
   it("can't read patient which is not mine", async () => {
@@ -940,11 +944,10 @@ describe('add temporary token', () => {
   });
   it('request passcode to my phone', async() => {
     const ret = await axios.post(entry_point + '/api/patient/getloginurl', {
-      phone: phone,
-      test: true
+      phone: phone
     });
     console.log(ret.data)
-    expect(ret.data.phone).toBe(phone)
+    expect(ret.data.phone).toBe(replaceAll(phone,'-',''))
     expect(ret.data).toHaveProperty('loginKey')
     loginKey = ret.data.loginKey
   });

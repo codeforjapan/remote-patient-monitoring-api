@@ -1,7 +1,12 @@
 "use strict";
 import { APIGatewayProxyEvent } from "aws-lambda";
-
 export default class Validator {
+  replaceAll(string: string, search: string, replace: string): string {
+    return string.split(search).join(replace);
+  }
+  normalizePhone(phone: string): string {
+    return this.replaceAll(phone, "-", "");
+  }
   hasProperty = (obj: any, key: string): boolean => {
     return !!obj && Object.prototype.hasOwnProperty.call(obj, key);
   };
