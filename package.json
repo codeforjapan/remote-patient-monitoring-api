@@ -53,7 +53,12 @@
     "stg:createAdmin": "util/create_admin.sh -s stg",
     "stg:confirmAdmin": "util/confirm_admin.sh -s stg",
     "stg:test:e2e": "util/delete_all_cognito_users.sh -s stg && JEST_STAGE=\"stg\" jest --silent=false --runInBand test/e2e",
-    "stg:remove:all": "run-s \"remove:gateway -- --stage stg\" \"remove:dynamodb -- --stage stg\""
+    "stg:remove:all": "run-s \"remove:gateway -- --stage stg\" \"remove:dynamodb -- --stage stg\"",
+    "prd:deploy": "run-s \"deploy:dynamodb -- --stage prd\" prd:deploy:all-gateway",
+    "prd:deploy:all-gateway": "run-s build:functions-yaml \"deploy:lambda -- --stage prd\" prd:deploy:gateway",
+    "prd:deploy:gateway": "run-s build:functions-yaml \"build:swagger-yaml -- --stage prd\" \"deploy:gateway-force -- --stage prd\"",
+    "prd:createAdmin": "util/create_admin.sh -s prd",
+    "prd:confirmAdmin": "util/confirm_admin.sh -s prd"
   },
   "name": "remote-patient-monitoring",
   "devDependencies": {

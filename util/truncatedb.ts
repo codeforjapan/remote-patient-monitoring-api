@@ -5,6 +5,7 @@ import AWS, { DynamoDB } from 'aws-sdk';
 import * as configsys from '../src/webpack/config';
 import configFileDev from '../config/dev.json';
 import configFileStg from '../config/stg.json';
+import configFilePrd from '../config/prd.json';
 
 let profile = 'default';
 if (process.env.AWS_PROFILE) {
@@ -20,7 +21,7 @@ export class TruncateDB {
   private configFile: any;
   private config: configsys.Config;
   constructor(stage: string) {
-    this.configFile = (stage === 'stg') ? configFileStg : configFileDev;
+    this.configFile = (stage === 'prd') ? configFilePrd : (stage === 'stg') ? configFileStg : configFileDev;
     this.config = configsys.readConfig(stage)
     AWS.config.update({ region: this.config.region });
     AWS.config.credentials = credentials;
