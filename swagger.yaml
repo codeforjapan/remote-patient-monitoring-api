@@ -12,6 +12,7 @@ info:
   version: 1.0.0
 servers:
   - url: 'https://monitoring.stopcovid19.jp/stg/'
+  - url: 'https://monitoring.stopcovid19.jp/prd/'
 paths:
   /api/admin/login:
     post:
