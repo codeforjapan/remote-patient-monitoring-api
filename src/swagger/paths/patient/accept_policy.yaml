@@ -32,6 +32,8 @@ post:
             properties:
               result:
                 type: string
+              user:
+                $ref: "../../schemas/produceLogin.yaml"
     400:
       description: Bad Request
       headers:

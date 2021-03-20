@@ -502,9 +502,10 @@ export namespace Patient {
       const res = await patientTable.acceptPolicy(
         event.pathParameters.patientId
       );
+      const user = await patientTable.getPatient(event.pathParameters.patientId)
       return {
         statusCode: 200,
-        body: JSON.stringify(res),
+        body: JSON.stringify({...res, user: user}),
       };
     } catch (err) {
       console.log("acceptPolicy error");
