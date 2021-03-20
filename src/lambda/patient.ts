@@ -3,10 +3,12 @@ import { v4 as uuid } from "uuid";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import AWS, { DynamoDB } from "aws-sdk";
 import {
+  Center,
   NurseParam,
+  Status,
   PatientParam,
   TempLoginParam,
-  TempLoginResult,
+  TempLoginResult
 } from "../lambda/definitions/types";
 import { CognitoAdmin, Config } from "../aws/cognito_admin";
 import { loadDynamoDBClient } from "../util/dynamodbclient";
@@ -21,7 +23,6 @@ import CenterTable from "../aws/centerTable";
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
-import { Center, Status } from "./definitions/types";
 import TempLoginTable from "../aws/tempLoginTable";
 
 const sendLoginURLSMS = async (param: {
@@ -502,10 +503,9 @@ export namespace Patient {
       const res = await patientTable.acceptPolicy(
         event.pathParameters.patientId
       );
-      const user = await patientTable.getPatient(event.pathParameters.patientId)
       return {
         statusCode: 200,
-        body: JSON.stringify({...res, user: user}),
+        body: JSON.stringify(res),
       };
     } catch (err) {
       console.log("acceptPolicy error");
@@ -521,6 +521,7 @@ export namespace Patient {
 
   export const initialize: APIGatewayProxyHandler = async (event) => {
     const tempLoginTable = new TempLoginTable(docClient);
+    const patientTable = new PatientTable(docClient);
     const validator = new Validator();
     try {
       if (!validator.isPatientAPI(event)) {
@@ -561,9 +562,10 @@ export namespace Patient {
       };
       const admin = new CognitoAdmin(config);
       const user = await admin.initialize(loginResult.patientId);
+      const paticipant = await patientTable.getPatient(loginResult.patientId)
       return {
         statusCode: 200,
-        body: JSON.stringify(user),
+        body: JSON.stringify({...user, policy_accepted: (paticipant as PatientParam).policy_accepted}),
       };
     } catch (err) {
       console.log("acceptPolicy error");
