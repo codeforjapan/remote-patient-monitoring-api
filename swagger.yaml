@@ -57,6 +57,8 @@ paths:
                     type: string
                   refreshToken:
                     type: string
+                  policyAccepted:
+                    type: string
         '400':
           description: Bad Request
           headers:
@@ -232,6 +234,8 @@ paths:
                   idToken:
                     type: string
                   refreshToken:
+                    type: string
+                  policyAccepted:
                     type: string
         '400':
           description: Bad Request
@@ -409,6 +413,8 @@ paths:
                     type: string
                   refreshToken:
                     type: string
+                  policyAccepted:
+                    type: string
         '400':
           description: Bad Request
           headers:
@@ -585,6 +591,8 @@ paths:
                     type: string
                   refreshToken:
                     type: string
+                  policyAccepted:
+                    type: string
         '400':
           description: Bad Request
           headers:
@@ -739,6 +747,8 @@ paths:
                   idToken:
                     type: string
                   refreshToken:
+                    type: string
+                  policyAccepted:
                     type: string
         '400':
           description: Bad Request
@@ -5860,6 +5870,17 @@ paths:
                 properties:
                   result:
                     type: string
+                  user:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                      idToken:
+                        type: string
+                      refreshToken:
+                        type: string
+                      policyAccepted:
+                        type: string
         '400':
           description: Bad Request
           headers:
