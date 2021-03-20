@@ -148,8 +148,9 @@ export default class PatientTable {
 
   acceptPolicy(patientId: string): Promise<any> {
     const updateExpression = "set policy_accepted = :policy_accepted";
+    const policy_accepted_time = new Date().toISOString()
     const expressionAttributeValues: any = {
-      ":policy_accepted": new Date().toISOString(),
+      ":policy_accepted": policy_accepted_time,
     };
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
@@ -165,7 +166,7 @@ export default class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          resolve({ result: "OK" });
+          resolve({ result: "OK", policy_accepted: policy_accepted_time });
         }
       });
     });
