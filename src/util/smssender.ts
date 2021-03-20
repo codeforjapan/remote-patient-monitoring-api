@@ -29,6 +29,7 @@ export class SMSSender {
   }
   public async sendSMS(to: string, text: string): Promise<SendSMSResult> {
     if (this.endpoint == "") {
+      console.log("no endpoint specified")
       return new Promise((resolve) => {
         resolve({ status: "100" });
       });
