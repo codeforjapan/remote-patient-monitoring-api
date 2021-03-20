@@ -35,7 +35,7 @@ const sendLoginURLSMS = async (param: {
     accessKey: process.env.SMS_ACCESSKEY || "",
   };
   let loginURL = "http://localhost:8000/#/login/";
-  if (process.env.STAGE && process.env.STAGE == "stg") {
+  if (process.env.STAGE && (process.env.STAGE == "stg" || process.env.STAGE == "prd")) {
     loginURL = process.env.LOGINURL || loginURL;
     const smsSender = new SMSSender(endpoint, logininfo);
     console.log("Call SEND SMS");

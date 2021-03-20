@@ -120,19 +120,21 @@ export default class Validator {
     return true;
   }
 
-  isNurseAPI(event: APIGatewayProxyEvent) {
+  isNurseAPI(event: APIGatewayProxyEvent): boolean {
     if (!event.path) return false;
     return (
       event.path.startsWith("/api/nurse/") ||
-      event.path.startsWith("/stg/api/nurse/")
+      event.path.startsWith("/stg/api/nurse/") ||
+      event.path.startsWith("/prd/api/nurse/")
     );
   }
 
-  isPatientAPI(event: APIGatewayProxyEvent) {
+  isPatientAPI(event: APIGatewayProxyEvent): boolean {
     if (!event.path) return false;
     return (
       event.path.startsWith("/api/patient/") ||
-      event.path.startsWith("/stg/api/patient/")
+      event.path.startsWith("/stg/api/patient/") ||
+      event.path.startsWith("/prd/api/patient/")
     );
   }
 }
