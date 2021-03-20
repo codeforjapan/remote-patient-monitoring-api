@@ -206,6 +206,8 @@ postSendLoginURLPolicy:
   description: "send login URL to specified phone number"
   role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
   environment:
+    STAGE: ${self:provider.stage}
+    SMS_ENDPOINT: ${self:provider.environment.SMS_ENDPOINT}
     TEMPLOGIN_TABLE_NAME: ${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}
     PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
     PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
