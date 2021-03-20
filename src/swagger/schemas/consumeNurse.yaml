@@ -1,0 +1,11 @@
+type: object
+required:
+  - manageCenters
+properties:
+  manageCenters:
+    type: array
+    items:
+      type: object
+      properties:
+        centerId:
+          type: string

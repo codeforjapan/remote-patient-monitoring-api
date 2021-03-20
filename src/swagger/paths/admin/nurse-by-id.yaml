@@ -1,0 +1,228 @@
+get:
+  tags:
+    - Nurse
+  summary: 観察者の取得
+  description: 指定された{nurseId}を持つ観察者情報を返します
+  security:
+    - APIGatewayAdminAuthorizer: []
+  parameters:
+    - name: nurseId
+      in: path
+      description: 取得したい観察者のID
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: OK
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Nurse.yaml"
+    400:
+      description: Bad Request
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Error.yaml"
+    500:
+      description: Internal error
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Error.yaml"
+  x-amazon-apigateway-integration:
+    type: aws_proxy
+    responses:
+      default:
+        statusCode: "200"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+      BAD.*:
+        statusCode: "400"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+      INT.*:
+        statusCode: "500"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-getNurse-#{SERVERLESS::Stage}/invocations
+    passthroughBehavior: when_no_match
+    httpMethod: POST
+    contentHandling: CONVERT_TO_TEXT
+put:
+  tags:
+    - Nurse
+  summary: 観察者の更新
+  description: 指定されたnurseIdの観察者情報を更新します
+  security:
+    - APIGatewayAdminAuthorizer: []
+  parameters:
+    - name: nurseId
+      in: path
+      description: 更新したい観察者のID
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: nurse model which you want to update.
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/consumeNurse.yaml"
+    required: true
+  responses:
+    200:
+      description: OK
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Nurse.yaml"
+    400:
+      description: Bad Request
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Error.yaml"
+    500:
+      description: Internal error
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Error.yaml"
+  x-amazon-apigateway-integration:
+    type: aws_proxy
+    responses:
+      default:
+        statusCode: "200"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+      BAD.*:
+        statusCode: "400"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+      INT.*:
+        statusCode: "500"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-putNurse-#{SERVERLESS::Stage}/invocations
+    passthroughBehavior: when_no_match
+    httpMethod: POST
+    contentHandling: CONVERT_TO_TEXT
+  x-codegen-request-body-name: body
+options:
+  tags:
+    - CORS
+  summary: CORS support
+  description: |
+    Enable CORS by returning correct headers
+  parameters:
+    - name: nurseId
+      in: path
+      description: 取得したい観察者のID
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: Default response for CORS method
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: string
+        Access-Control-Allow-Methods:
+          schema:
+            type: string
+        Access-Control-Allow-Headers:
+          schema:
+            type: string
+      content: {}
+  x-amazon-apigateway-integration:
+    type: mock
+    requestTemplates:
+      application/json: |
+        {
+          "statusCode" : 200
+        }
+    responses:
+      default:
+        statusCode: "200"
+        responseParameters:
+          method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+          method.response.header.Access-Control-Allow-Methods: "'*'"
+          method.response.header.Access-Control-Allow-Origin: "'*'"
+        responseTemplates:
+          application/json: |
+            {}

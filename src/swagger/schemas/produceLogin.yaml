@@ -1,0 +1,8 @@
+type: object
+properties:
+  username:
+    type: string
+  idToken:
+    type: string
+  refreshToken:
+    type: string

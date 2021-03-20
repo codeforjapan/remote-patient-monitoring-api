@@ -1,0 +1,238 @@
+postAdminLogin:
+  handler: src/lambda/handler.postAdminLogin
+  name: "remote-patient-monitoring-postAdminLogin-${self:provider.stage}"
+  description: "post Admin login"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPostAdminLoginRole-${self:provider.stage}"
+  environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+    USER_POOL_ID: !Ref RPMAdminUserPool #! ONLY:GATEWAY
+    USER_POOL_CLIENT_ID: !Ref RPMAdminAppClient #! ONLY:GATEWAY
+  #! BEGIN ONLY:LOCAL
+  events:
+    - http:
+        path: api/admin/login
+        method: post
+  #! END ONLY:LOCAL
+postNurseLogin:
+  handler: src/lambda/handler.postNurseLogin
+  name: "remote-patient-monitoring-postNurseLogin-${self:provider.stage}"
+  description: "post Nurse login"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPostAdminLoginRole-${self:provider.stage}"
+  environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    USER_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
+    USER_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY
+  #! BEGIN ONLY:LOCAL
+  events:
+    - http:
+        path: api/nurse/login
+        method: post
+  #! END ONLY:LOCAL
+postPatientLogin:
+  handler: src/lambda/handler.postPatientLogin
+  name: "remote-patient-monitoring-postPatientLogin-${self:provider.stage}"
+  description: "post Patient login"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPostAdminLoginRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    USER_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
+    USER_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+  #! BEGIN ONLY:LOCAL
+  events:
+    - http:
+        path: api/patient/login
+        method: post
+  #! END ONLY:LOCAL
+getCenters:
+  handler: src/lambda/handler.getCenters
+  name: "remote-patient-monitoring-getCenters-${self:provider.stage}"
+  description: "get Centers"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMGetCentersRole-${self:provider.stage}"
+  environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+  #! BEGIN ONLY:LOCAL
+  events:
+    - http:
+        path: api/admin/centers
+        method: get
+    - http:
+        path: api/nurse/centers
+        method: get
+    - http:
+        path: api/patient/centers
+        method: get
+  #! END ONLY:LOCAL
+getCenter:
+  handler: src/lambda/handler.getCenter
+  name: "remote-patient-monitoring-getCenter-${self:provider.stage}"
+  description: "get Center"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMGetCenterRole-${self:provider.stage}"
+  environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+  #! BEGIN ONLY:LOCAL
+  events:
+    - http:
+        path: api/admin/centers/{centerId}
+        method: get
+        request:
+          parameters:
+            paths:
+              centerId: true
+    - http:
+        path: api/nurse/centers/{centerId}
+        method: get
+        request:
+          parameters:
+            paths:
+              centerId: true
+  #! END ONLY:LOCAL
+postCenter:
+  handler: src/lambda/handler.postCenter
+  name: "remote-patient-monitoring-postCenter-${self:provider.stage}"
+  description: "post Center"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPostCenterRole-${self:provider.stage}"
+  environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+putCenter:
+  handler: src/lambda/handler.putCenter
+  name: "remote-patient-monitoring-putCenter-${self:provider.stage}"
+  description: "put Center"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPutCenterRole-${self:provider.stage}"
+  environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+getNurses:
+  handler: src/lambda/handler.getNurses
+  name: "remote-patient-monitoring-getNurses-${self:provider.stage}"
+  description: "get Nurses"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMNurseTableRole-${self:provider.stage}"
+  environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+getNurse:
+  handler: src/lambda/handler.getNurse
+  name: "remote-patient-monitoring-getNurse-${self:provider.stage}"
+  description: "get Nurse"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMNurseTableRole-${self:provider.stage}"
+  environment:
+    NURSE_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
+    NURSE_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+postNurse:
+  handler: src/lambda/handler.postNurse
+  name: "remote-patient-monitoring-postNurse-${self:provider.stage}"
+  description: "post Nurse"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMNurseTableRole-${self:provider.stage}"
+  environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    NURSE_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
+    NURSE_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY
+putNurse:
+  handler: src/lambda/handler.putNurse
+  name: "remote-patient-monitoring-putNurse-${self:provider.stage}"
+  description: "put Nurse"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMNurseTableRole-${self:provider.stage}"
+  environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    NURSE_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
+    NURSE_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY
+getPatients:
+  handler: src/lambda/handler.getPatients
+  name: "remote-patient-monitoring-getPatients-${self:provider.stage}"
+  description: "get Patients"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    NURSE_POOL_ID: !Ref RPMNurseUserPool #! ONLY:GATEWAY
+    NURSE_POOL_CLIENT_ID: !Ref RPMNurseAppClient #! ONLY:GATEWAY
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+getPatient:
+  handler: src/lambda/handler.getPatient
+  name: "remote-patient-monitoring-getPatient-${self:provider.stage}"
+  description: "get Patient"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    CENTER_TABLE_NAME: ${self:provider.environment.DBPrefix}CenterTable-${self:provider.stage}
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+postPatient:
+  handler: src/lambda/handler.postPatient
+  name: "remote-patient-monitoring-postPatient-${self:provider.stage}"
+  description: "post Patient"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    TEMPLOGIN_TABLE_NAME: ${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}
+    STAGE: ${self:provider.stage}
+    SMS_ENDPOINT: ${self:provider.environment.SMS_ENDPOINT}
+    SMS_SECURITYKEY: ${self:provider.environment.SMS_SECURITYKEY}
+    SMS_ACCESSKEY: ${self:provider.environment.SMS_ACCESSKEY}
+    LOGINURL: ${self:provider.environment.LOGINURL}
+    PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
+    PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+putPatient:
+  handler: src/lambda/handler.putPatient
+  name: "remote-patient-monitoring-putPatient-${self:provider.stage}"
+  description: "put Patient"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
+    PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+postAcceptPolicy:
+  handler: src/lambda/handler.postAcceptPolicy
+  name: "remote-patient-monitoring-postAcceptPolicy-${self:provider.stage}"
+  description: "accept Policy"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
+    PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+postInitializePatient:
+  handler: src/lambda/handler.postInitializePatient
+  name: "remote-patient-monitoring-postInitializePatient-${self:provider.stage}"
+  description: "initialize Patient"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    TEMPLOGIN_TABLE_NAME: ${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
+    PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+postSendLoginURLPolicy:
+  handler: src/lambda/handler.postSendLoginURL
+  name: "remote-patient-monitoring-postSendLoginURL-${self:provider.stage}"
+  description: "send login URL to specified phone number"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    STAGE: ${self:provider.stage}
+    SMS_ENDPOINT: ${self:provider.environment.SMS_ENDPOINT}
+    TEMPLOGIN_TABLE_NAME: ${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
+    PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+postStatus:
+  handler: src/lambda/handler.postStatus
+  name: "remote-patient-monitoring-postStatus-${self:provider.stage}"
+  description: "post Status"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    NURSE_TABLE_NAME: ${self:provider.environment.DBPrefix}NurseTable-${self:provider.stage}
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+    PATIENT_POOL_ID: !Ref RPMPatientUserPool #! ONLY:GATEWAY
+    PATIENT_POOL_CLIENT_ID: !Ref RPMPatientAppClient #! ONLY:GATEWAY
+getStatuses:
+  handler: src/lambda/handler.getStatuses
+  name: "remote-patient-monitoring-getStatuses-${self:provider.stage}"
+  description: "get Statuses"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}
+deleteStatus:
+  handler: src/lambda/handler.deleteStatus
+  name: "remote-patient-monitoring-deleteStatus-${self:provider.stage}"
+  description: "get Statuses"
+  role: "arn:aws:iam::#{AWS::AccountId}:role/RPMPatientTableRole-${self:provider.stage}"
+  environment:
+    PATIENT_TABLE_NAME: ${self:provider.environment.DBPrefix}PatientTable-${self:provider.stage}

@@ -1,0 +1,16 @@
+{
+  "AuthAdminUserPoolDomain": "rpm-admin",
+  "AuthNurseUserPoolDomain": "rpm-nurse",
+  "AuthPatientUserPoolDomain": "rpm-patient",
+  "OauthCallbackURL": "https://stg.remotepatientmonitoring.jp",
+  "OauthSignoutURL": "https://stg.remotepatientmonitoring.jp",
+  "Bucket": "remote-patient-monitoring-stg",
+  "DebugMode": "on",
+  "DBPrefix": "STGRPM-",
+  "AdminUserEmail": "hal@code4japan.org",
+  "AdminUserName": "admin",
+  "SMS_ENDPOINT":"https://sms-host-setting",
+  "SMS_SECURITYKEY": "your_securitykey",
+  "SMS_ACCESSKEY": "your_access_key",
+  "LOGINURL": "https://client.rms.stopcovid19.jp//login/"
+}

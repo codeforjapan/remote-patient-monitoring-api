@@ -1,0 +1,14 @@
+{
+  "AuthAdminUserPoolDomain": "remote-patient-monitoring-admin2",
+  "AuthNurseUserPoolDomain": "remote-patient-monitoring-nurse2",
+  "AuthPatientUserPoolDomain": "remote-patient-monitoring-patient2",
+  "OauthCallbackURL": "https://dev.remotepatientmonitoring.jp",
+  "OauthSignoutURL": "https://dev.remotepatientmonitoring.jp",
+  "Bucket": "remote-patient-monitoring-dev",
+  "DebugMode": "on",
+  "DBPrefix": "RemotePatientMonitoring-",
+  "SMS_ENDPOINT":"",
+  "SMS_SECURITYKEY": "",
+  "SMS_ACCESSKEY": "",
+  "LOGINURL": "http://localhost:8080/#/login/"
+}

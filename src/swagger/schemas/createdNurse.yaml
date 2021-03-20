@@ -1,0 +1,10 @@
+type: object
+properties:
+  nurseId:
+    type: string
+  password:
+    type: string
+  manageCenters:
+    type: array
+    items:
+      $ref: "./Center.yaml"

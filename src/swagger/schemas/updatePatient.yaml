@@ -1,0 +1,8 @@
+type: object
+required:
+  - phone
+properties:
+  phone:
+    type: string
+  display:
+    type: boolean

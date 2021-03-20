@@ -1,0 +1,82 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: remote-patient-monitoring
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: "2"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+  # you can overwrite defaults here
+  stage: ${opt:stage, self:custom.defaultStage}
+  region: ap-northeast-1
+  apiGateway:
+    shouldStartNameWithService: true
+
+  # you can add statements to the Lambda function's IAM Role here
+  #  iamRoleStatements:
+  #    - Effect: "Allow"
+  #      Action:
+  #        - "s3:ListBucket"
+  #      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+  #    - Effect: "Allow"
+  #      Action:
+  #        - "s3:PutObject"
+  #      Resource:
+  #        Fn::Join:
+  #          - ""
+  #          - - "arn:aws:s3:::"
+  #            - "Ref" : "ServerlessDeploymentBucket"
+  #            - "/*"
+
+  # you can define service wide environment variables here
+  environment:
+    Bucket: ${file(config/${self:provider.stage}.json):Bucket}
+    DebugMode: ${file(config/${self:provider.stage}.json):DebugMode}
+    DBPrefix: ${file(./config/${self:provider.stage}.json):DBPrefix}
+    SMS_ENDPOINT: ${file(config/${self:provider.stage}.json):SMS_ENDPOINT}
+    SMS_SECURITYKEY: ${file(config/${self:provider.stage}.json):SMS_SECURITYKEY}
+    SMS_ACCESSKEY: ${file(config/${self:provider.stage}.json):SMS_ACCESSKEY}
+    LOGINURL: ${file(config/${self:provider.stage}.json):LOGINURL}
+
+# you can add packaging information here
+package:
+  #  include:
+  #    - include-me.js
+  #    - include-me-dir/**
+  ${file(./templates/exclude-files.yml)}
+
+functions: ${file(./templates/functions-lambda.yml)}
+
+# you can add CloudFormation resource templates here
+resources:
+  # Please comment out below two lines for the first deploy. After the deployment, enable it and deploy again.
+  # Swagger UI 関連の設計は https://betterdev.blog/serverless-swagger-ui-for-api-gateway/ を参考にした。
+
+plugins:
+  - serverless-pseudo-parameters
+  - serverless-s3-deploy
+  - serverless-scriptable-plugin
+  - serverless-cloudformation-sub-variables
+  - serverless-plugin-typescript
+custom:
+  defaultStage: dev
+  project: remote-patient-monitoring
+  baseName: ${self:custom.project}-${self:provider.stage}-${self:service}

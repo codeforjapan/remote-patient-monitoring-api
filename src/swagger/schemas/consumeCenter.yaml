@@ -1,0 +1,8 @@
+type: object
+required:
+  - centerName
+properties:
+  centerName:
+    type: string
+  emergencyPhone:
+    type: string

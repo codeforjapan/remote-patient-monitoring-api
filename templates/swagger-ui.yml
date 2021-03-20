@@ -1,0 +1,79 @@
+Resources:
+  SwaggerDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: ${self:custom.baseName}-swaggerui
+        HttpVersion: http2
+        Origins:
+          - Id: swaggerS3
+            DomainName: "#{SwaggerBucket.RegionalDomainName}"
+            S3OriginConfig:
+              OriginAccessIdentity: "origin-access-identity/cloudfront/#{SwaggerDistributionOAI}"
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          TargetOriginId: swaggerS3
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: "false"
+            Cookies:
+              Forward: none
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: "true"
+
+  SwaggerBucketCloudFrontAccessPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SwaggerBucket
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Resource: "arn:aws:s3:::#{SwaggerBucket}/*"
+            Principal:
+              CanonicalUser: !GetAtt SwaggerDistributionOAI.S3CanonicalUserId
+
+  SwaggerDistributionOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "Access #{SwaggerBucket} bucket"
+
+  SwaggerBucket:
+    Type: AWS::S3::Bucket
+
+  SwaggerUIAuthRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: cognito-identity.amazonaws.com
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                cognito-identity.amazonaws.com:aud: !Ref RPMAdminIdentityProvider
+              ForAnyValue:StringLike:
+                cognito-identity.amazonaws.com:amr: authenticated
+      Policies:
+        - PolicyName: api-gateway
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: apigateway:GET
+                Resource: "arn:aws:apigateway:#{AWS::Region}::/restapis/#{ApiGatewayRestApi}/stages/${self:provider.stage}/exports/*"
+Outputs:
+  SwaggerBucketName:
+    Value: !Ref SwaggerBucket

@@ -1,0 +1,19 @@
+type: object
+properties:
+  patientId:
+    type: string
+  centerId:
+    type: string
+  password:
+    type: string
+  policy_accepted:
+    type: string
+    format: date-time
+  phone:
+    type: string
+  memo:
+    type: string
+  display:
+    type: boolean
+  loginKey:
+    type: string

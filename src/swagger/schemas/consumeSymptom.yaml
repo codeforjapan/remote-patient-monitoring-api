@@ -1,0 +1,20 @@
+type: object
+required:
+  - cough
+  - phlegm
+  - suffocation
+  - headache
+  - sore_throat
+properties:
+  cough:
+    type: boolean
+  phlegm:
+    type: boolean
+  suffocation:
+    type: boolean
+  headache:
+    type: boolean
+  sore_throat:
+    type: boolean
+  remarks:
+    type: string

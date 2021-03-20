@@ -1,0 +1,109 @@
+openapi: 3.0.1
+info:
+  title: Remote Patient Monitoring System API(#{SERVERLESS::Stage})
+  description: 遠隔療養者モニタリングシステムのAPIです。(#{SERVERLESS::Stage})
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: hal@code4japan.org
+  license:
+    name: MIT License
+    url: https://github.com/codeforjapan/remote-patient-monitoring-api/blob/main/LICENSE
+  version: 1.0.0
+servers:
+  - url: https://monitoring.stopcovid19.jp/stg/
+paths:
+  /api/admin/login:
+    $ref: ./paths/admin/login.yaml
+  /api/nurse/login:
+    $ref: ./paths/nurse/login.yaml
+  /api/patient/login:
+    $ref: ./paths/patient/login.yaml
+  /api/patient/initialize:
+    $ref: ./paths/patient/initialize.yaml
+  /api/patient/getloginurl:
+    $ref: ./paths/patient/getlogincode.yaml
+  /api/admin/centers/:
+    $ref: ./paths/admin/centers.yaml
+  /api/nurse/centers/:
+    $ref: ./paths/nurse/centers.yaml
+  /api/admin/centers/{centerId}:
+    $ref: ./paths/admin/center-by-id.yaml
+  /api/nurse/centers/{centerId}:
+    $ref: ./paths/nurse/center-by-id.yaml
+  /api/admin/centers/{centerId}/nurses/:
+    $ref: ./paths/admin/nurses-by-center-id.yaml
+  /api/nurse/centers/{centerId}/nurses/:
+    $ref: ./paths/nurse/nurses-by-center-id.yaml
+  /api/admin/nurses/{nurseId}:
+    $ref: ./paths/admin/nurse-by-id.yaml
+  /api/nurse/nurses/{nurseId}:
+    $ref: ./paths/nurse/nurse-by-id.yaml
+  /api/admin/centers/{centerId}/patients/:
+    $ref: ./paths/admin/patients-by-center-id.yaml
+  /api/nurse/centers/{centerId}/patients/:
+    $ref: ./paths/nurse/patients-by-center-id.yaml
+  /api/admin/patients/{patientId}:
+    $ref: ./paths/admin/patient-by-id.yaml
+  /api/nurse/patients/{patientId}:
+    $ref: ./paths/nurse/patient-by-id.yaml
+  /api/patient/patients/{patientId}:
+    $ref: ./paths/patient/patient-by-id.yaml
+  /api/admin/patients/{patientId}/statuses:
+    $ref: ./paths/admin/statuses-by-patient-id.yaml
+  /api/admin/patients/{patientId}/statuses/{statusId}:
+    $ref: ./paths/admin/status-by-id.yaml
+  /api/nurse/patients/{patientId}/statuses:
+    $ref: ./paths/nurse/statuses-by-patient-id.yaml
+  /api/nurse/patients/{patientId}/statuses/{statusId}:
+    $ref: ./paths/nurse/status-by-id.yaml
+  /api/patient/patients/{patientId}/statuses:
+    $ref: ./paths/patient/statuses-by-patient-id.yaml
+  /api/patient/patients/{patientId}/statuses/{statusId}:
+    $ref: ./paths/patient/status-by-id.yaml
+  /api/patient/patients/{patientId}/accept_policy:
+    $ref: ./paths/patient/accept_policy.yaml
+components:
+  schemas:
+    $ref: "./schemas/index.yaml"
+  securitySchemes:
+    APIGatewayAdminAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - Fn::Sub: "${RPMAdminUserPool.Arn}"
+        identityValidationExpression: ".*"
+    APIGatewayNurseAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - Fn::Sub: "${RPMNurseUserPool.Arn}"
+        identityValidationExpression: ".*"
+    APIGatewayPatientAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        type: cognito_user_pools
+        providerARNs:
+          - Fn::Sub: "${RPMPatientUserPool.Arn}"
+        identityValidationExpression: ".*"
+tags:
+  - name: Center
+    description: 保健所に関するモデル
+  - name: Nurse
+    description: 観察者（保健師など）に関するモデル
+  - name: Patient
+    description: 療養者に関するモデル
+  - name: Status
+    description: 症状報告に関するモデル
+  - name: CORS
+    description: Cross-Origin Resource Sharing 設定

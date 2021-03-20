@@ -1,0 +1,14 @@
+type: object
+required:
+  - phone
+properties:
+  patientId:
+    type: string
+  phone:
+    type: string
+  memo:
+    type: string
+  display:
+    type: boolean
+  sendSMS:
+    type: boolean

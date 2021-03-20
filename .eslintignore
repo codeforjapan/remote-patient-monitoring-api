@@ -1,0 +1,4 @@
+src/plugins/*
+src/webpack/*
+test/**/*
+util/truncatedb.ts

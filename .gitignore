@@ -4,3 +4,20 @@ jspm_packages
 
 # Serverless directories
 .serverless
+.build
+.dynamodb
+.lib
+src/webpack/config.js
+src/webpack/config.js.map
+src/webpack/config.json
+src/swagger/_swagger.yaml
+src/gh-swagger-ui/swagger.yaml
+util/config.json
+util/.secret.json
+templates/swagger.yaml
+dist/**
+config/stg.json
+src/gh-swagger-ui/swagger.yaml
+templates/functions-.yml
+templates/functions-true.yml
+templates/functions-lambda.yml

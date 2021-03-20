@@ -1,0 +1,16 @@
+type: object
+properties:
+  symptomId:
+    type: string
+  cough:
+    type: boolean
+  phlegm:
+    type: boolean
+  suffocation:
+    type: boolean
+  headache:
+    type: boolean
+  sore_throat:
+    type: boolean
+  remarks:
+    type: string

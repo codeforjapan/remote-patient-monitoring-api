@@ -1,0 +1,24 @@
+Center:
+  $ref: "./Center.yaml"
+consumeCenter:
+  $ref: "./consumeCenter.yaml"
+Centers:
+  $ref: "./Centers.yaml"
+Nurse:
+  $ref: "./Nurse.yaml"
+Nurses:
+  $ref: "./Nurses.yaml"
+Patient:
+  $ref: "./Patient.yaml"
+consumePatient:
+  $ref: "./consumePatient.yaml"
+Patients:
+  $ref: "./Patients.yaml"
+Statuses:
+  $ref: "./Statuses.yaml"
+Status:
+  $ref: "./Status.yaml"
+consumeStatus:
+  $ref: "./consumeStatus.yaml"
+consumeSymptom:
+  $ref: "./consumeSymptom.yaml"

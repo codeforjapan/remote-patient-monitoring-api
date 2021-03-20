@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "lib": ["es2019","dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": false,
+    "sourceMap": true,
+    "target": "es5",
+    "resolveJsonModule": true,
+    "outDir": ".lib"
+  },
+  "exclude": ["src/swagger", "src/gh-swagger-ui", "src/webpack", "test"]
+}
