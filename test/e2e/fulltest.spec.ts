@@ -650,8 +650,7 @@ describe('Patient user', () => {
     const ret = await axios_patient.post(entry_point + `/api/patient/patients/${patient_id}/accept_policy`);
     console.log(ret.data)
     expect(ret.data.result).toBe('OK')
-    expect(ret.data.user.patientId).toBe(patient_id)
-    expect(ret.data.user).toHaveProperty('policy_accepted')
+    expect(ret.data).toHaveProperty('policy_accepted')
   });
 
 
