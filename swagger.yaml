@@ -11,8 +11,8 @@ info:
       https://github.com/codeforjapan/remote-patient-monitoring-api/blob/main/LICENSE
   version: 1.0.0
 servers:
-  - url: 'https://monitoring.stopcovid19.jp/stg/'
-  - url: 'https://monitoring.stopcovid19.jp/prd/'
+  - url: 'https://api.rms.stopcovid19.jp/stg/'
+  - url: 'https://api.rms.stopcovid19.jp/prd/'
 paths:
   /api/admin/login:
     post:
