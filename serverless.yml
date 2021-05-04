@@ -28,6 +28,9 @@ provider:
   region: ap-northeast-1
   apiGateway:
     shouldStartNameWithService: true
+    minimumCompressionSize: 1024
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
 
   # you can add statements to the Lambda function's IAM Role here
   #  iamRoleStatements:
