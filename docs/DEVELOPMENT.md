@@ -1,5 +1,11 @@
 # Set up environment
 
+試験的にインストールしてくれた方々の記事をまとめました、こちらも参考にしてください。
+- [Code for Japanの遠隔療養者モニタリングシステムをAWSにデプロイしてみた](https://zenn.dev/garasubo/articles/4336405b222c7b9de1b2)
+- [remote-patient-monitoring-api インストールメモ](https://note.com/siumaiuma/n/n2dd3f3d9a8ab)
+- [cecake0141/remote-patient-monitoring-api-installation-note](https://github.com/icecake0141/remote-patient-monitoring-api-installation-note/wiki)
+
+
 ## install dependencies
 
 * Serverless
