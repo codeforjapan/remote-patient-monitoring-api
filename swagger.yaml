@@ -6,7 +6,7 @@ info:
   contact:
     email: hal@code4japan.org
   license:
-    name: MIT License
+    name: GNU AGPL v3
     url: >-
       https://github.com/codeforjapan/remote-patient-monitoring-api/blob/main/LICENSE
   version: 1.0.0
