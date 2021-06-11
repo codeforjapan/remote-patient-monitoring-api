@@ -30,9 +30,6 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
     minimumCompressionSize: 1024
-  environment:
-    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
-
   # you can add statements to the Lambda function's IAM Role here
   #  iamRoleStatements:
   #    - Effect: "Allow"
@@ -51,6 +48,7 @@ provider:
 
   # you can define service wide environment variables here
   environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     Bucket: ${file(config/${self:provider.stage}.json):Bucket}
     DebugMode: ${file(config/${self:provider.stage}.json):DebugMode}
     DBPrefix: ${file(./config/${self:provider.stage}.json):DBPrefix}
