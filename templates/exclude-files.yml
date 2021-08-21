@@ -2,6 +2,7 @@ exclude:
   - node_modules/**
   - "!node_modules/@aws-amplify/**"
   - "!node_modules/uuid/**"
+  - "!node_modules/axios/**"
   - "!node_modules/fs*/**"
   - "!node_modules/aws-lambda-cors/**"
   - "!node_modules/serverless-dynamodb-client/**"

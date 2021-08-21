@@ -4,9 +4,14 @@ import { SMSSender } from '../../src/util/smssender'
 import { CognitoIdentityServiceProvider, SMS } from 'aws-sdk';
 import { ResolvePlugin } from 'webpack';
 
+const replaceAll = (string: string, search: string, replace: string):string => {
+  return string.split(search).join(replace);
+}  
 describe('patient test', () => {
   const handler = require('../../src/lambda/handler')
+  process.env.CENTER_TABLE_NAME = 'RemotePatientMonitoring-CenterTable-dev'
   process.env.PATIENT_TABLE_NAME = 'RemotePatientMonitoring-PatientTable-dev'
+  process.env.TEMPLOGIN_TABLE_NAME = 'RemotePatientMonitoring-TempLoginTable-dev'
 
   it('return Patient', async () => {
     const ret = await handler.getPatient({ pathParameters: { patientId: "dc9958a2-bcba-41db-99c1-290b3ed2a074" } })
@@ -14,7 +19,9 @@ describe('patient test', () => {
     expect(JSON.parse(ret.body)).toStrictEqual({
       "patientId": "dc9958a2-bcba-41db-99c1-290b3ed2a074",
       "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269",
-      "phone": "090-3333-3333",
+      "centerName": "A保健所",
+      "emergencyPhone": "0333334444",
+      "phone": "09033333333",
       "memo": "hoge",
       "display": true
     })
@@ -45,14 +52,21 @@ describe('patient test', () => {
     process.env.SMS_LOGINURL = "https://client.mnt.stopcovid19.jp/login"
     process.env.SMS_ENDPOINT = "localhost"
     process.env.SMS_APIKEY = "apikey"
+    process.env.STAGE = 'stg'
 
     const signUp = jest.spyOn(CognitoAdmin.prototype, "signUp").mockImplementation(async (username: string, password?: string) => {
       console.log(password)
       return { username: username, password: 'hoge', user: {} }
     })
+    const signIn = jest.spyOn(CognitoAdmin.prototype, "signIn").mockImplementation(async (username: string, password: string) => {
+      console.log(username,password)
+      return {AuthenticationResult: {IdToken: "hoge"}}
+    })
     const sms = jest.spyOn(SMSSender.prototype, "sendSMS").mockImplementation((to: string, text: string) => {
       console.log(to, text)
-      return true
+      return new Promise((resolve) => {
+        resolve({messageId: "", status: "100"})
+      })
     })
     const params = {
       pathParameters: {
@@ -62,11 +76,13 @@ describe('patient test', () => {
         "patientId": "halsk",
         "phone": "090-1234-5678",
         "memo": "メモメモ",
-        "display": true
+        "display": true,
+        "sendSMS": true
       }
     }
     const ret = await handler.postPatient(params)
-    expect(JSON.parse(ret.body).phone).toBe("090-1234-5678")
+    console.log(ret.body)
+    expect(JSON.parse(ret.body).phone).toBe("09012345678")
     expect(JSON.parse(ret.body)).toHaveProperty('loginKey')
     expect(JSON.parse(ret.body).memo).toBe('メモメモ')
     expect(sms).toHaveBeenCalled()

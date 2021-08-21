@@ -6,3 +6,5 @@ properties:
     type: string
   refreshToken:
     type: string
+  policyAccepted:
+    type: string

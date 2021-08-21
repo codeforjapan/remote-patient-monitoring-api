@@ -44,6 +44,8 @@ export const getPatient = cors(cors_get)(Patient.getPatient);
 export const putPatient = cors(cors_put)(Patient.putPatient);
 export const postPatient = cors(cors_post)(Patient.postPatient);
 export const postAcceptPolicy = cors(cors_post)(Patient.acceptPolicy);
+export const postInitializePatient = cors(cors_post)(Patient.initialize);
+export const postSendLoginURL = cors(cors_post)(Patient.sendLoginURL);
 
 // nurses
 export const getNurses = cors(cors_get)(Nurse.getNurses);

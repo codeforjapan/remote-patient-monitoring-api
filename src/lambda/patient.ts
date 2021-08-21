@@ -2,19 +2,52 @@
 import { v4 as uuid } from "uuid";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import AWS, { DynamoDB } from "aws-sdk";
-import { NurseParam, PatientParam } from "../lambda/definitions/types";
+import {
+  Center,
+  NurseParam,
+  Status,
+  PatientParam,
+  TempLoginParam,
+  TempLoginResult
+} from "../lambda/definitions/types";
 import { CognitoAdmin, Config } from "../aws/cognito_admin";
 import { loadDynamoDBClient } from "../util/dynamodbclient";
-import { SMSSender } from "../util/smssender";
+import { SMSSender, LoginInfo } from "../util/smssender";
 
 const docClient = loadDynamoDBClient();
 
 AWS.config.update({
   region: process.env.region,
 });
+import CenterTable from "../aws/centerTable";
 import PatientTable from "../aws/patientTable";
 import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
+import TempLoginTable from "../aws/tempLoginTable";
+
+const sendLoginURLSMS = async (param: {
+  phone: string;
+  loginKey: string;
+}): Promise<{ status: string; messageId?: string }> => {
+  // getIdToken using new user id/password
+  const endpoint = process.env.SMS_ENDPOINT!;
+  const logininfo: LoginInfo = {
+    securityKey: process.env.SMS_SECURITYKEY || "",
+    accessKey: process.env.SMS_ACCESSKEY || "",
+  };
+  let loginURL = "http://localhost:8000/#/login/";
+  if (process.env.STAGE && (process.env.STAGE == "stg" || process.env.STAGE == "prd")) {
+    loginURL = process.env.LOGINURL || loginURL;
+    const smsSender = new SMSSender(endpoint, logininfo);
+    console.log("Call SEND SMS");
+    const url = loginURL + param.loginKey;
+    const res = await smsSender.sendSMS(param.phone, `体調入力URL: ${url}`);
+    return Promise.resolve(res);
+  } else {
+    return Promise.resolve({ status: "100", messageid: param.loginKey });
+  }
+};
+
 /**
  * A data handler for  Patients
  */
@@ -22,11 +55,19 @@ export namespace Patient {
   const sliceStatus = (patient: PatientParam, limit = -1): PatientParam => {
     // ステータスを指定した件数に絞る
     if (patient.statuses) {
+      patient.statuses = sortStatus(patient.statuses);
       if (limit > -1 && patient.statuses.length > limit) {
         patient.statuses.splice(limit, patient.statuses.length - limit);
       }
     }
     return patient;
+  };
+  export const sortStatus = (statuses: Status[]): Status[] => {
+    // ステータスを指定した件数に絞る
+    statuses.sort((a, b) => {
+      return new Date(b.created).getTime() - new Date(a.created).getTime();
+    });
+    return statuses;
   };
   const isCenterManagedByNurse = async (
     nurseId: string,
@@ -74,6 +115,9 @@ export namespace Patient {
         };
         const admin = new CognitoAdmin(config);
         const nurseId = admin.getUserId(event);
+        if (!nurseId) {
+          throw new Error("nurseId is not found");
+        }
         if (
           !(await isCenterManagedByNurse(
             nurseId,
@@ -114,9 +158,10 @@ export namespace Patient {
   export const postPatient: APIGatewayProxyHandler = async (event) => {
     console.log("called postPatient");
     const patientTable = new PatientTable(docClient);
+    const tmpLoginTable = new TempLoginTable(docClient);
     const validator = new Validator();
-    const bodyData = validator.jsonBody(event.body);
-
+    const bodyData: PatientParam = validator.jsonBody(event.body);
+    bodyData.phone = validator.normalizePhone(bodyData.phone)
     if (!event.pathParameters || !event.pathParameters.centerId) {
       return {
         statusCode: 404,
@@ -149,6 +194,9 @@ export namespace Patient {
       // check if the center is managable by this user
       if (validator.isNurseAPI(event)) {
         const nurseId = admin.getUserId(event);
+        if (!nurseId) {
+          throw new Error("nurseId is not found");
+        }
         if (
           !(await isCenterManagedByNurse(
             nurseId,
@@ -189,32 +237,48 @@ export namespace Patient {
       };
       try {
         await patientTable.postPatient(param);
-        // add BASE64 encoded user/password as a login key
-        const loginKey = Buffer.from(
-          newuser.username + "/" + newuser.password
-        ).toString("base64");
-        // send login url via SMS
-        if (process.env.SMS_ENDPOINT) {
-          //@TODO implementation
-          const endpoint = process.env.SMS_ENDPOINT!;
-          const logininfo = { key: process.env.SMS_APIKEY };
-          let loginURL = "http://localhost:8000/login/";
-          if (process.env.STAGE && process.env.STAGE == "stg") {
-            loginURL = process.env.SMS_LOGINURL!;
+        // テンポラリのログインコードを発行しSMSで送信する
+        const ret = await tmpLoginTable.postToken({
+          patientId: patientId,
+          loginKey: uuid(),
+          phone: bodyData.phone,
+        });
+        if (!ret) {
+          return {
+            statusCode: 500,
+            body: JSON.stringify({
+              errorCode: "RPM00999",
+              errorMessage: "Something error occurred",
+            }),
+          };
+        }
+        if (bodyData.sendSMS === true) {
+          const res = await sendLoginURLSMS({
+            phone: bodyData.phone,
+            loginKey: (ret as TempLoginResult).loginKey,
+          });
+          if (res.status !== "100") {
+            console.log("SMS Failed");
+            return {
+              statusCode: 400,
+              body: JSON.stringify({
+                errorCode: "RPM00104",
+                errorMessage: "User was created but sending SMS failed",
+              }),
+            };
           }
-          const smsSender = new SMSSender(endpoint, logininfo);
-          console.log(event);
-          smsSender.sendSMS(param.phone, `体調入力URL: ${loginURL + loginKey}`);
         }
         return {
           statusCode: 201,
           body: JSON.stringify({
             ...param,
             password: newuser.password,
-            loginKey: loginKey,
+            loginKey: (ret as TempLoginResult).loginKey,
           }),
         };
       } catch (err) {
+        console.log("error occurred");
+        console.log(err);
         return {
           statusCode: 400,
           body: err,
@@ -222,6 +286,7 @@ export namespace Patient {
       }
     } catch (err) {
       console.log("postPatientTable-index error");
+      console.log(err);
       return {
         statusCode: 500,
         body: JSON.stringify({
@@ -233,6 +298,7 @@ export namespace Patient {
 
   export const getPatient: APIGatewayProxyHandler = async (event) => {
     const patientTable = new PatientTable(docClient);
+    const centerTable = new CenterTable(docClient);
     const validator = new Validator();
     if (!event.pathParameters || !event.pathParameters.patientId) {
       return {
@@ -277,6 +343,9 @@ export namespace Patient {
       if (validator.isNurseAPI(event)) {
         const nurseId = admin.getUserId(event);
 
+        if (!nurseId) {
+          throw new Error("nurseId is not found");
+        }
         if (
           !(await isCenterManagedByNurse(
             nurseId,
@@ -293,13 +362,21 @@ export namespace Patient {
         }
       }
       const patient = sliceStatus(res as PatientParam, 20);
-
+      const center: Center = (await centerTable.getCenter(
+        patient.centerId
+      )) as Center;
       return {
         statusCode: 200,
-        body: JSON.stringify(patient),
+        body: JSON.stringify({
+          ...patient,
+          centerId: center.centerId,
+          centerName: center.centerName,
+          emergencyPhone: center.emergencyPhone,
+        }),
       };
     } catch (err) {
       console.log("getPatientTable-index error");
+      console.log(err);
       return {
         statusCode: 500,
         body: JSON.stringify({
@@ -313,6 +390,7 @@ export namespace Patient {
     const patientTable = new PatientTable(docClient);
     const validator = new Validator();
     const bodyData: PatientParam = validator.jsonBody(event.body);
+    bodyData.phone = validator.normalizePhone(bodyData.phone)
     try {
       if (!event.body || !validator.checkPatientPutBody(bodyData)) {
         const errorModel = {
@@ -345,7 +423,9 @@ export namespace Patient {
         const res = await patientTable.getPatient(
           event.pathParameters.patientId
         );
-
+        if (!nurseId) {
+          throw new Error("nurseId is not found");
+        }
         if (
           !(await isCenterManagedByNurse(
             nurseId,
@@ -429,6 +509,171 @@ export namespace Patient {
       };
     } catch (err) {
       console.log("acceptPolicy error");
+      console.log(err);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: err,
+        }),
+      };
+    }
+  };
+
+  export const initialize: APIGatewayProxyHandler = async (event) => {
+    const tempLoginTable = new TempLoginTable(docClient);
+    const patientTable = new PatientTable(docClient);
+    const validator = new Validator();
+    try {
+      if (!validator.isPatientAPI(event)) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      // ログインキーが保存されているか確認する
+      const bodyParam: { loginKey: string } = validator.jsonBody(event.body);
+      const loginResult = await tempLoginTable.searchPhone(bodyParam.loginKey);
+      if (!loginResult) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      let created = new Date(loginResult.created);
+      created = new Date(created.getTime() + 24 * 60 * 60 * 1000);
+      if (created.getTime() < new Date().getTime()) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      const config: Config = {
+        userPoolId: process.env.PATIENT_POOL_ID!,
+        userPoolClientId: process.env.PATIENT_POOL_CLIENT_ID!,
+      };
+      const admin = new CognitoAdmin(config);
+      const user = await admin.initialize(loginResult.patientId);
+      const paticipant = await patientTable.getPatient(loginResult.patientId)
+      return {
+        statusCode: 200,
+        body: JSON.stringify({...user, policy_accepted: (paticipant as PatientParam).policy_accepted}),
+      };
+    } catch (err) {
+      console.log("acceptPolicy error");
+      console.log(err);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: err,
+        }),
+      };
+    }
+  };
+  export const sendLoginURL: APIGatewayProxyHandler = async (event) => {
+    const patientTable = new PatientTable(docClient);
+    const tmpLoginTable = new TempLoginTable(docClient);
+    const validator = new Validator();
+    if (!event.body) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          errorCode: "RPM00999",
+          errorMessage: "Something errro occurred",
+        }),
+      };
+    
+    }
+    const bodyData: TempLoginParam = validator.jsonBody(event.body);
+    if (bodyData.phone) {
+      bodyData.phone = validator.normalizePhone(bodyData.phone)
+    }
+    try {
+      if (!validator.isPatientAPI(event)) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      if (!bodyData.phone) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            errorCode: "RPM00101",
+            errorMessage: "Forbidden",
+          }),
+        };
+      }
+      const patientId = await patientTable.searchPhone(bodyData.phone);
+      if (!patientId) {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({
+            errorCode: "RPM00001",
+            errorMessage: "Patient Not Found",
+          }),
+        };
+      }
+      const ret = await tmpLoginTable.postToken({
+        patientId: patientId,
+        loginKey: uuid(),
+        phone: bodyData.phone,
+      });
+      if (!ret) {
+        return {
+          statusCode: 500,
+          body: JSON.stringify({
+            errorCode: "RPM00999",
+            errorMessage: "Something errro occurred",
+          }),
+        };
+      }
+      if (bodyData.sendSMS === true) {
+        const res = await sendLoginURLSMS({
+          phone: bodyData.phone,
+          loginKey: (ret as TempLoginResult).loginKey,
+        });
+        if (res.status !== "100") {
+          console.log("SMS Failed");
+          return {
+            statusCode: 400,
+            body: JSON.stringify({
+              errorCode: "RPM00104",
+              errorMessage: "User was created but sending SMS failed",
+            }),
+          };
+        }
+      }
+      // 本番環境の場合、loginKey は返さない
+      if (process.env.STAGE && process.env.STAGE == "prd") {
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            phone: bodyData.phone,
+          }),
+        };
+      } else {
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            phone: bodyData.phone,
+            loginKey: (ret as TempLoginResult).loginKey,
+          }),
+        };
+      }
+    } catch (err) {
+      console.log("send login url error");
       console.log(err);
       return {
         statusCode: 500,

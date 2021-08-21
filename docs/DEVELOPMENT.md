@@ -11,7 +11,9 @@
 
 Follow [this AWS instruction](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/install-cliv2.html)
 
-Set AWS profile
+AWS CLIをインストールした後`aws configure`を利用して設定を行います。
+アクセスキーIDとシークレットアクセスキーが必要になるので、[こちらのドキュメント](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-quickstart.html)の「アクセスキー ID とシークレットアクセスキー」のセクションを参考につくってください。
+また、リージョンは`ap-northeast-1`（東京）を指定します。
 
 ```bash
 aws configure --profile your-profile-name
@@ -33,7 +35,6 @@ config/dev.json
   "AuthAdminUserPoolDomain":"your-api-domain-admin",
   "AuthNurseUserPoolDomain":"your-api-domain-nurse",
   "AuthPatientUserPoolDomain":"your-api-domain-patient",
-  "AuthAdminUserPoolDomain":"your.api.domain",
   "OauthCallbackURL":"https://your.callback.url",
   "OauthSignoutURL":"https://your.signout.url",
   "Bucket":"your-bucket-name",
@@ -194,6 +195,17 @@ serverless invoke local --function putCenter --data '{ "pathParameters": {"cente
 npm run deploy:gateway
 ```
 
+## ステージング環境の構築
+
+stg.json ファイルを作る
+
+`cp config/stg.json.sample config/stg.json`
+
+必要な設定をする
+
+`vi config/stg.json`
+
+deploy する
 ## アンインストール
 
 ### 全て削除

@@ -25,7 +25,6 @@ export default class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("getPatient Success!");
           const filtered = data.Items!.filter(
             (item) => item.centerId === centerId
           );
@@ -48,14 +47,13 @@ export default class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("getPatient Success!");
           resolve(data.Item! as Patient);
         }
       });
     });
   }
 
-  searchPhone(phone: string): Promise<boolean> {
+  searchPhone(phone: string): Promise<string | undefined> {
     const query: DynamoDB.DocumentClient.QueryInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       IndexName: "RemotePatientMonitoringPatientTableGSIPhone",
@@ -63,19 +61,22 @@ export default class PatientTable {
       ExpressionAttributeValues: { ":phone": phone },
       ProjectionExpression: "patientId",
     };
-    console.log(query);
     return new Promise((resolve) => {
       this.client.query(query, (err, data) => {
         if (err) {
           console.log(err);
-          resolve(false);
+          resolve(undefined);
         } else {
-          resolve(data.Count! > 0);
+          if (data.Count! > 0) {
+            resolve(data.Items![0].patientId);
+          } else {
+            resolve(undefined);
+          }
         }
       });
     });
   }
-  async postPatient(patient: PatientParam) {
+  async postPatient(patient: PatientParam): Promise<PatientParam | AWSError> {
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
       Item: patient,
@@ -85,13 +86,11 @@ export default class PatientTable {
       if (ret) {
         reject({ message: "phone already exists" });
       } else {
-        this.client.put(params, (err, data) => {
-          console.log(data);
+        this.client.put(params, (err) => {
           if (err) {
             console.log(err);
             reject(err);
           } else {
-            console.log("postPatient Success!");
             resolve(patient);
           }
         });
@@ -99,7 +98,10 @@ export default class PatientTable {
     });
   }
 
-  putPatient(patientId: string, patient: PatientParam) {
+  putPatient(
+    patientId: string,
+    patient: PatientParam
+  ): Promise<PatientParam | AWSError> {
     let updateExpression =
       "set phone = :phone, display = :display, centerId = :centerId";
 
@@ -138,7 +140,6 @@ export default class PatientTable {
           console.log(err);
           reject(err);
         } else {
-          console.log("putPatient Success!");
           resolve(patient);
         }
       });
@@ -147,8 +148,9 @@ export default class PatientTable {
 
   acceptPolicy(patientId: string): Promise<any> {
     const updateExpression = "set policy_accepted = :policy_accepted";
+    const policy_accepted_time = new Date().toISOString()
     const expressionAttributeValues: any = {
-      ":policy_accepted": new Date().toISOString(),
+      ":policy_accepted": policy_accepted_time,
     };
     const params: DynamoDB.DocumentClient.UpdateItemInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
@@ -159,13 +161,12 @@ export default class PatientTable {
       ExpressionAttributeValues: expressionAttributeValues,
     };
     return new Promise((resolve, reject) => {
-      this.client.update(params, (err, data) => {
+      this.client.update(params, (err) => {
         if (err) {
           console.log(err);
           reject(err);
         } else {
-          console.log(data);
-          resolve({ result: "OK" });
+          resolve({ result: "OK", policy_accepted: policy_accepted_time });
         }
       });
     });
@@ -176,14 +177,11 @@ export default class PatientTable {
     param: StatusParam
   ): Promise<Status> {
     try {
-      console.log(patientId);
-      console.log(centerId);
-      console.log(param);
       const requestBody: Status = {
         patientId: patientId,
         statusId: uuid(),
         centerId: centerId,
-        created: new Date().toISOString(),
+        created: param.created || new Date().toISOString(),
         SpO2: param.SpO2,
         body_temperature: param.body_temperature,
         pulse: param.pulse,
@@ -216,7 +214,10 @@ export default class PatientTable {
       throw err;
     }
   }
-  async deletePatientStatus(patientId: string, statusId: string) {
+  async deletePatientStatus(
+    patientId: string,
+    statusId: string
+  ): Promise<PatientParam | AWSError> {
     try {
       const ret = await this.getPatient(patientId);
 

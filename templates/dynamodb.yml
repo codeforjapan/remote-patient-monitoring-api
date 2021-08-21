@@ -41,3 +41,23 @@ Resources:
           Projection:
             ProjectionType: ALL
       BillingMode: PAY_PER_REQUEST
+  RemotePatientMonitoringTempLoginTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.DBPrefix}TempLoginTable-${self:provider.stage}
+      KeySchema:
+        - AttributeName: phone
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: phone
+          AttributeType: S
+        - AttributeName: loginKey
+          AttributeType: S
+      GlobalSecondaryIndexes:
+        - IndexName: RemotePatientMonitoringTempLoginTableGSIToken
+          KeySchema:
+            - AttributeName: loginKey
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      BillingMode: PAY_PER_REQUEST

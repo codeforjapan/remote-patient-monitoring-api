@@ -28,6 +28,7 @@ provider:
   region: ap-northeast-1
   apiGateway:
     shouldStartNameWithService: true
+    minimumCompressionSize: 1024
 
   # you can add statements to the Lambda function's IAM Role here
   #  iamRoleStatements:
@@ -47,6 +48,7 @@ provider:
 
   # you can define service wide environment variables here
   environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     Bucket: ${file(config/${self:provider.stage}.json):Bucket}
     DebugMode: ${file(config/${self:provider.stage}.json):DebugMode}
     OauthCallbackURL: ${file(config/${self:provider.stage}.json):OauthCallbackURL}
@@ -55,6 +57,10 @@ provider:
     AuthNurseUserPoolDomain: ${file(config/${self:provider.stage}.json):AuthNurseUserPoolDomain}
     AuthPatientUserPoolDomain: ${file(config/${self:provider.stage}.json):AuthPatientUserPoolDomain}
     DBPrefix: ${file(config/${self:provider.stage}.json):DBPrefix}
+    SMS_ENDPOINT: ${file(config/${self:provider.stage}.json):SMS_ENDPOINT}
+    SMS_SECURITYKEY: ${file(config/${self:provider.stage}.json):SMS_SECURITYKEY}
+    SMS_ACCESSKEY: ${file(config/${self:provider.stage}.json):SMS_ACCESSKEY}
+    LOGINURL: ${file(config/${self:provider.stage}.json):LOGINURL}
     IS_OFFLINE: ${opt:offline, ''}
 custom:
   defaultStage: dev

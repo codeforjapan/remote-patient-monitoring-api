@@ -1,17 +1,20 @@
 post:
   tags:
     - Patient
-  summary: 利用規約への同意
-  description: 指定されたPatientIdの policy_accepted を現在時間で更新します。ログインした本人しか利用できません。
-  security:
-    - APIGatewayPatientAuthorizer: []
-  parameters:
-    - name: patientId
-      in: path
-      description: 更新したい療養者のID
-      required: true
-      schema:
-        type: string
+  summary: ログインURLを指定された携帯電話番号に送信する
+  description: 指定された電話番号に、IdToken つきのログイン用URLを送信する
+  requestBody:
+    description: phone number of user
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            phone:
+              description: 電話番号
+              type: string
+              example: 09033333333
+    required: true
   responses:
     200:
       description: OK
@@ -28,12 +31,7 @@ post:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              result:
-                type: string
-              user:
-                $ref: "../../schemas/produceLogin.yaml"
+            $ref: "../../schemas/produceLogin.yaml"
     400:
       description: Bad Request
       headers:
@@ -87,7 +85,7 @@ post:
           method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
           method.response.header.Access-Control-Allow-Methods: "'*'"
           method.response.header.Access-Control-Allow-Origin: "'*'"
-    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postAcceptPolicy-#{SERVERLESS::Stage}/invocations
+    uri: arn:aws:apigateway:#{AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:remote-patient-monitoring-postSendLoginURL-#{SERVERLESS::Stage}/invocations
     passthroughBehavior: when_no_match
     httpMethod: POST
     contentHandling: CONVERT_TO_TEXT
@@ -101,7 +99,7 @@ options:
   parameters:
     - name: patientId
       in: path
-      description: 取得したい療養者のID
+      description: 更新したい療養者のID
       required: true
       schema:
         type: string

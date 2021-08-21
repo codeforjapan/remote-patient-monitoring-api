@@ -5,8 +5,45 @@ import { PatientParam, Status, StatusParam } from '../../src/lambda/definitions/
 import { secret } from '../lib/secret';
 import { v4 as uuid } from 'uuid';
 import { AxiosInstance } from 'axios'
+import { SMSSender } from '../../src/util/smssender'
+
+const dummy_statuses = [
+[36.7,69,91],
+[36.7,60,98],
+[36.7,63,90],
+[38.3,85,89],
+[39.1,102,86],
+[39.4,112,93],
+[39.5,102,90],
+[37.6,90,96],
+[37.1,71,97],
+[37.6,76,98],
+[36.1,63,98],
+[35.6,57,98],
+[35.7,60,96],
+[35.8,60,98],
+[37.9,70,98],
+[36.8,67,98],
+[35.9,50,93],
+[36.0,60,98],
+[35.6,58,98],
+[36.4,65,98],
+[35.5,57,94],
+[36.5,51,98],
+[35.5,60,98],
+[35.9,53,98],
+[36.2,52,98],
+[35.7,59,98],
+[35.8,61,98],
+[35.7,51,98]
+];
 const axios = require('axios');
 let entry_point: string;
+jest.setTimeout(30000);
+
+const replaceAll = (string: string, search: string, replace: string):string => {
+  return string.split(search).join(replace);
+}  
 
 const STAGE = process.env.JEST_STAGE || 'dev';
 const config = configsys.readConfig(STAGE);
@@ -53,6 +90,7 @@ let patient_id_in_another_center: string;
 let patient_item_in_another_center: any;
 let patient_password: string;
 const phone: string = '090-3333-3333';
+let status_to_be_deleted: string[] = []
 
 describe('admin user', () => {
   let axios_admin: any;
@@ -77,14 +115,14 @@ describe('admin user', () => {
     const ret = await axios_admin.post(entry_point + '/api/admin/centers', { centerName: 'A保健所', emergencyPhone: "0166-33-2222" });
     expect(ret.data).toHaveProperty('centerId');
     expect(ret.data.centerName).toBe('A保健所');
-    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
+    expect(ret.data.emergencyPhone).toBe('0166332222');
     center_id = ret.data.centerId;
   });
 
   it('read new center id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
     expect(ret.data.centerName).toBe('A保健所');
-    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
+    expect(ret.data.emergencyPhone).toBe('0166332222');
   });
 
   it('update existing center', async () => {
@@ -96,18 +134,18 @@ describe('admin user', () => {
   it('read updated center id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
     expect(ret.data.centerName).toBe(center_name);
-    expect(ret.data.emergencyPhone).toBe('0166-33-2222');
+    expect(ret.data.emergencyPhone).toBe('0166332222');
   });
 
   it('update existing center', async () => {
     const ret = await axios_admin.put(entry_point + `/api/admin/centers/${center_id}`, { emergencyPhone: "0166-33-9999" });
-    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
+    expect(ret.data.emergencyPhone).toBe('0166339999');
   });
 
   it('read updated center id', async () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/centers/${center_id}`);
     expect(ret.data.centerName).toBe(center_name);
-    expect(ret.data.emergencyPhone).toBe('0166-33-9999');
+    expect(ret.data.emergencyPhone).toBe('0166339999');
   });
 
   it('create another center', async () => {
@@ -191,7 +229,7 @@ describe('admin user', () => {
       phone: phone,
     });
     expect(ret.data.patientId).toBe(patient_id);
-    expect(ret.data.phone).toBe(phone);
+    expect(ret.data.phone).toBe(replaceAll(phone,'-',''));
     expect(ret.data.centerId).toBe(center_id);
     expect(ret.data.memo).toBe("患者メモ");
     expect(ret.data).toHaveProperty('password');
@@ -202,7 +240,10 @@ describe('admin user', () => {
     const ret = await axios_admin.get(entry_point + `/api/admin/patients/${patient_id}`);
     patient_item = ret.data;
     expect(ret.data.policy_accepted).toBe(undefined);
-    expect(ret.data.phone).toBe(phone);
+    expect(ret.data.centerId).toBe(center_id);
+    expect(ret.data.centerName).toBe(center_name);
+    expect(ret.data.emergencyPhone).toBe('0166339999');
+    expect(ret.data.phone).toBe(replaceAll(phone,'-',''));
     expect(ret.data.memo).toBe("患者メモ");
   });
 
@@ -221,7 +262,7 @@ describe('admin user', () => {
       phone: '090-1111-1111',
     });
     expect(ret.data).toHaveProperty('patientId');
-    expect(ret.data.phone).toBe('090-1111-1111');
+    expect(ret.data.phone).toBe('09011111111');
     patient_id2 = ret.data.patientId;
   });
 
@@ -230,7 +271,7 @@ describe('admin user', () => {
       patientId: uuid(),
       phone: '090-2222-2222',
     });
-    expect(ret.data.phone).toBe('090-2222-2222');
+    expect(ret.data.phone).toBe('09022222222');
   });
 
   it('get two patients from the center', async () => {
@@ -274,7 +315,7 @@ describe('admin user', () => {
     const ret2 = await axios_admin.post(entry_point + `/api/admin/centers/${center_id3}/patients`, {
       phone: '090-3899-2222',
     });
-    expect(ret2.data.phone).toBe('090-3899-2222');
+    expect(ret2.data.phone).toBe('09038992222');
     expect(ret2.data).toHaveProperty('patientId');
     patient_id_in_another_center = ret2.data.patientId;
     patient_item_in_another_center = ret2.data;
@@ -338,6 +379,9 @@ describe('patient user login', () => {
  */
 let idToken: string;
 let refreshToken: string;
+let patient_to_initialize = uuid();
+let password_to_initialize: string;
+let newLoginKey: string
 describe('Nurse user', () => {
   let axios_nurse: any;
   let nurse_item: any;
@@ -416,7 +460,7 @@ describe('Nurse user', () => {
     expect(ret.data).toHaveProperty('patientId');
     patient_id3 = ret.data.patientId;
     expect(ret.data).toHaveProperty('password');
-    expect(ret.data.phone).toBe('090-3293-2333');
+    expect(ret.data.phone).toBe('09032932333');
     expect(ret.data).toHaveProperty('statuses');
   });
 
@@ -434,7 +478,7 @@ describe('Nurse user', () => {
   it('read new patient id', async () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id3}`);
     patient_item = ret.data;
-    expect(ret.data.phone).toBe('090-3293-2333');
+    expect(ret.data.phone).toBe('09032932333');
   });
 
   it("can't read patient which is not related to a managing center", async () => {
@@ -447,12 +491,14 @@ describe('Nurse user', () => {
 
   it('create new patient to the center', async () => {
     const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, {
-      patientId: uuid(),
-      phone: '090-3827-1428',
+      patientId: patient_to_initialize,
+      phone: '090-3827-1428'
     });
     expect(ret.data).toHaveProperty('password');
+    expect(ret.data).toHaveProperty('loginKey');
     expect(ret.data).toHaveProperty('display');
-    expect(ret.data.phone).toBe('090-3827-1428');
+    expect(ret.data.phone).toBe('09038271428');
+    newLoginKey = ret.data.loginKey;
   });
 
   it('get 4 patients from the center', async () => {
@@ -510,14 +556,14 @@ describe('Nurse user', () => {
         remarks: 'dummy',
       },
     };
-    const ret = await axios_nurse.post(`${entry_point}/api/nurse/patients/${patient_id3}/statuses`, dummyPostData);
+    const ret = await axios_nurse.post(`${entry_point}/api/nurse/patients/${patient_id2}/statuses`, dummyPostData);
     const result = ret.data;
     expect(result.statusId).not.toBe(null);
     expect(result.SpO2).toBe(dummyPostData.SpO2);
     expect(result.body_temperature).toBe(dummyPostData.body_temperature);
     expect(result.pulse).toBe(dummyPostData.pulse);
     expect(result.centerId).toBe(center_id);
-    expect(result.patientId).toBe(patient_id3);
+    expect(result.patientId).toBe(patient_id2);
     expect(result.created).not.toBe(null);
     expect(result.symptom!.cough).toBe(dummyPostData.symptom!.cough);
     expect(result.symptom!.phlegm).toBe(dummyPostData.symptom!.phlegm);
@@ -557,6 +603,19 @@ describe('refresh Token', () => {
   });
 });
 
+describe('initialize user', () => {
+  it('initialize with newLoginKey', async() => {
+    const ret = await axios.post(entry_point + "/api/patient/initialize", {loginKey: newLoginKey})
+    expect(ret.data).toHaveProperty('refreshToken')
+  })
+  it('fails to initialize with idToken of another user', async() => {
+    expect.assertions(1);
+    const t = async () => {
+      await axios.post(entry_point + "/api/patient/patients/initialize", {loginKey: "hoge"})
+    }
+    await expect(t).rejects.toThrow(/403/)
+  })
+})
 /*
  * Patient methods
  */
@@ -570,6 +629,7 @@ describe('Patient user', () => {
       password: patient_password,
     });
     idToken = ret.data.idToken;
+    console.log(idToken)
     refreshToken = ret.data.refreshToken;
     axios_patient = axios.create({
       headers: {
@@ -590,6 +650,7 @@ describe('Patient user', () => {
     const ret = await axios_patient.post(entry_point + `/api/patient/patients/${patient_id}/accept_policy`);
     console.log(ret.data)
     expect(ret.data.result).toBe('OK')
+    expect(ret.data).toHaveProperty('policy_accepted')
   });
 
 
@@ -612,7 +673,10 @@ describe('Patient user', () => {
   it('read my patient id', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}`);
     patient_item = ret.data;
-    expect(ret.data.phone).toBe(phone);
+    expect(ret.data.centerId).toBe(center_id);
+    expect(ret.data.centerName).toBe('C保健所');
+    expect(ret.data.emergencyPhone).toBe('0166339999');
+    expect(ret.data.phone).toBe(replaceAll(phone,'-',''));
   });
 
   it("can't read patient which is not mine", async () => {
@@ -657,6 +721,7 @@ describe('Patient user', () => {
     const ret = await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData);
     const result: Status = ret.data;
     expect(result.statusId).not.toBe(null);
+    status_to_be_deleted.push(result.statusId)
     expect(result.SpO2).toBe(dummyPostData.SpO2);
     expect(result.body_temperature).toBe(dummyPostData.body_temperature);
     expect(result.pulse).toBe(dummyPostData.pulse);
@@ -688,6 +753,7 @@ describe('Patient user', () => {
     const ret = await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData);
     const result = ret.data;
     expect(result.statusId).not.toBe(null);
+    status_to_be_deleted.push(result.statusId)
     expect(result.SpO2).toBe(dummyPostData.SpO2);
     expect(result.body_temperature).toBe(dummyPostData.body_temperature);
     expect(result.pulse).toBe(dummyPostData.pulse);
@@ -772,19 +838,24 @@ describe('Patient user', () => {
         remarks: 'dummy',
       },
     };
-    await Promise.all([...Array(50)].map(async () => {
-      dummyPostData.SpO2 = 90 + Math.random() * 10
-      dummyPostData.pulse = 70 + Math.random() * 20
-      dummyPostData.body_temperature = 35 + Math.random() * 5
+    const now = new Date();
+    await Promise.all(dummy_statuses.map(async (item, index) => {
+      const created = new Date(now.getTime() - (dummy_statuses.length - index + 1) * 12 * 60 * 60 * 1000)
+      dummyPostData.SpO2 = item[2]
+      dummyPostData.pulse = item[1]
+      dummyPostData.body_temperature = item[0]
+      dummyPostData.created = created.toISOString()
       await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
     }
     ))
+    dummyPostData.created = new Date().toISOString();
     dummyPostData.symptom!.remarks = 'latest one'
-    await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
+    const result = await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData)
+    status_to_be_deleted.push(result.data.statusId)
   });
-  it('get 53 statuses', async () => {
+  it('get 31 statuses', async () => {
     const ret = await axios_patient.get(entry_point + `/api/patient/patients/${patient_id}/statuses`);
-    expect(ret.data.length).toBe(53);
+    expect(ret.data.length).toBe(dummy_statuses.length + 3);
     expect(Date.parse(ret.data[0].created)).toBeGreaterThan(Date.parse(ret.data[1].created))
   });
   it('get latest 20 statuses by patient', async () => {
@@ -793,6 +864,14 @@ describe('Patient user', () => {
     expect(ret.data.statuses![0].symptom!.remarks).toBe('latest one');
     expect(Date.parse(ret.data.statuses![0].created)).toBeGreaterThan(Date.parse(ret.data.statuses![1].created))
   });
+  it('delete statuses', async () =>{
+    console.log(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[0]}`)
+    console.log(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[1]}`)
+    console.log(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[2]}`)
+    await axios_patient.delete(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[0]}`)
+    await axios_patient.delete(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[1]}`)
+    await axios_patient.delete(`${entry_point}/api/patient/patients/${patient_id}/statuses/${status_to_be_deleted[2]}`)
+  })
 });
 
 /*
@@ -815,12 +894,12 @@ describe('Nurse user(again)', () => {
   it('get latest 20 statuses by patient', async () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id}`);
     expect(ret.data.statuses.length).toBe(20);
-    expect(ret.data.statuses![0].symptom!.remarks).toBe('latest one');
+    expect(ret.data.statuses![0].symptom!.remarks).toBe('dummy');
   });
 
   it('get full statuses by patient', async () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/patients/${patient_id}/statuses`);
-    expect(ret.data.length).toBe(53);
+    expect(ret.data.length).toBe(28);
   });
 
   it('get list of patients and statuses by center', async () => {
@@ -847,6 +926,31 @@ describe('refresh Token', () => {
       refreshToken: refreshToken
     });
     expect(ret.data).toHaveProperty('idToken');
+  });
+});
+
+let loginKey: string
+describe('add temporary token', () => {
+  it('fails by sending with no pararm', async() => {
+    const t = async () => {
+      const ret = await axios.post(entry_point + '/api/patient/getloginurl');
+    }
+    await expect(t).rejects.toThrow(/500/)
+  });
+  it('fails by sending with no registered phone', async() => {
+    const t = async () => {
+      const ret = await axios.post(entry_point + '/api/patient/getloginurl', {phone: '03-3333-9393'});
+    }
+    await expect(t).rejects.toThrow(/404/)
+  });
+  it('request passcode to my phone', async() => {
+    const ret = await axios.post(entry_point + '/api/patient/getloginurl', {
+      phone: phone
+    });
+    console.log(ret.data)
+    expect(ret.data.phone).toBe(replaceAll(phone,'-',''))
+    expect(ret.data).toHaveProperty('loginKey')
+    loginKey = ret.data.loginKey
   });
 });
 

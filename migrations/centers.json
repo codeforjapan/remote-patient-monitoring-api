@@ -2,11 +2,16 @@
     {
         "centerId": "942f71cf-5f19-45d2-846b-4e6609f48269",
         "centerName": "A保健所",
-        "emergencyPhone":"03-3333-4444"
+        "emergencyPhone":"0333334444"
     },
     {
         "centerId": "942f71cf-5f19-45d2-846a-4e6609f48269",
         "centerName": "B保健所",
-        "emergencyPhone":"03-3333-5555"
+        "emergencyPhone":"0333335555"
+    },
+    {
+        "centerId": "test-status-dummy-center",
+        "centerName": "dummy保健所",
+        "emergencyPhone":"0344474777"
     }
 ]

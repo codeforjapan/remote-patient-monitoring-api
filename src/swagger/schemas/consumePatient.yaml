@@ -10,3 +10,5 @@ properties:
     type: string
   display:
     type: boolean
+  sendSMS:
+    type: boolean

@@ -11,6 +11,7 @@ import Validator from "../util/validator";
 import NurseTable from "../aws/nurseTable";
 import { CognitoAdmin, Config } from "../aws/cognito_admin";
 import { Patient } from "./definitions/types";
+import * as PatientFunc from "./patient";
 const docClient = loadDynamoDBClient();
 
 AWS.config.update({
@@ -59,6 +60,9 @@ export namespace Status {
       // /api/nurse の場合
       if (validator.isNurseAPI(event)) {
         const nurseId = admin.getUserId(event);
+        if (!nurseId) {
+          throw new Error("nurseId is not found");
+        }
         if (!centerId) {
           const errorModel = {
             errorCode: "RPM00001",
@@ -178,7 +182,7 @@ export namespace Status {
       const patient = ret as Patient;
       return {
         statusCode: 200,
-        body: JSON.stringify(patient.statuses),
+        body: JSON.stringify(PatientFunc.Patient.sortStatus(patient.statuses!)),
       };
     } catch (err) {
       const errorModel = { error: err };

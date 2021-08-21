@@ -21,6 +21,8 @@ jobs:
 
       - name: npm install
         run: |
+          cp config/stg.json.sample config/stg.json # for ignoring install error
+          cp config/stg.json.sample config/prd.json # for ignoring install error
           npm install
 
       - name: build swagger yaml
