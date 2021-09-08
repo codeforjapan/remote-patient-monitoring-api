@@ -6,7 +6,7 @@ import { ResolvePlugin } from 'webpack';
 
 const replaceAll = (string: string, search: string, replace: string):string => {
   return string.split(search).join(replace);
-}  
+}
 describe('patient test', () => {
   const handler = require('../../src/lambda/handler')
   process.env.CENTER_TABLE_NAME = 'RemotePatientMonitoring-CenterTable-dev'
@@ -77,7 +77,8 @@ describe('patient test', () => {
         "phone": "090-1234-5678",
         "memo": "メモメモ",
         "display": true,
-        "sendSMS": true
+        "sendSMS": true,
+        "isAccepted": true,
       }
     }
     const ret = await handler.postPatient(params)
@@ -85,6 +86,7 @@ describe('patient test', () => {
     expect(JSON.parse(ret.body).phone).toBe("09012345678")
     expect(JSON.parse(ret.body)).toHaveProperty('loginKey')
     expect(JSON.parse(ret.body).memo).toBe('メモメモ')
+    expect(Date.parse(JSON.parse(ret.body).policy_accepted)).toBeGreaterThan(Date.parse('2021-01-01T00:00:00.000Z'))
     expect(sms).toHaveBeenCalled()
   });
   it('fails to create patient which has a same phone', async () => {
