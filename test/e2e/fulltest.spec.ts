@@ -520,7 +520,6 @@ describe('Nurse user', () => {
     expect(ret.data).toHaveProperty('display');
     expect(ret.data.phone).toBe('09038271429');
     expect(Date.parse(ret.data.policy_accepted)).toBeGreaterThan(Date.parse('2021-01-01T00:00:00.000Z'))
-    newLoginKey = ret.data.loginKey;
   });
 
   it('update existing patient', async () => {
