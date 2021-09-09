@@ -43,7 +43,7 @@ jest.setTimeout(30000);
 
 const replaceAll = (string: string, search: string, replace: string):string => {
   return string.split(search).join(replace);
-}  
+}
 
 const STAGE = process.env.JEST_STAGE || 'dev';
 const config = configsys.readConfig(STAGE);
@@ -232,6 +232,7 @@ describe('admin user', () => {
     expect(ret.data.phone).toBe(replaceAll(phone,'-',''));
     expect(ret.data.centerId).toBe(center_id);
     expect(ret.data.memo).toBe("患者メモ");
+    expect(ret.data.policy_accepted).toBeUndefined();
     expect(ret.data).toHaveProperty('password');
     patient_password = ret.data.password;
   });
@@ -245,6 +246,7 @@ describe('admin user', () => {
     expect(ret.data.emergencyPhone).toBe('0166339999');
     expect(ret.data.phone).toBe(replaceAll(phone,'-',''));
     expect(ret.data.memo).toBe("患者メモ");
+    expect(ret.data.policy_accepted).toBeUndefined();
   });
 
   it('fails to create new patient with existing phone', async () => {
@@ -498,6 +500,7 @@ describe('Nurse user', () => {
     expect(ret.data).toHaveProperty('loginKey');
     expect(ret.data).toHaveProperty('display');
     expect(ret.data.phone).toBe('09038271428');
+    expect(ret.data.policy_accepted).toBeUndefined();
     newLoginKey = ret.data.loginKey;
   });
 
@@ -505,6 +508,19 @@ describe('Nurse user', () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id}/patients`);
     expect(ret.data.Count).toBe(4);
     expect(ret.data.Items).toHaveLength(4);
+  });
+
+  it('create new patient to the center with policy acceptance', async () => {
+    const ret = await axios_nurse.post(entry_point + `/api/nurse/centers/${center_id}/patients`, {
+      phone: '090-3827-1429',
+      isAccepted: true
+    });
+    expect(ret.data).toHaveProperty('password');
+    expect(ret.data).toHaveProperty('loginKey');
+    expect(ret.data).toHaveProperty('display');
+    expect(ret.data.phone).toBe('09038271429');
+    expect(Date.parse(ret.data.policy_accepted)).toBeGreaterThan(Date.parse('2021-01-01T00:00:00.000Z'))
+    newLoginKey = ret.data.loginKey;
   });
 
   it('update existing patient', async () => {
@@ -904,7 +920,7 @@ describe('Nurse user(again)', () => {
 
   it('get list of patients and statuses by center', async () => {
     const ret = await axios_nurse.get(entry_point + `/api/nurse/centers/${center_id}/patients`);
-    expect(ret.data.Count).toBe(4);
+    expect(ret.data.Count).toBe(5);
     expect(ret.data.Items).toBeDefined()
     const items = ret.data.Items! as PatientParam[]
     const mydata = items.find(item => item.patientId === patient_id)
