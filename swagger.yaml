@@ -2804,6 +2804,8 @@ paths:
                   type: boolean
                 sendSMS:
                   type: boolean
+                isAccepted:
+                  type: boolean
         required: true
       responses:
         '201':
@@ -3148,6 +3150,8 @@ paths:
                 display:
                   type: boolean
                 sendSMS:
+                  type: boolean
+                isAccepted:
                   type: boolean
         required: true
       responses:
@@ -6130,6 +6134,8 @@ components:
         display:
           type: boolean
         sendSMS:
+          type: boolean
+        isAccepted:
           type: boolean
     Patients:
       type: array
