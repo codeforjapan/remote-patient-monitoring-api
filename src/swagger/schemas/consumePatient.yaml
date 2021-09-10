@@ -12,3 +12,5 @@ properties:
     type: boolean
   sendSMS:
     type: boolean
+  isAccepted:
+    type: boolean
