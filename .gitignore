@@ -7,6 +7,7 @@ jspm_packages
 .build
 .dynamodb
 .lib
+.DS_Store
 src/webpack/config.js
 src/webpack/config.js.map
 src/webpack/config.json

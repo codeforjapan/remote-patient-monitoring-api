@@ -231,7 +231,7 @@ export namespace Patient {
         phone: bodyData.phone,
         display: true,
         memo: bodyData.memo || "",
-        policy_accepted: undefined,
+        policy_accepted: bodyData.isAccepted === true ? new Date().toISOString() : undefined,
         centerId: event.pathParameters.centerId,
         statuses: [],
       };
@@ -590,7 +590,6 @@ export namespace Patient {
           errorMessage: "Something errro occurred",
         }),
       };
-    
     }
     const bodyData: TempLoginParam = validator.jsonBody(event.body);
     if (bodyData.phone) {

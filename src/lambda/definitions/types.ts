@@ -32,6 +32,7 @@ export interface PatientParam {
   statuses?: Status[];
   centerId: string;
   sendSMS?: boolean;
+  isAccepted?: boolean;
 }
 
 export interface Patient {
