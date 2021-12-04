@@ -334,6 +334,11 @@ describe('admin user', () => {
         suffocation: false,
         headache: false,
         sore_throat: false,
+        malaise: false,
+        nausea: false,
+        diarrhea: false,
+        difficulty_eating: false,
+        no_urination: false,
         remarks: 'dummy',
       },
     };
@@ -351,6 +356,11 @@ describe('admin user', () => {
     expect(result.symptom!.headache).toBe(dummyPostData.symptom!.headache);
     expect(result.symptom!.sore_throat).toBe(dummyPostData.symptom!.sore_throat);
     expect(result.symptom!.suffocation).toBe(dummyPostData.symptom!.suffocation);
+    expect(result.symptom!.malaise).toBe(dummyPostData.symptom!.malaise);
+    expect(result.symptom!.nausea).toBe(dummyPostData.symptom!.nausea);
+    expect(result.symptom!.diarrhea).toBe(dummyPostData.symptom!.diarrhea);
+    expect(result.symptom!.difficulty_eating).toBe(dummyPostData.symptom!.difficulty_eating);
+    expect(result.symptom!.no_urination).toBe(dummyPostData.symptom!.no_urination);
     expect(result.symptom!.remarks).toBe(dummyPostData.symptom!.remarks);
     expect(result.symptom!.symptomId).not.toBe(null);
   });
@@ -568,6 +578,11 @@ describe('Nurse user', () => {
         suffocation: false,
         headache: false,
         sore_throat: false,
+        malaise: false,
+        nausea: false,
+        diarrhea: false,
+        difficulty_eating: false,
+        no_urination: false,
         remarks: 'dummy',
       },
     };
@@ -585,6 +600,11 @@ describe('Nurse user', () => {
     expect(result.symptom!.headache).toBe(dummyPostData.symptom!.headache);
     expect(result.symptom!.sore_throat).toBe(dummyPostData.symptom!.sore_throat);
     expect(result.symptom!.suffocation).toBe(dummyPostData.symptom!.suffocation);
+    expect(result.symptom!.malaise).toBe(dummyPostData.symptom!.malaise);
+    expect(result.symptom!.nausea).toBe(dummyPostData.symptom!.nausea);
+    expect(result.symptom!.diarrhea).toBe(dummyPostData.symptom!.diarrhea);
+    expect(result.symptom!.difficulty_eating).toBe(dummyPostData.symptom!.difficulty_eating);
+    expect(result.symptom!.no_urination).toBe(dummyPostData.symptom!.no_urination);
     expect(result.symptom!.remarks).toBe(dummyPostData.symptom!.remarks);
     expect(result.symptom!.symptomId).not.toBe(null);
   });
@@ -599,6 +619,11 @@ describe('Nurse user', () => {
         suffocation: false,
         headache: false,
         sore_throat: false,
+        malaise: false,
+        nausea: false,
+        diarrhea: false,
+        difficulty_eating: false,
+        no_urination: false,
         remarks: 'dummy',
       },
     };
@@ -731,6 +756,11 @@ describe('Patient user', () => {
         suffocation: true,
         headache: true,
         sore_throat: true,
+        malaise: true,
+        nausea: true,
+        diarrhea: true,
+        difficulty_eating: true,
+        no_urination: true,
       },
     };
     const ret = await axios_patient.post(`${entry_point}/api/patient/patients/${patient_id}/statuses`, dummyPostData);
@@ -748,6 +778,11 @@ describe('Patient user', () => {
     expect(result.symptom!.headache).toBe(dummyPostData.symptom!.headache);
     expect(result.symptom!.sore_throat).toBe(dummyPostData.symptom!.sore_throat);
     expect(result.symptom!.suffocation).toBe(dummyPostData.symptom!.suffocation);
+    expect(result.symptom!.malaise).toBe(dummyPostData.symptom!.malaise);
+    expect(result.symptom!.nausea).toBe(dummyPostData.symptom!.nausea);
+    expect(result.symptom!.diarrhea).toBe(dummyPostData.symptom!.diarrhea);
+    expect(result.symptom!.difficulty_eating).toBe(dummyPostData.symptom!.difficulty_eating);
+    expect(result.symptom!.no_urination).toBe(dummyPostData.symptom!.no_urination);
     expect(result.symptom!.remarks).toBeUndefined();
     expect(result.symptom!.symptomId).not.toBe(null);
   });
@@ -762,6 +797,11 @@ describe('Patient user', () => {
         suffocation: false,
         headache: false,
         sore_throat: false,
+        malaise: false,
+        nausea: false,
+        diarrhea: false,
+        difficulty_eating: false,
+        no_urination: false,
         remarks: 'dummy',
       },
     };
@@ -780,6 +820,11 @@ describe('Patient user', () => {
     expect(result.symptom!.headache).toBe(dummyPostData.symptom!.headache);
     expect(result.symptom!.sore_throat).toBe(dummyPostData.symptom!.sore_throat);
     expect(result.symptom!.suffocation).toBe(dummyPostData.symptom!.suffocation);
+    expect(result.symptom!.malaise).toBe(dummyPostData.symptom!.malaise);
+    expect(result.symptom!.nausea).toBe(dummyPostData.symptom!.nausea);
+    expect(result.symptom!.diarrhea).toBe(dummyPostData.symptom!.diarrhea);
+    expect(result.symptom!.difficulty_eating).toBe(dummyPostData.symptom!.difficulty_eating);
+    expect(result.symptom!.no_urination).toBe(dummyPostData.symptom!.no_urination);
     expect(result.symptom!.remarks).toBe(dummyPostData.symptom!.remarks);
     expect(result.symptom!.symptomId).not.toBe(null);
   });
@@ -828,6 +873,11 @@ describe('Patient user', () => {
         suffocation: true,
         headache: true,
         sore_throat: true,
+        malaise: true,
+        nausea: true,
+        diarrhea: true,
+        difficulty_eating: true,
+        no_urination: true,
         remarks: 'dummy',
       },
     };
@@ -850,6 +900,11 @@ describe('Patient user', () => {
         suffocation: false,
         headache: false,
         sore_throat: false,
+        malaise: false,
+        nausea: false,
+        diarrhea: false,
+        difficulty_eating: false,
+        no_urination: false,
         remarks: 'dummy',
       },
     };
