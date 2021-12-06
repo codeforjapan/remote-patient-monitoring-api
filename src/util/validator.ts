@@ -97,6 +97,11 @@ export default class Validator {
       { name: "suffocation", type: "boolean" },
       { name: "headache", type: "boolean" },
       { name: "sore_throat", type: "boolean" },
+      { name: "malaise", type: "boolean" },
+      { name: "nausea", type: "boolean" },
+      { name: "diarrhea", type: "boolean" },
+      { name: "difficulty_eating", type: "boolean" },
+      { name: "no_urination", type: "boolean" },
     ];
     return this.checkRequestBody(res, requiredParams);
   }
