@@ -2656,6 +2656,16 @@ paths:
                                 type: boolean
                               sore_throat:
                                 type: boolean
+                              malaise:
+                                type: boolean
+                              nausea:
+                                type: boolean
+                              diarrhea:
+                                type: boolean
+                              difficulty_eating:
+                                type: boolean
+                              no_urination:
+                                type: boolean
                               remarks:
                                 type: string
         '400':
@@ -3003,6 +3013,16 @@ paths:
                                 type: boolean
                               sore_throat:
                                 type: boolean
+                              malaise:
+                                type: boolean
+                              nausea:
+                                type: boolean
+                              diarrhea:
+                                type: boolean
+                              difficulty_eating:
+                                type: boolean
+                              no_urination:
+                                type: boolean
                               remarks:
                                 type: string
         '400':
@@ -3341,6 +3361,16 @@ paths:
                               type: boolean
                             sore_throat:
                               type: boolean
+                            malaise:
+                              type: boolean
+                            nausea:
+                              type: boolean
+                            diarrhea:
+                              type: boolean
+                            difficulty_eating:
+                              type: boolean
+                            no_urination:
+                              type: boolean
                             remarks:
                               type: string
         '400':
@@ -3507,6 +3537,16 @@ paths:
                             headache:
                               type: boolean
                             sore_throat:
+                              type: boolean
+                            malaise:
+                              type: boolean
+                            nausea:
+                              type: boolean
+                            diarrhea:
+                              type: boolean
+                            difficulty_eating:
+                              type: boolean
+                            no_urination:
                               type: boolean
                             remarks:
                               type: string
@@ -3707,6 +3747,16 @@ paths:
                               type: boolean
                             sore_throat:
                               type: boolean
+                            malaise:
+                              type: boolean
+                            nausea:
+                              type: boolean
+                            diarrhea:
+                              type: boolean
+                            difficulty_eating:
+                              type: boolean
+                            no_urination:
+                              type: boolean
                             remarks:
                               type: string
         '400':
@@ -3873,6 +3923,16 @@ paths:
                             headache:
                               type: boolean
                             sore_throat:
+                              type: boolean
+                            malaise:
+                              type: boolean
+                            nausea:
+                              type: boolean
+                            diarrhea:
+                              type: boolean
+                            difficulty_eating:
+                              type: boolean
+                            no_urination:
                               type: boolean
                             remarks:
                               type: string
@@ -4073,6 +4133,16 @@ paths:
                               type: boolean
                             sore_throat:
                               type: boolean
+                            malaise:
+                              type: boolean
+                            nausea:
+                              type: boolean
+                            diarrhea:
+                              type: boolean
+                            difficulty_eating:
+                              type: boolean
+                            no_urination:
+                              type: boolean
                             remarks:
                               type: string
         '400':
@@ -4267,6 +4337,16 @@ paths:
                           type: boolean
                         sore_throat:
                           type: boolean
+                        malaise:
+                          type: boolean
+                        nausea:
+                          type: boolean
+                        diarrhea:
+                          type: boolean
+                        difficulty_eating:
+                          type: boolean
+                        no_urination:
+                          type: boolean
                         remarks:
                           type: string
         '400':
@@ -4424,6 +4504,11 @@ paths:
                     - suffocation
                     - headache
                     - sore_throat
+                    - malaise
+                    - nausea
+                    - diarrhea
+                    - difficulty_eating
+                    - no_urination
                   properties:
                     cough:
                       type: boolean
@@ -4434,6 +4519,16 @@ paths:
                     headache:
                       type: boolean
                     sore_throat:
+                      type: boolean
+                    malaise:
+                      type: boolean
+                    nausea:
+                      type: boolean
+                    diarrhea:
+                      type: boolean
+                    difficulty_eating:
+                      type: boolean
+                    no_urination:
                       type: boolean
                     remarks:
                       type: string
@@ -4488,6 +4583,16 @@ paths:
                       headache:
                         type: boolean
                       sore_throat:
+                        type: boolean
+                      malaise:
+                        type: boolean
+                      nausea:
+                        type: boolean
+                      diarrhea:
+                        type: boolean
+                      difficulty_eating:
+                        type: boolean
+                      no_urination:
                         type: boolean
                       remarks:
                         type: string
@@ -4801,6 +4906,16 @@ paths:
                           type: boolean
                         sore_throat:
                           type: boolean
+                        malaise:
+                          type: boolean
+                        nausea:
+                          type: boolean
+                        diarrhea:
+                          type: boolean
+                        difficulty_eating:
+                          type: boolean
+                        no_urination:
+                          type: boolean
                         remarks:
                           type: string
         '400':
@@ -4958,6 +5073,11 @@ paths:
                     - suffocation
                     - headache
                     - sore_throat
+                    - malaise
+                    - nausea
+                    - diarrhea
+                    - difficulty_eating
+                    - no_urination
                   properties:
                     cough:
                       type: boolean
@@ -4968,6 +5088,16 @@ paths:
                     headache:
                       type: boolean
                     sore_throat:
+                      type: boolean
+                    malaise:
+                      type: boolean
+                    nausea:
+                      type: boolean
+                    diarrhea:
+                      type: boolean
+                    difficulty_eating:
+                      type: boolean
+                    no_urination:
                       type: boolean
                     remarks:
                       type: string
@@ -5022,6 +5152,16 @@ paths:
                       headache:
                         type: boolean
                       sore_throat:
+                        type: boolean
+                      malaise:
+                        type: boolean
+                      nausea:
+                        type: boolean
+                      diarrhea:
+                        type: boolean
+                      difficulty_eating:
+                        type: boolean
+                      no_urination:
                         type: boolean
                       remarks:
                         type: string
@@ -5335,6 +5475,16 @@ paths:
                           type: boolean
                         sore_throat:
                           type: boolean
+                        malaise:
+                          type: boolean
+                        nausea:
+                          type: boolean
+                        diarrhea:
+                          type: boolean
+                        difficulty_eating:
+                          type: boolean
+                        no_urination:
+                          type: boolean
                         remarks:
                           type: string
         '400':
@@ -5492,6 +5642,11 @@ paths:
                     - suffocation
                     - headache
                     - sore_throat
+                    - malaise
+                    - nausea
+                    - diarrhea
+                    - difficulty_eating
+                    - no_urination
                   properties:
                     cough:
                       type: boolean
@@ -5502,6 +5657,16 @@ paths:
                     headache:
                       type: boolean
                     sore_throat:
+                      type: boolean
+                    malaise:
+                      type: boolean
+                    nausea:
+                      type: boolean
+                    diarrhea:
+                      type: boolean
+                    difficulty_eating:
+                      type: boolean
+                    no_urination:
                       type: boolean
                     remarks:
                       type: string
@@ -5556,6 +5721,16 @@ paths:
                       headache:
                         type: boolean
                       sore_throat:
+                        type: boolean
+                      malaise:
+                        type: boolean
+                      nausea:
+                        type: boolean
+                      diarrhea:
+                        type: boolean
+                      difficulty_eating:
+                        type: boolean
+                      no_urination:
                         type: boolean
                       remarks:
                         type: string
@@ -5718,6 +5893,16 @@ paths:
                             headache:
                               type: boolean
                             sore_throat:
+                              type: boolean
+                            malaise:
+                              type: boolean
+                            nausea:
+                              type: boolean
+                            diarrhea:
+                              type: boolean
+                            difficulty_eating:
+                              type: boolean
+                            no_urination:
                               type: boolean
                             remarks:
                               type: string
@@ -6118,6 +6303,16 @@ components:
                     type: boolean
                   sore_throat:
                     type: boolean
+                  malaise:
+                    type: boolean
+                  nausea:
+                    type: boolean
+                  diarrhea:
+                    type: boolean
+                  difficulty_eating:
+                    type: boolean
+                  no_urination:
+                    type: boolean
                   remarks:
                     type: string
     consumePatient:
@@ -6193,6 +6388,16 @@ components:
                       type: boolean
                     sore_throat:
                       type: boolean
+                    malaise:
+                      type: boolean
+                    nausea:
+                      type: boolean
+                    diarrhea:
+                      type: boolean
+                    difficulty_eating:
+                      type: boolean
+                    no_urination:
+                      type: boolean
                     remarks:
                       type: string
     Statuses:
@@ -6233,6 +6438,16 @@ components:
                 type: boolean
               sore_throat:
                 type: boolean
+              malaise:
+                type: boolean
+              nausea:
+                type: boolean
+              diarrhea:
+                type: boolean
+              difficulty_eating:
+                type: boolean
+              no_urination:
+                type: boolean
               remarks:
                 type: string
     Status:
@@ -6271,6 +6486,16 @@ components:
               type: boolean
             sore_throat:
               type: boolean
+            malaise:
+              type: boolean
+            nausea:
+              type: boolean
+            diarrhea:
+              type: boolean
+            difficulty_eating:
+              type: boolean
+            no_urination:
+              type: boolean
             remarks:
               type: string
     consumeStatus:
@@ -6297,6 +6522,11 @@ components:
             - suffocation
             - headache
             - sore_throat
+            - malaise
+            - nausea
+            - diarrhea
+            - difficulty_eating
+            - no_urination
           properties:
             cough:
               type: boolean
@@ -6308,6 +6538,16 @@ components:
               type: boolean
             sore_throat:
               type: boolean
+            malaise:
+              type: boolean
+            nausea:
+              type: boolean
+            diarrhea:
+              type: boolean
+            difficulty_eating:
+              type: boolean
+            no_urination:
+              type: boolean
             remarks:
               type: string
     consumeSymptom:
@@ -6318,6 +6558,11 @@ components:
         - suffocation
         - headache
         - sore_throat
+        - malaise
+        - nausea
+        - diarrhea
+        - difficulty_eating
+        - no_urination
       properties:
         cough:
           type: boolean
@@ -6328,6 +6573,16 @@ components:
         headache:
           type: boolean
         sore_throat:
+          type: boolean
+        malaise:
+          type: boolean
+        nausea:
+          type: boolean
+        diarrhea:
+          type: boolean
+        difficulty_eating:
+          type: boolean
+        no_urination:
           type: boolean
         remarks:
           type: string
