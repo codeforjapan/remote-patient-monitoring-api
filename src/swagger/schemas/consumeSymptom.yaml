@@ -5,6 +5,11 @@ required:
   - suffocation
   - headache
   - sore_throat
+  - malaise
+  - nausea
+  - diarrhea
+  - difficulty_eating
+  - no_urination
 properties:
   cough:
     type: boolean
@@ -15,6 +20,16 @@ properties:
   headache:
     type: boolean
   sore_throat:
+    type: boolean
+  malaise:
+    type: boolean
+  nausea:
+    type: boolean
+  diarrhea:
+    type: boolean
+  difficulty_eating:
+    type: boolean
+  no_urination:
     type: boolean
   remarks:
     type: string

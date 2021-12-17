@@ -30,9 +30,9 @@ export class Importer {
     this.userinfo = userinfo
   }
   /**
-   * import data to the database with API 
-   * @param data 
-   * @returns 
+   * import data to the database with API
+   * @param data
+   * @returns
    */
   async importData(data: string[][]):Promise<string> {
     await this.api.login(this.userinfo.username, this.userinfo.password)
@@ -90,8 +90,8 @@ export class APIcaller {
   }
   /**
    * ログイン処理
-   * @param username 
-   * @param password 
+   * @param username
+   * @param password
    */
   async login(username: string, password: string): Promise<void> {
     console.log('# login')
@@ -121,8 +121,8 @@ export class APIcaller {
   }
   /**
    * create new patient with patient ID
-   * @param patientId  
-   * @returns 
+   * @param patientId
+   * @returns
    */
   async putPatient(centerId: string, patientId: string):Promise<Patient> {
     console.log('# put patient')
@@ -163,7 +163,7 @@ export class APIcaller {
   }
   /**
    * ステータスを追加する
-   * @param status 
+   * @param status
    */
   async putStatus(status: LoadedStatus):Promise<void> {
     console.log('# put status')
@@ -183,6 +183,11 @@ export class APIcaller {
         suffocation: false,
         headache: false,
         sore_throat: false,
+        malaise: false,
+        nausea: false,
+        diarrhea: false,
+        difficulty_eating: false,
+        no_urination: false,
         remarks: ""
       }
     }

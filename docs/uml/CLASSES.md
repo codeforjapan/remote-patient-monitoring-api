@@ -50,6 +50,11 @@ class Symptom {
     Boolean suffocation
     Boolean headache
     Boolean sore_throat
+    Boolean malaise
+    Boolean nausea
+    Boolean diarrhea
+    Boolean difficulty_eating
+    Boolean no_urination
     String Remarks
 }
 
