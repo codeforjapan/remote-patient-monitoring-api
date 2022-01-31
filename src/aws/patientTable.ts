@@ -13,25 +13,28 @@ export default class PatientTable {
     this.client = serviceClient;
   }
 
-  getPatients(
+  async getPatients(
     centerId: string
   ): Promise<DynamoDB.DocumentClient.ScanOutput | AWSError> {
     const params: DynamoDB.ScanInput = {
       TableName: process.env.PATIENT_TABLE_NAME!,
     };
-    return new Promise((resolve, reject) => {
-      this.client.scan(params, (err, data) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          const filtered = data.Items!.filter(
-            (item) => item.centerId === centerId
-          );
-          resolve({ Count: filtered.length, Items: filtered });
-        }
-      });
-    });
+    const items: DynamoDB.DocumentClient.ItemList = [];
+    let result: DynamoDB.DocumentClient.ScanOutput | undefined = undefined;
+    do {
+      if (result?.LastEvaluatedKey) {
+        params.ExclusiveStartKey = result.LastEvaluatedKey
+      }
+      result = await this.client.scan(params).promise().catch(err => {
+        console.log(err);
+        throw(err);
+      })
+      items.push(...result.Items!)
+    } while (result.LastEvaluatedKey)
+    const filtered = items.filter(
+      (item) => item.centerId === centerId
+    );
+    return ({ Count: filtered.length, Items: filtered })
   }
 
   getPatient(patientId: string): Promise<Patient | AWSError> {
