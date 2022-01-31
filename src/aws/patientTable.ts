@@ -20,8 +20,11 @@ export default class PatientTable {
       TableName: process.env.PATIENT_TABLE_NAME!,
     };
     const items: DynamoDB.DocumentClient.ItemList = [];
-    let result: DynamoDB.DocumentClient.ScanOutput;
+    let result: DynamoDB.DocumentClient.ScanOutput | undefined = undefined;
     do {
+      if (result?.LastEvaluatedKey) {
+        params.ExclusiveStartKey = result.LastEvaluatedKey
+      }
       result = await this.client.scan(params).promise()
       items.push(...result.Items!)
     } while (result.LastEvaluatedKey)
