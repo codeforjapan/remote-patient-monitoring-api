@@ -25,7 +25,7 @@ center_id=`echo $ret | jq -r ".Items[0].centerId"`
 echo $center_id;
 # put patient and status
 echo "put patients"
-for i in {1..1000}
+for i in {1..500}
 do
   echo "...${i}"
   pid="pid-${i}"
