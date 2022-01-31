@@ -25,7 +25,10 @@ export default class PatientTable {
       if (result?.LastEvaluatedKey) {
         params.ExclusiveStartKey = result.LastEvaluatedKey
       }
-      result = await this.client.scan(params).promise()
+      result = await this.client.scan(params).promise().catch(err => {
+        console.log(err);
+        throw(err);
+      })
       items.push(...result.Items!)
     } while (result.LastEvaluatedKey)
     const filtered = items.filter(
