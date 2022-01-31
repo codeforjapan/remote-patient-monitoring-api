@@ -28,7 +28,7 @@ export default class PatientTable {
     const filtered = items.filter(
       (item) => item.centerId === centerId
     );
-    return ({ Count: filtered.length, Items: filtered})
+    return ({ Count: filtered.length, Items: filtered })
   }
 
   getPatient(patientId: string): Promise<Patient | AWSError> {
